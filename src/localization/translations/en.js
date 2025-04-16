@@ -13,6 +13,12 @@ const enTranslation = {
   "Previous": "Previous",
   "Back": "Back",
   "Continue": "Continue",
+  "Home": "Home",
+  "Templates": "Templates",
+  "Main Navigation": "Main Navigation",
+  "Open menu": "Open menu",
+  "Close menu": "Close menu",
+  "Go to home page": "Go to home page",
 
   // Welcome Screen
   "Welcome to Resume Builder": "Welcome to Sira",
