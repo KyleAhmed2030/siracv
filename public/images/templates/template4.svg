@@ -1,46 +1,54 @@
-<svg width="300" height="420" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
-  <!-- Modern Template -->
-  <rect width="300" height="420" fill="#ffffff"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="400" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+  <title>Modern Resume Template</title>
+  <rect width="300" height="400" fill="#ffffff"/>
   
-  <!-- Modern Header with Accent Color -->
-  <rect x="0" y="0" width="300" height="5" fill="#00bcd4"/>
-  <text x="30" y="45" font-family="Arial" font-size="26" font-weight="bold" fill="#00bcd4">JOHN DOE</text>
-  <text x="30" y="65" font-family="Arial" font-size="14" fill="#555555">UX/UI DESIGNER</text>
+  <!-- Header with color accent -->
+  <rect x="0" y="0" width="300" height="80" fill="#8e44ad"/>
   
-  <!-- Contact with Modern Icons -->
-  <text x="30" y="95" font-family="Arial" font-size="12" fill="#888888">hello@johndoe.com</text>
-  <text x="170" y="95" font-family="Arial" font-size="12" fill="#888888">(123) 456-7890</text>
-  <text x="30" y="115" font-family="Arial" font-size="12" fill="#888888">johndoe.design</text>
-  <text x="170" y="115" font-family="Arial" font-size="12" fill="#888888">New York, NY</text>
+  <!-- Name & title centered in header -->
+  <rect x="60" y="25" width="180" height="16" fill="#ffffff"/>
+  <rect x="90" y="45" width="120" height="8" fill="#d6bcf0"/>
   
-  <!-- Modern Divider Line -->
-  <line x1="30" y1="135" x2="270" y2="135" stroke="#eeeeee" stroke-width="2"/>
+  <!-- Main content section -->
+  <rect x="30" y="100" width="240" height="280" fill="#ffffff"/>
   
-  <!-- Main Content with Modern Typography -->
-  <text x="30" y="165" font-family="Arial" font-size="16" font-weight="bold" fill="#333333">PROFILE</text>
-  <text x="30" y="185" font-family="Arial" font-size="12" fill="#555555" width="240">User experience designer with expertise in creating intuitive interfaces...</text>
+  <!-- Summary section -->
+  <rect x="30" y="100" width="100" height="10" fill="#8e44ad"/>
+  <rect x="30" y="120" width="240" height="4" fill="#555555"/>
+  <rect x="30" y="128" width="240" height="4" fill="#555555"/>
+  <rect x="30" y="136" width="180" height="4" fill="#555555"/>
   
-  <text x="30" y="220" font-family="Arial" font-size="16" font-weight="bold" fill="#333333">EXPERIENCE</text>
-  <text x="30" y="240" font-family="Arial" font-size="14" font-weight="bold" fill="#555555">Senior UX Designer</text>
-  <text x="30" y="255" font-family="Arial" font-size="12" fill="#00bcd4">Design Studio Inc.</text>
-  <text x="30" y="270" font-family="Arial" font-size="12" fill="#888888">2019 - Present</text>
-  <text x="30" y="290" font-family="Arial" font-size="12" fill="#555555">• Redesigned e-commerce platform increasing conversion by 35%</text>
-  <text x="30" y="305" font-family="Arial" font-size="12" fill="#555555">• Led UX research initiatives across multiple products</text>
+  <!-- Experience section with modern design -->
+  <rect x="30" y="160" width="100" height="10" fill="#8e44ad"/>
   
-  <text x="30" y="335" font-family="Arial" font-size="16" font-weight="bold" fill="#333333">SKILLS</text>
-  <!-- Modern Skill Pills -->
-  <rect x="30" y="355" width="65" height="24" rx="12" fill="#e8f7f9"/>
-  <text x="48" y="372" font-family="Arial" font-size="12" fill="#00bcd4">Figma</text>
+  <!-- First experience -->
+  <rect x="30" y="180" width="60" height="6" fill="#8e44ad"/>
+  <rect x="30" y="190" width="120" height="8" fill="#333333"/>
+  <rect x="200" y="190" width="70" height="6" fill="#999999"/>
   
-  <rect x="105" y="355" width="65" height="24" rx="12" fill="#e8f7f9"/>
-  <text x="116" y="372" font-family="Arial" font-size="12" fill="#00bcd4">Sketch</text>
+  <rect x="30" y="205" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="212" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="219" width="180" height="3" fill="#555555"/>
   
-  <rect x="180" y="355" width="90" height="24" rx="12" fill="#e8f7f9"/>
-  <text x="193" y="372" font-family="Arial" font-size="12" fill="#00bcd4">Prototyping</text>
+  <!-- Second experience -->
+  <rect x="30" y="240" width="60" height="6" fill="#8e44ad"/>
+  <rect x="30" y="250" width="120" height="8" fill="#333333"/>
+  <rect x="200" y="250" width="70" height="6" fill="#999999"/>
   
-  <rect x="30" y="385" width="65" height="24" rx="12" fill="#e8f7f9"/>
-  <text x="43" y="402" font-family="Arial" font-size="12" fill="#00bcd4">HTML</text>
+  <rect x="30" y="265" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="272" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="279" width="180" height="3" fill="#555555"/>
   
-  <rect x="105" y="385" width="65" height="24" rx="12" fill="#e8f7f9"/>
-  <text x="122" y="402" font-family="Arial" font-size="12" fill="#00bcd4">CSS</text>
+  <!-- Education and skills section -->
+  <rect x="30" y="300" width="100" height="10" fill="#8e44ad"/>
+  <rect x="30" y="320" width="120" height="8" fill="#333333"/>
+  <rect x="200" y="320" width="70" height="6" fill="#999999"/>
+  
+  <!-- Skills as modern badges -->
+  <rect x="30" y="340" width="60" height="6" fill="#8e44ad"/>
+  <rect x="30" y="355" width="50" height="20" rx="10" fill="#f3e5f5" stroke="#8e44ad" stroke-width="2"/>
+  <rect x="90" y="355" width="50" height="20" rx="10" fill="#f3e5f5" stroke="#8e44ad" stroke-width="2"/>
+  <rect x="150" y="355" width="50" height="20" rx="10" fill="#f3e5f5" stroke="#8e44ad" stroke-width="2"/>
+  <rect x="210" y="355" width="50" height="20" rx="10" fill="#f3e5f5" stroke="#8e44ad" stroke-width="2"/>
 </svg>

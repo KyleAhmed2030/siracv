@@ -1,36 +1,56 @@
-<svg width="300" height="420" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
-  <!-- Executive Template -->
-  <rect width="300" height="420" fill="#ffffff"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="400" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+  <title>Executive Resume Template</title>
+  <rect width="300" height="400" fill="#ffffff"/>
   
-  <!-- Elegant Header -->
-  <rect x="0" y="0" width="300" height="100" fill="#1a2a3a"/>
-  <text x="150" y="40" font-family="Times New Roman, serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">JONATHAN SMITH</text>
-  <text x="150" y="65" font-family="Times New Roman, serif" font-size="16" fill="#e0e0e0" text-anchor="middle">CHIEF EXECUTIVE OFFICER</text>
-  <line x1="100" y1="80" x2="200" y2="80" stroke="#c0aa70" stroke-width="2"/>
+  <!-- Header section -->
+  <rect x="0" y="0" width="300" height="80" fill="#1a1a1a"/>
   
-  <!-- Contact Info in Elegant Style -->
-  <rect x="0" y="100" width="300" height="35" fill="#f5f5f5"/>
-  <text x="150" y="122" font-family="Times New Roman, serif" font-size="12" fill="#333333" text-anchor="middle">jsmith@executive.com | (212) 555-0123 | New York, NY</text>
+  <!-- Name - Large and executive style -->
+  <rect x="30" y="25" width="180" height="18" fill="#ffffff"/>
+  <rect x="30" y="48" width="140" height="8" fill="#b3b3b3"/>
   
-  <!-- Professional Summary -->
-  <text x="30" y="165" font-family="Times New Roman, serif" font-size="16" font-weight="bold" fill="#1a2a3a">EXECUTIVE SUMMARY</text>
-  <line x1="30" y1="175" x2="270" y2="175" stroke="#c0aa70" stroke-width="1"/>
-  <text x="30" y="195" font-family="Times New Roman, serif" font-size="12" fill="#333333" width="240">Accomplished executive with 15+ years of leadership experience in driving organizational growth...</text>
+  <!-- Divider -->
+  <rect x="0" y="80" width="300" height="10" fill="#aa0000"/>
   
-  <!-- Professional Experience -->
-  <text x="30" y="230" font-family="Times New Roman, serif" font-size="16" font-weight="bold" fill="#1a2a3a">PROFESSIONAL EXPERIENCE</text>
-  <line x1="30" y1="240" x2="270" y2="240" stroke="#c0aa70" stroke-width="1"/>
+  <!-- Content in top area -->
+  <rect x="30" y="110" width="240" height="270" fill="#ffffff"/>
   
-  <text x="30" y="260" font-family="Times New Roman, serif" font-size="14" font-weight="bold" fill="#1a2a3a">Chief Executive Officer</text>
-  <text x="30" y="275" font-family="Times New Roman, serif" font-size="14" font-style="italic" fill="#1a2a3a">Global Enterprises Inc.</text>
-  <text x="30" y="290" font-family="Times New Roman, serif" font-size="12" fill="#555555">2015 - Present</text>
-  <text x="30" y="310" font-family="Times New Roman, serif" font-size="12" fill="#333333">• Led company through 300% revenue growth over 5 years</text>
-  <text x="30" y="325" font-family="Times New Roman, serif" font-size="12" fill="#333333">• Spearheaded international expansion into 12 new markets</text>
+  <!-- Summary section with elegant divider -->
+  <rect x="30" y="110" width="120" height="12" fill="#1a1a1a"/>
+  <rect x="30" y="130" width="240" height="4" fill="#555555"/>
+  <rect x="30" y="138" width="240" height="4" fill="#555555"/>
+  <rect x="30" y="146" width="240" height="4" fill="#555555"/>
+  <rect x="30" y="154" width="140" height="4" fill="#555555"/>
   
-  <!-- Education -->
-  <text x="30" y="360" font-family="Times New Roman, serif" font-size="16" font-weight="bold" fill="#1a2a3a">EDUCATION</text>
-  <line x1="30" y1="370" x2="270" y2="370" stroke="#c0aa70" stroke-width="1"/>
+  <!-- Executive experience area -->
+  <rect x="30" y="180" width="130" height="12" fill="#1a1a1a"/>
   
-  <text x="30" y="390" font-family="Times New Roman, serif" font-size="14" font-weight="bold" fill="#1a2a3a">MBA, Business Administration</text>
-  <text x="30" y="405" font-family="Times New Roman, serif" font-size="14" font-style="italic" fill="#1a2a3a">Harvard Business School</text>
+  <!-- Experience 1 - Executive position -->
+  <rect x="30" y="202" width="130" height="8" fill="#333333"/>
+  <rect x="30" y="215" width="90" height="8" fill="#aa0000"/>
+  <rect x="200" y="202" width="70" height="6" fill="#777777"/>
+  
+  <rect x="30" y="230" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="237" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="244" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="251" width="180" height="3" fill="#555555"/>
+  
+  <!-- Divider -->
+  <rect x="30" y="265" width="240" height="1" fill="#cccccc"/>
+  
+  <!-- Experience 2 - Previous role -->
+  <rect x="30" y="277" width="130" height="8" fill="#333333"/>
+  <rect x="30" y="290" width="90" height="8" fill="#aa0000"/>
+  <rect x="200" y="277" width="70" height="6" fill="#777777"/>
+  
+  <rect x="30" y="305" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="312" width="240" height="3" fill="#555555"/>
+  <rect x="30" y="319" width="180" height="3" fill="#555555"/>
+  
+  <!-- Education and qualifications - Executive style -->
+  <rect x="30" y="340" width="120" height="12" fill="#1a1a1a"/>
+  <rect x="30" y="360" width="140" height="6" fill="#333333"/>
+  <rect x="30" y="370" width="90" height="6" fill="#aa0000"/>
+  <rect x="200" y="360" width="70" height="6" fill="#777777"/>
 </svg>
