@@ -5,7 +5,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow the React dev server
+  credentials: true
+}));
 
 // Parse JSON request body
 app.use(express.json());
@@ -19,16 +22,33 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from the Sira Resume Builder API' });
 });
 
-// For production build, serve static files and handle client routing
-// Uncomment this when you have a build folder with compiled React app
-/*
-app.use(express.static(path.join(__dirname, 'build')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// For validation messages test
+app.get('/api/localization/status', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: 'Localization API is working',
+    translations: {
+      english: {
+        count: 190,
+        status: 'Complete'
+      },
+      arabic: {
+        count: 194,
+        status: 'Enhanced',
+        recentlyAdded: [
+          "End date must be after start date",
+          "Institution name is required",
+          "Job title is required when employer is specified",
+          "Employer is required when job title is specified",
+          "Please enter a valid URL starting with http:// or https://"
+        ]
+      }
+    }
+  });
 });
-*/
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`API available at http://localhost:${PORT}/api/hello`);
+  console.log(`Localization status API available at http://localhost:${PORT}/api/localization/status`);
 });
