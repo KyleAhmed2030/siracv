@@ -2,6 +2,7 @@ import React from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useResume } from '../hooks/useResume';
 import { formatDate } from '../utils/helpers';
+import { useTranslation } from 'react-i18next';
 
 const ResumePreview = ({ resumeData }) => {
   const { theme } = useTheme();
