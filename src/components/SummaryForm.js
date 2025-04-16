@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResume } from '../hooks/useResume';
 import { useTheme } from '../hooks/useTheme';
+import TextArea from './TextArea';
 
 const SummaryForm = ({ onValidationChange }) => {
   const { t } = useTranslation();
@@ -83,35 +84,26 @@ const SummaryForm = ({ onValidationChange }) => {
   
   return (
     <div className="form-section">
-      <div className="form-group">
-        <label htmlFor="summary-input" className="form-label">
-          {t('Professional Summary')}
-        </label>
+      <TextArea
+        id="summary-input"
+        label={t('Professional Summary')}
+        value={resumeData.summary || ''}
+        onChange={handleChange}
+        placeholder={t('Briefly describe your professional background, key skills, and what makes you unique...')}
+        rows={6}
+        helpText={t('Write a professional summary that highlights your experience and skills')}
+      />
         
-        <p className="form-help-text">
-          {t('Write a professional summary that highlights your experience and skills')}
-        </p>
-        
-        <textarea
-          id="summary-input"
-          value={resumeData.summary || ''}
-          onChange={handleChange}
-          placeholder={t('Briefly describe your professional background, key skills, and what makes you unique...')}
-          className={`form-textarea ${theme}`}
-          rows={6}
-        />
-        
-        <div style={characterCountStyle}>
-          <span style={{ color: getStatusColor() }}>
-            {summaryLength} {t('characters')} 
-            {getStatusText() && ` - ${getStatusText()}`}
-          </span>
-        </div>
-        
-        <p className="form-hint">
-          {t('A good summary should be 3-5 sentences that quickly summarizes your background and skills')}
-        </p>
+      <div style={characterCountStyle}>
+        <span style={{ color: getStatusColor() }}>
+          {summaryLength} {t('characters')} 
+          {getStatusText() && ` - ${getStatusText()}`}
+        </span>
       </div>
+      
+      <p className="form-hint">
+        {t('A good summary should be 3-5 sentences that quickly summarizes your background and skills')}
+      </p>
     </div>
   );
 };

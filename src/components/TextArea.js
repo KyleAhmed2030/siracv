@@ -3,12 +3,11 @@ import { useTheme } from '../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
 
 /**
- * Reusable input component with label, icon, and error handling
+ * Reusable textarea component with label and error handling
  */
-const Input = ({
+const TextArea = ({
   id,
   label,
-  type = 'text',
   value,
   onChange,
   onBlur,
@@ -16,15 +15,14 @@ const Input = ({
   error,
   required = false,
   disabled = false,
-  min,
-  max,
+  rows = 4,
   className = '',
-  icon
+  helpText
 }) => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   
-  const inputId = id || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`;
+  const textareaId = id || `textarea-${label?.toLowerCase().replace(/\s+/g, '-')}`;
   
   // Format error message with translation if it's a standard message
   const getErrorMessage = (error) => {
@@ -38,32 +36,28 @@ const Input = ({
   return (
     <div className={`form-group ${className}`}>
       {label && (
-        <label htmlFor={inputId} className="form-label">
+        <label htmlFor={textareaId} className="form-label">
           {label}{required && <span className="required-indicator">*</span>}
         </label>
       )}
       
-      <div className="input-container">
-        {icon && <div className="input-icon">{icon}</div>}
-        
-        <input
-          id={inputId}
-          type={type}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          placeholder={placeholder}
-          disabled={disabled}
-          min={min}
-          max={max}
-          className={`form-input ${theme} ${error ? 'has-error' : ''} ${icon ? 'has-icon' : ''}`}
-          required={required}
-        />
-      </div>
+      {helpText && <p className="form-help-text">{helpText}</p>}
+      
+      <textarea
+        id={textareaId}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        disabled={disabled}
+        className={`form-textarea ${theme} ${error ? 'has-error' : ''}`}
+        rows={rows}
+        required={required}
+      />
       
       {error && <div className="form-error">{getErrorMessage(error)}</div>}
     </div>
   );
 };
 
-export default Input;
+export default TextArea;
