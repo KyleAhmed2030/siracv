@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ResumeContextProvider } from './context/ResumeContext';
 import { ThemeContextProvider, THEME_STORAGE_KEY } from './context/ThemeContext';
-import { AuthProvider } from './context/AuthContext';
 import AppNavigator from './navigation/AppNavigator';
 import './localization/i18n';
 import './index.css';
@@ -38,11 +37,9 @@ function App() {
   
   return (
     <ThemeContextProvider initialTheme={initialTheme}>
-      <AuthProvider>
-        <ResumeContextProvider>
-          <AppNavigator initialLanguage={initialLanguage} />
-        </ResumeContextProvider>
-      </AuthProvider>
+      <ResumeContextProvider>
+        <AppNavigator initialLanguage={initialLanguage} />
+      </ResumeContextProvider>
     </ThemeContextProvider>
   );
 }

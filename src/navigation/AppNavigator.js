@@ -5,7 +5,6 @@ import { useTheme } from '../hooks/useTheme';
 
 // Components
 import Header from '../components/Header';
-import ProtectedRoute from '../components/ProtectedRoute';
 
 // Screens
 import WelcomeScreen from '../screens/WelcomeScreen';
@@ -14,7 +13,6 @@ import ResumeBuilderScreen from '../screens/ResumeBuilderScreen';
 import PreviewScreen from '../screens/PreviewScreen';
 import SavedResumesScreen from '../screens/SavedResumesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import AuthScreen from '../screens/AuthScreen';
 
 // Layout component that decides whether to show the header
 const MainLayout = () => {
@@ -58,32 +56,16 @@ const AppNavigator = ({ initialLanguage }) => {
     <Router>
       <Routes>
         <Route element={<MainLayout />}>
-          {/* Public routes */}
           <Route path="/" element={<WelcomeScreen />} />
           <Route path="/templates" element={<TemplateSelectionScreen />} />
-          <Route path="/auth" element={<AuthScreen />} />
-          
-          {/* Unprotected builder routes - users can create resumes without login */}
           <Route path="/builder/basicInfo" element={<ResumeBuilderScreen step="basicInfo" />} />
           <Route path="/builder/education" element={<ResumeBuilderScreen step="education" />} />
           <Route path="/builder/workExperience" element={<ResumeBuilderScreen step="workExperience" />} />
           <Route path="/builder/skills" element={<ResumeBuilderScreen step="skills" />} />
           <Route path="/builder/summary" element={<ResumeBuilderScreen step="summary" />} />
           <Route path="/preview" element={<PreviewScreen />} />
-          
-          {/* Protected routes - require authentication */}
-          <Route path="/saved" element={
-            <ProtectedRoute>
-              <SavedResumesScreen />
-            </ProtectedRoute>
-          } />
-          <Route path="/settings" element={
-            <ProtectedRoute>
-              <SettingsScreen />
-            </ProtectedRoute>
-          } />
-          
-          {/* Fallback */}
+          <Route path="/saved" element={<SavedResumesScreen />} />
+          <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
