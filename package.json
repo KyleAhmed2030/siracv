@@ -11,7 +11,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0",
     "html2canvas": "^1.4.1",
     "i18next": "^22.4.15",
     "jspdf": "^3.0.1",
