@@ -59,10 +59,10 @@ export const ResumeContextProvider = ({ children }) => {
   // Loading state
   const [isLoading, setIsLoading] = useState(true);
   
-  // Set loading to false once storage is initialized
+  // Set loading to false once mounted
   useEffect(() => {
     setIsLoading(false);
-  }, [currentResumeData, savedResumes]);
+  }, []);
   
   /**
    * Update specific parts of the resume data
