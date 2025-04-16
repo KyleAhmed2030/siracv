@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * Header component that displays the app name/logo and provides navigation
@@ -11,6 +12,7 @@ const Header = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 576);
   const [menuOpen, setMenuOpen] = useState(false);
   
@@ -53,6 +55,16 @@ const Header = () => {
   
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+  
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+      setMenuOpen(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
   
   // Ensure header is visible regardless of theme
@@ -175,12 +187,56 @@ const Header = () => {
           <li style={navItemStyle}>
             <Link to="/templates" style={navLinkStyle}>{t('Templates')}</Link>
           </li>
-          <li style={navItemStyle}>
-            <Link to="/saved" style={navLinkStyle}>{t('Saved Resumes')}</Link>
-          </li>
+          
+          {/* Only show Saved Resumes if authenticated */}
+          {isAuthenticated && (
+            <li style={navItemStyle}>
+              <Link to="/saved" style={navLinkStyle}>{t('Saved Resumes')}</Link>
+            </li>
+          )}
+          
           <li style={navItemStyle}>
             <Link to="/settings" style={navLinkStyle}>{t('Settings')}</Link>
           </li>
+          
+          {/* Show Login/Logout based on authentication status */}
+          {isAuthenticated ? (
+            <>
+              <li style={navItemStyle}>
+                <span style={{
+                  ...navLinkStyle,
+                  cursor: 'default',
+                  fontWeight: 'normal',
+                  color: theme === 'dark' ? '#aaa' : '#666'
+                }}>
+                  {user?.name || user?.email}
+                </span>
+              </li>
+              <li style={navItemStyle}>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    ...navLinkStyle,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {t('Logout')}
+                </button>
+              </li>
+            </>
+          ) : (
+            <li style={navItemStyle}>
+              <Link to="/auth" style={{
+                ...navLinkStyle,
+                color: theme === 'dark' ? '#3498db' : '#2c3e50',
+                fontWeight: 'bold'
+              }}>
+                {t('Login')}
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
     </header>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import { useResume } from '../hooks/useResume';
+import { useAuth } from '../context/AuthContext';
 import ResumePreview from '../components/ResumePreview';
 import Button from '../components/Button';
 import PdfGenerator from '../components/PdfGenerator';
