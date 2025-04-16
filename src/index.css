@@ -199,7 +199,9 @@ header {
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s;
-  color: white; /* Ensuring all buttons have white text */
+  color: white !important; /* Force white text */
+  display: inline-block;
+  text-align: center;
 }
 
 .button-primary {
@@ -208,6 +210,44 @@ header {
 
 .button-secondary {
   background-color: #95a5a6;
+}
+
+.button-medium {
+  padding: 10px 15px;
+  font-size: 1rem;
+}
+
+.button-small {
+  padding: 5px 10px;
+  font-size: 0.85rem;
+}
+
+.button-large {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+}
+
+.button-full-width {
+  width: 100%;
+  display: block;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-icon {
+  margin-right: 8px;
+}
+
+/* Make sure the button text within the button is visible */
+button span.button-text {
+  color: white !important;
 }
 
 .form-group {
@@ -416,7 +456,8 @@ header {
   margin-bottom: 15px;
 }
 
-.button-text {
+/* Text Button (separate from the span inside regular buttons) */
+button.button-text {
   background: none;
   border: none;
   color: #3498db;
@@ -426,11 +467,11 @@ header {
   font-weight: bold;
 }
 
-.button-text:hover {
+button.button-text:hover {
   text-decoration: underline;
 }
 
-.dark-theme .button-text {
+.dark-theme button.button-text {
   color: #61dafb;
 }
 
