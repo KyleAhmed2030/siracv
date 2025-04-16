@@ -1,43 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResume } from '../hooks/useResume';
+import { useTheme } from '../hooks/useTheme';
 
 const SummaryForm = () => {
   const { t } = useTranslation();
   const { resumeData, updateResumeData } = useResume();
-  const [summary, setSummary] = useState(resumeData.summary || '');
+  const { theme } = useTheme();
   
-  // Update local state when resumeData changes
-  useEffect(() => {
-    setSummary(resumeData.summary || '');
-  }, [resumeData.summary]);
-  
-  // Handle summary text change
-  const handleSummaryChange = (e) => {
-    const value = e.target.value;
-    setSummary(value);
-    updateResumeData({ summary: value });
+  // Handle summary change
+  const handleChange = (e) => {
+    updateResumeData({
+      summary: e.target.value
+    });
   };
   
   return (
     <div className="form-section">
-      <h3>{t('Professional Summary')}</h3>
-      
       <div className="form-group">
-        <label className="form-label">
-          {t('Write a professional summary that highlights your experience and skills')}
+        <label htmlFor="summary-input" className="form-label">
+          {t('Professional Summary')}
         </label>
+        
+        <p className="form-help-text">
+          {t('Write a professional summary that highlights your experience and skills')}
+        </p>
+        
         <textarea
-          name="summary"
-          value={summary}
-          onChange={handleSummaryChange}
+          id="summary-input"
+          value={resumeData.summary || ''}
+          onChange={handleChange}
           placeholder={t('Briefly describe your professional background, key skills, and what makes you unique...')}
-          className="form-input"
+          className={`form-textarea ${theme}`}
           rows={6}
         />
-        <div className="form-hint">
+        
+        <p className="form-hint">
           {t('A good summary should be 3-5 sentences that quickly summarizes your background and skills')}
-        </div>
+        </p>
       </div>
     </div>
   );

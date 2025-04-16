@@ -1,157 +1,110 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResume } from '../hooks/useResume';
 import Input from './Input';
+import { isValidEmail } from '../utils/helpers';
 
 const BasicInfoForm = () => {
   const { t } = useTranslation();
   const { resumeData, updateResumeData } = useResume();
-  const [formData, setFormData] = useState(resumeData.basicInfo || {});
+  const { basicInfo = {} } = resumeData;
   
-  // Update component state when resumeData changes
-  useEffect(() => {
-    setFormData(resumeData.basicInfo || {});
-  }, [resumeData.basicInfo]);
+  const [errors, setErrors] = useState({});
   
-  // Update context when form data changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => {
-      const newData = { ...prevData, [name]: value };
-      updateResumeData({ basicInfo: newData });
-      return newData;
+  // Handle input change
+  const handleChange = (field, value) => {
+    updateResumeData({
+      basicInfo: {
+        ...basicInfo,
+        [field]: value
+      }
     });
+    
+    // Clear error for this field if it exists
+    if (errors[field]) {
+      setErrors({
+        ...errors,
+        [field]: null
+      });
+    }
+  };
+  
+  // Validate email
+  const validateEmail = (email) => {
+    if (email && !isValidEmail(email)) {
+      setErrors({
+        ...errors,
+        email: t('Please enter a valid email address')
+      });
+    }
   };
   
   return (
     <div className="form-section">
-      <h3>{t('Personal Information')}</h3>
-      
       <div className="form-row">
-        <div className="form-group half">
-          <Input
-            label={t('First Name')}
-            name="firstName"
-            value={formData.firstName || ''}
-            onChange={handleChange}
-            placeholder={t('Enter your first name')}
-            required
-          />
-        </div>
-        <div className="form-group half">
-          <Input
-            label={t('Last Name')}
-            name="lastName"
-            value={formData.lastName || ''}
-            onChange={handleChange}
-            placeholder={t('Enter your last name')}
-            required
-          />
-        </div>
-      </div>
-      
-      <div className="form-group">
         <Input
-          label={t('Job Title')}
-          name="jobTitle"
-          value={formData.jobTitle || ''}
-          onChange={handleChange}
-          placeholder={t('e.g. Software Engineer')}
+          label={t('First Name')}
+          value={basicInfo.firstName || ''}
+          onChange={(e) => handleChange('firstName', e.target.value)}
+          placeholder={t('Enter your first name')}
+          required
+        />
+        
+        <Input
+          label={t('Last Name')}
+          value={basicInfo.lastName || ''}
+          onChange={(e) => handleChange('lastName', e.target.value)}
+          placeholder={t('Enter your last name')}
+          required
         />
       </div>
       
-      <div className="form-row">
-        <div className="form-group half">
-          <Input
-            label={t('Email')}
-            name="email"
-            type="email"
-            value={formData.email || ''}
-            onChange={handleChange}
-            placeholder={t('Enter your email')}
-          />
-        </div>
-        <div className="form-group half">
-          <Input
-            label={t('Phone')}
-            name="phone"
-            value={formData.phone || ''}
-            onChange={handleChange}
-            placeholder={t('Enter your phone number')}
-          />
-        </div>
-      </div>
+      <Input
+        label={t('Job Title')}
+        value={basicInfo.jobTitle || ''}
+        onChange={(e) => handleChange('jobTitle', e.target.value)}
+        placeholder={t('e.g. Software Engineer')}
+      />
       
-      <div className="form-group">
-        <Input
-          label={t('Address')}
-          name="address"
-          value={formData.address || ''}
-          onChange={handleChange}
-          placeholder={t('Enter your street address')}
-        />
-      </div>
+      <Input
+        label={t('Email')}
+        type="email"
+        value={basicInfo.email || ''}
+        onChange={(e) => handleChange('email', e.target.value)}
+        onBlur={(e) => validateEmail(e.target.value)}
+        placeholder={t('Enter your email')}
+        error={errors.email}
+      />
       
-      <div className="form-row">
-        <div className="form-group half">
-          <Input
-            label={t('City')}
-            name="city"
-            value={formData.city || ''}
-            onChange={handleChange}
-            placeholder={t('Enter your city')}
-          />
-        </div>
-        <div className="form-group quarter">
-          <Input
-            label={t('State')}
-            name="state"
-            value={formData.state || ''}
-            onChange={handleChange}
-            placeholder={t('State/Province')}
-          />
-        </div>
-        <div className="form-group quarter">
-          <Input
-            label={t('Zip Code')}
-            name="zipCode"
-            value={formData.zipCode || ''}
-            onChange={handleChange}
-            placeholder={t('Zip/Postal Code')}
-          />
-        </div>
-      </div>
+      <Input
+        label={t('Phone')}
+        type="tel"
+        value={basicInfo.phone || ''}
+        onChange={(e) => handleChange('phone', e.target.value)}
+        placeholder={t('Enter your phone number')}
+      />
       
-      <div className="form-group">
-        <Input
-          label={t('Country')}
-          name="country"
-          value={formData.country || ''}
-          onChange={handleChange}
-          placeholder={t('Enter your country')}
-        />
-      </div>
+      <Input
+        label={t('Location')}
+        value={basicInfo.location || ''}
+        onChange={(e) => handleChange('location', e.target.value)}
+        placeholder={t('City, Country')}
+      />
       
-      <div className="form-row">
-        <div className="form-group half">
-          <Input
-            label={t('Website')}
-            name="website"
-            value={formData.website || ''}
-            onChange={handleChange}
-            placeholder={t('e.g. portfolio or personal website')}
-          />
-        </div>
-        <div className="form-group half">
-          <Input
-            label={t('LinkedIn')}
-            name="linkedIn"
-            value={formData.linkedIn || ''}
-            onChange={handleChange}
-            placeholder={t('LinkedIn profile URL')}
-          />
-        </div>
-      </div>
+      <Input
+        label={t('Website')}
+        type="url"
+        value={basicInfo.website || ''}
+        onChange={(e) => handleChange('website', e.target.value)}
+        placeholder={t('e.g. portfolio or personal website')}
+      />
+      
+      <Input
+        label={t('LinkedIn')}
+        value={basicInfo.linkedIn || ''}
+        onChange={(e) => handleChange('linkedIn', e.target.value)}
+        placeholder={t('LinkedIn profile URL')}
+      />
     </div>
   );
 };

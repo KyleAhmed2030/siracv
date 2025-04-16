@@ -14,17 +14,23 @@ export const useStorage = (key, initialValue) => {
 
   // Initialize from localStorage
   useEffect(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      setStoredValue(item ? JSON.parse(item) : initialValue);
-    } catch (error) {
-      console.error('Error reading from localStorage:', error);
-      setError(error);
-      setStoredValue(initialValue);
-    } finally {
-      setLoading(false);
-    }
-  }, [key, initialValue]);
+    const readValueFromStorage = () => {
+      try {
+        const item = window.localStorage.getItem(key);
+        // Only update state if the value is different
+        const parsedItem = item ? JSON.parse(item) : initialValue;
+        setStoredValue(parsedItem);
+      } catch (error) {
+        console.error('Error reading from localStorage:', error);
+        setError(error);
+        setStoredValue(initialValue);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    readValueFromStorage();
+  }, [key]); // Remove initialValue from dependencies
 
   // Return a wrapped version of useState's setter function
   const setValue = (value) => {

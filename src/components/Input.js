@@ -1,47 +1,54 @@
 import React from 'react';
+import { useTheme } from '../hooks/useTheme';
 
 /**
  * Reusable input component with label, icon, and error handling
  */
 const Input = ({
+  id,
   label,
-  name,
   type = 'text',
   value,
   onChange,
   placeholder,
+  error,
   required = false,
-  error = null,
-  icon = null,
+  disabled = false,
+  min,
+  max,
   className = '',
-  disabled = false
+  icon
 }) => {
+  const { theme } = useTheme();
+  
+  const inputId = id || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`;
+  
   return (
-    <div className={`input-container ${className} ${error ? 'input-error' : ''}`}>
+    <div className={`form-group ${className}`}>
       {label && (
-        <label htmlFor={name} className="form-label">
-          {label}
-          {required && <span className="required-mark">*</span>}
+        <label htmlFor={inputId} className="form-label">
+          {label}{required && <span className="required-indicator">*</span>}
         </label>
       )}
       
-      <div className="input-wrapper">
-        {icon && <span className="input-icon">{icon}</span>}
+      <div className="input-container">
+        {icon && <div className="input-icon">{icon}</div>}
         
         <input
+          id={inputId}
           type={type}
-          id={name}
-          name={name}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="form-input"
-          required={required}
           disabled={disabled}
+          min={min}
+          max={max}
+          className={`form-input ${theme} ${error ? 'has-error' : ''} ${icon ? 'has-icon' : ''}`}
+          required={required}
         />
       </div>
       
-      {error && <div className="input-error-message">{error}</div>}
+      {error && <div className="form-error">{error}</div>}
     </div>
   );
 };
