@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
@@ -10,6 +10,22 @@ const Header = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 576);
+  
+  // Add resize listener to update mobile state
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 576);
+    };
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   const handleLogoClick = () => {
     navigate('/');
@@ -19,7 +35,8 @@ const Header = () => {
   const headerStyle = {
     display: 'flex',
     alignItems: 'center',
-    padding: '16px 24px',
+    justifyContent: 'space-between',
+    padding: isMobile ? '12px 16px' : '16px 24px',
     backgroundColor: theme === 'dark' ? '#222' : '#fff',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
     position: 'sticky',
@@ -35,12 +52,12 @@ const Header = () => {
   };
   
   const iconStyle = {
-    fontSize: '24px',
-    marginRight: '8px'
+    fontSize: isMobile ? '20px' : '24px',
+    marginRight: isMobile ? '6px' : '8px'
   };
   
   const titleStyle = {
-    fontSize: '24px',
+    fontSize: isMobile ? '20px' : '24px',
     fontWeight: 700,
     margin: 0,
     color: theme === 'dark' ? '#3498db' : '#2c3e50'
