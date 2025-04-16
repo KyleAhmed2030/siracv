@@ -78,8 +78,9 @@ a {
 }
 
 .dark .button-secondary {
-  background-color: var(--gray-700);
+  background-color: var(--primary-dark);
   color: white;
+  font-weight: 600;
 }
 
 /* Layout */
@@ -87,6 +88,40 @@ a {
   max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 16px;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: var(--light-bg);
+  box-shadow: var(--box-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dark.app-header {
+  background-color: var(--dark-element-bg);
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo-icon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.app-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--primary-color);
 }
 
 /* Button styles */
@@ -114,7 +149,8 @@ a {
 
 .button-secondary {
   background-color: var(--gray-200);
-  color: white;
+  color: var(--dark-bg);
+  font-weight: 600;
 }
 
 .button-secondary:hover {
