@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
@@ -10,6 +10,22 @@ const WelcomeScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 576);
+  
+  // Add resize listener to update mobile state
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 576);
+    };
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   // Handle get started button
   const handleGetStarted = () => {
@@ -21,21 +37,21 @@ const WelcomeScreen = () => {
     navigate('/saved');
   };
   
-  // Logo style for the welcome screen
+  // Logo style for the welcome screen with responsive sizing
   const appLogoStyle = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '20px'
+    marginBottom: isMobile ? '15px' : '20px'
   };
   
   const logoIconStyle = {
-    fontSize: '36px',
+    fontSize: isMobile ? '28px' : '36px',
     marginRight: '10px'
   };
   
   const logoTextStyle = {
-    fontSize: '36px',
+    fontSize: isMobile ? '28px' : '36px',
     fontWeight: 700,
     color: theme === 'dark' ? '#3498db' : '#2c3e50',
     margin: 0

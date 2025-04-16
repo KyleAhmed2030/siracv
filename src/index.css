@@ -742,9 +742,85 @@ a {
 }
 
 /* Responsive styles */
+/* Base mobile styles - Small devices (phones, 576px and down) */
+@media (max-width: 576px) {
+  /* Font size adjustments */
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  h2 {
+    font-size: 20px;
+  }
+  
+  h3 {
+    font-size: 18px;
+  }
+  
+  /* Header adjustments */
+  .app-header {
+    padding: 12px 16px;
+  }
+  
+  .app-title {
+    font-size: 20px;
+  }
+  
+  .logo-icon {
+    font-size: 20px;
+  }
+  
+  /* Layout adjustments */
+  .main-content {
+    padding: 16px 12px;
+  }
+  
+  .welcome-screen,
+  .template-selection-screen,
+  .resume-builder-screen,
+  .preview-screen,
+  .saved-resumes-screen,
+  .settings-screen {
+    padding: 20px 12px;
+  }
+  
+  .welcome-container {
+    padding: 0;
+  }
+
+  .form-container {
+    padding: 20px 15px;
+  }
+
+  /* Welcome screen specific */
+  .welcome-actions {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Form elements */
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .button {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Medium devices (tablets, 768px and down) */
 @media (max-width: 768px) {
   .template-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
   
   .resume-contact-info {
@@ -754,6 +830,8 @@ a {
   
   .resume-preview {
     padding: 20px;
+    margin: 0 auto;
+    max-width: 100%;
   }
   
   .saved-resume-item {
@@ -764,6 +842,9 @@ a {
   .resume-actions {
     margin-top: 15px;
     align-self: flex-end;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
   
   .navigation-buttons {
@@ -778,5 +859,44 @@ a {
   
   .button {
     width: 100%;
+  }
+  
+  /* Template preview */
+  .template-preview {
+    height: 250px;
+  }
+  
+  /* Welcome screen */
+  .welcome-header {
+    margin-bottom: 30px;
+  }
+  
+  /* Settings */
+  .settings-item {
+    margin-bottom: 15px;
+  }
+}
+
+/* Large devices (desktops, 992px and down) */
+@media (max-width: 992px) {
+  .container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+  
+  .resume-preview {
+    max-width: 90%;
+  }
+}
+
+/* For RTL layouts in mobile view */
+@media (max-width: 768px) {
+  [dir="rtl"] .navigation-buttons,
+  [dir="rtl"] .preview-actions {
+    flex-direction: column;
+  }
+  
+  [dir="rtl"] .resume-actions {
+    flex-direction: row-reverse;
   }
 }
