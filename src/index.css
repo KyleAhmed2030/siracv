@@ -79,7 +79,7 @@ a {
 
 .dark .button-secondary {
   background-color: var(--gray-700);
-  color: var(--gray-200);
+  color: white;
 }
 
 /* Layout */
@@ -114,7 +114,7 @@ a {
 
 .button-secondary {
   background-color: var(--gray-200);
-  color: var(--gray-800);
+  color: white;
 }
 
 .button-secondary:hover {

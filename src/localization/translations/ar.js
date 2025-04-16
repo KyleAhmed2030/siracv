@@ -2,7 +2,7 @@ const arTranslation = {
   // General
   "Resume Builder": "سيرة",
   "Sira": "سيرة",
-  "Create professional resumes easily": "أنشئ سير ذاتية احترافية بسهولة",
+  "Create professional resumes easily": "أنشئ سيرة ذاتية احترافية بسهولة",
   "Get Started": "ابدأ الآن",
   "Save": "حفظ",
   "Cancel": "إلغاء",
@@ -13,6 +13,7 @@ const arTranslation = {
   "Previous": "السابق",
   "Back": "رجوع",
   "Continue": "استمرار",
+  "View Saved Resumes": "عرض السير الذاتية المحفوظة",
 
   // Welcome Screen
   "Welcome to Resume Builder": "مرحباً بك في سيرة",
@@ -53,6 +54,8 @@ const arTranslation = {
   "Country": "الدولة",
   "Website": "الموقع الإلكتروني",
   "LinkedIn": "لينكد إن",
+  "Location": "الموقع",
+  "Please enter a valid email address": "يرجى إدخال بريد إلكتروني صحيح",
 
   "Enter your first name": "أدخل اسمك الأول",
   "Enter your last name": "أدخل اسم عائلتك",
