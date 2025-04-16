@@ -46,7 +46,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "react-scripts start"
+args = "cd . && react-scripts start"
 waitForPort = 3000
 
 [deployment]
