@@ -88,6 +88,8 @@ input:checked + .slider:before {
   background: none;
   cursor: pointer;
   border-radius: 4px;
+  color: #333;
+  font-weight: bold;
 }
 
 .language-btn.active {
@@ -197,16 +199,15 @@ header {
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s;
+  color: white; /* Ensuring all buttons have white text */
 }
 
 .button-primary {
   background-color: #3498db;
-  color: white;
 }
 
 .button-secondary {
   background-color: #95a5a6;
-  color: white;
 }
 
 .form-group {
@@ -422,6 +423,7 @@ header {
   cursor: pointer;
   padding: 5px;
   font-size: 0.9rem;
+  font-weight: bold;
 }
 
 .button-text:hover {
