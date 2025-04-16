@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next';
 const ResumePreview = ({ resumeData }) => {
   const { theme } = useTheme();
   const { getColorValue } = useResume();
+  const { t } = useTranslation();
   
   if (!resumeData) {
-    return <div className="resume-preview-empty">No resume data available</div>;
+    return <div className="resume-preview-empty">{t('No resume data available')}</div>;
   }
   
   const {
@@ -76,6 +77,7 @@ const Template1Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  const { t } = useTranslation();
   
   // CSS custom properties for colors
   const customStyles = {
@@ -129,14 +131,14 @@ const Template1Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
       
       {summary && (
         <div className="resume-section">
-          <h3>Professional Summary</h3>
+          <h3>{t('Professional Summary')}</h3>
           <p className="resume-summary">{summary}</p>
         </div>
       )}
       
       {workExperience.length > 0 && (
         <div className="resume-section">
-          <h3>Work Experience</h3>
+          <h3>{t('Work Experience')}</h3>
           
           {workExperience.map((experience) => (
             <div key={experience.id} className="resume-item">
@@ -160,7 +162,7 @@ const Template1Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
       
       {education.length > 0 && (
         <div className="resume-section">
-          <h3>Education</h3>
+          <h3>{t('Education')}</h3>
           
           {education.map((edu) => (
             <div key={edu.id} className="resume-item">
@@ -184,7 +186,7 @@ const Template1Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
       
       {skills.length > 0 && (
         <div className="resume-section">
-          <h3>Skills</h3>
+          <h3>{t('Skills')}</h3>
           
           <div className="skills-grid">
             {skills.map((skill) => (
@@ -209,6 +211,7 @@ const Template2Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  const { t } = useTranslation();
   
   // CSS custom properties for colors
   const customStyles = {
@@ -234,20 +237,20 @@ const Template2Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
           </div>
           
           <div className="sidebar-section">
-            <h3 className="sidebar-section-title">Contact</h3>
+            <h3 className="sidebar-section-title">{t('Contact')}</h3>
             <div className="sidebar-divider"></div>
             <ul className="contact-list">
-              {basicInfo.email && <li><span className="contact-label">Email:</span> {basicInfo.email}</li>}
-              {basicInfo.phone && <li><span className="contact-label">Phone:</span> {basicInfo.phone}</li>}
-              {basicInfo.location && <li><span className="contact-label">Location:</span> {basicInfo.location}</li>}
-              {basicInfo.website && <li><span className="contact-label">Website:</span> {basicInfo.website}</li>}
+              {basicInfo.email && <li><span className="contact-label">{t('Email')}:</span> {basicInfo.email}</li>}
+              {basicInfo.phone && <li><span className="contact-label">{t('Phone')}:</span> {basicInfo.phone}</li>}
+              {basicInfo.location && <li><span className="contact-label">{t('Location')}:</span> {basicInfo.location}</li>}
+              {basicInfo.website && <li><span className="contact-label">{t('Website')}:</span> {basicInfo.website}</li>}
               {basicInfo.linkedIn && <li><span className="contact-label">LinkedIn:</span> {basicInfo.linkedIn}</li>}
             </ul>
           </div>
           
           {skills.length > 0 && (
             <div className="sidebar-section">
-              <h3 className="sidebar-section-title">Skills</h3>
+              <h3 className="sidebar-section-title">{t('Skills')}</h3>
               <div className="sidebar-divider"></div>
               <div className="skills-container">
                 {skills.map(skill => (
@@ -350,6 +353,7 @@ const Template3Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  const { t } = useTranslation();
   
   // CSS custom properties for colors
   const customStyles = {
@@ -373,14 +377,14 @@ const Template3Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
 
       {summary && (
         <div className="template3-section">
-          <h2 className="section-title">Summary</h2>
+          <h2 className="section-title">{t('Summary')}</h2>
           <p className="section-content summary-text">{summary}</p>
         </div>
       )}
 
       {workExperience.length > 0 && (
         <div className="template3-section">
-          <h2 className="section-title">Experience</h2>
+          <h2 className="section-title">{t('Work Experience')}</h2>
           <div className="experience-container">
             {workExperience.map(exp => (
               <div key={exp.id} className="experience-item">
