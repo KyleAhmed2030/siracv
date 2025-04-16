@@ -1,13 +1,13 @@
 const express = require('express');
 const session = require('express-session');
+const path = require('path');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const cookieParser = require('cookie-parser');
 
+// Create Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -15,84 +15,72 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Session configuration
 app.use(session({
-  secret: 'sira-resume-builder-secret',
+  secret: process.env.SESSION_SECRET || 'sira-resume-builder-secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    secure: process.env.NODE_ENV === 'production'
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    httpOnly: true
   }
 }));
 
-// Passport initialization
+// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// User database (in-memory for development)
-// In production, this would be replaced with a real database
-const USERS_DB_FILE = path.join(__dirname, 'users.json');
-let users = [];
+// Simple in-memory user storage (replace with database in production)
+const users = [];
 
-// Load users from file if it exists
-try {
-  if (fs.existsSync(USERS_DB_FILE)) {
-    const data = fs.readFileSync(USERS_DB_FILE, 'utf8');
-    users = JSON.parse(data);
-  }
-} catch (err) {
-  console.error('Error loading users:', err);
-}
-
-// Save users to file
-const saveUsers = () => {
-  try {
-    fs.writeFileSync(USERS_DB_FILE, JSON.stringify(users, null, 2));
-  } catch (err) {
-    console.error('Error saving users:', err);
-  }
+// Password hashing
+const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10);
+  return bcrypt.hash(password, salt);
 };
 
-// Configure passport local strategy
+// Configure Passport local strategy
 passport.use(new LocalStrategy(
   { usernameField: 'email' },
   async (email, password, done) => {
     try {
-      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+      // Find user by email
+      const user = users.find(u => u.email === email);
       
+      // User not found
       if (!user) {
-        return done(null, false, { message: 'Incorrect email or password' });
+        return done(null, false, { message: 'Invalid email or password' });
       }
       
+      // Check password
       const isMatch = await bcrypt.compare(password, user.password);
-      
       if (!isMatch) {
-        return done(null, false, { message: 'Incorrect email or password' });
+        return done(null, false, { message: 'Invalid email or password' });
       }
       
+      // Success
       return done(null, user);
-    } catch (err) {
-      return done(err);
+    } catch (error) {
+      return done(error);
     }
   }
 ));
 
+// Serialize user for session
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+// Deserialize user from session
 passport.deserializeUser((id, done) => {
   const user = users.find(u => u.id === id);
+  if (!user) {
+    return done(new Error('User not found'));
+  }
   done(null, user);
 });
-
-// Check if user is authenticated middleware
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).json({ message: 'Not authenticated' });
-};
 
 // Authentication routes
 app.post('/api/register', async (req, res) => {
@@ -104,41 +92,36 @@ app.post('/api/register', async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
     
-    // Check if user already exists
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-      return res.status(400).json({ message: 'Email already registered' });
+    // Check if email already exists
+    if (users.some(u => u.email === email)) {
+      return res.status(400).json({ message: 'Email already in use' });
     }
     
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    
     // Create new user
+    const hashedPassword = await hashPassword(password);
     const newUser = {
       id: uuidv4(),
       name,
       email,
       password: hashedPassword,
-      savedResumes: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      createdAt: new Date()
     };
     
-    // Add user to database
+    // Save user
     users.push(newUser);
-    saveUsers();
     
-    // Log in the user
+    // Log in the newly registered user
     req.login(newUser, (err) => {
       if (err) {
-        return res.status(500).json({ message: 'Error logging in after registration' });
+        return res.status(500).json({ message: 'Login failed after registration' });
       }
-      const userResponse = { ...newUser };
-      delete userResponse.password;
-      return res.status(201).json(userResponse);
+      
+      // Return user data (excluding password)
+      const { password, ...userData } = newUser;
+      return res.status(201).json(userData);
     });
-  } catch (err) {
-    console.error('Registration error:', err);
+  } catch (error) {
+    console.error('Registration error:', error);
     res.status(500).json({ message: 'Server error during registration' });
   }
 });
@@ -148,130 +131,47 @@ app.post('/api/login', (req, res, next) => {
     if (err) {
       return next(err);
     }
+    
     if (!user) {
       return res.status(401).json({ message: info.message || 'Authentication failed' });
     }
+    
     req.login(user, (err) => {
       if (err) {
         return next(err);
       }
-      const userResponse = { ...user };
-      delete userResponse.password;
-      return res.json(userResponse);
+      
+      // Return user data (excluding password)
+      const { password, ...userData } = user;
+      return res.json(userData);
     });
   })(req, res, next);
 });
 
 app.post('/api/logout', (req, res) => {
   req.logout(function(err) {
-    if (err) { return next(err); }
-    res.status(200).json({ message: 'Logged out successfully' });
+    if (err) {
+      return res.status(500).json({ message: 'Logout failed' });
+    }
+    res.sendStatus(200);
   });
 });
 
 app.get('/api/user', (req, res) => {
-  if (!req.user) {
+  if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Not authenticated' });
   }
   
-  const userResponse = { ...req.user };
-  delete userResponse.password;
-  res.json(userResponse);
+  // Return user data (excluding password)
+  const { password, ...userData } = req.user;
+  res.json(userData);
 });
 
-// Resume saving and loading routes
-app.post('/api/resumes', isAuthenticated, (req, res) => {
-  try {
-    const { resumeData } = req.body;
-    if (!resumeData) {
-      return res.status(400).json({ message: 'Resume data is required' });
-    }
-    
-    const userId = req.user.id;
-    const user = users.find(u => u.id === userId);
-    
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    // If resume has an id, update it
-    if (resumeData.id) {
-      const index = user.savedResumes.findIndex(r => r.id === resumeData.id);
-      if (index !== -1) {
-        user.savedResumes[index] = {
-          ...resumeData,
-          updatedAt: new Date().toISOString()
-        };
-      } else {
-        // If resume id not found, create a new one
-        user.savedResumes.push({
-          ...resumeData,
-          id: uuidv4(),
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        });
-      }
-    } else {
-      // Create new resume
-      user.savedResumes.push({
-        ...resumeData,
-        id: uuidv4(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      });
-    }
-    
-    user.updatedAt = new Date().toISOString();
-    saveUsers();
-    
-    res.status(201).json({ message: 'Resume saved successfully', resumes: user.savedResumes });
-  } catch (err) {
-    console.error('Save resume error:', err);
-    res.status(500).json({ message: 'Server error while saving resume' });
-  }
-});
-
-app.get('/api/resumes', isAuthenticated, (req, res) => {
-  try {
-    const userId = req.user.id;
-    const user = users.find(u => u.id === userId);
-    
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    res.json(user.savedResumes);
-  } catch (err) {
-    console.error('Get resumes error:', err);
-    res.status(500).json({ message: 'Server error while fetching resumes' });
-  }
-});
-
-app.delete('/api/resumes/:id', isAuthenticated, (req, res) => {
-  try {
-    const resumeId = req.params.id;
-    const userId = req.user.id;
-    const user = users.find(u => u.id === userId);
-    
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    user.savedResumes = user.savedResumes.filter(r => r.id !== resumeId);
-    user.updatedAt = new Date().toISOString();
-    saveUsers();
-    
-    res.json({ message: 'Resume deleted successfully', resumes: user.savedResumes });
-  } catch (err) {
-    console.error('Delete resume error:', err);
-    res.status(500).json({ message: 'Server error while deleting resume' });
-  }
-});
-
-// Serve static assets in production
+// Serve static files from the React app in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'build')));
   
+  // Handle all other routes by serving the React app
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
   });

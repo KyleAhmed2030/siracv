@@ -1,68 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router-dom';
-import Button from './Button';
 import Input from './Input';
+import Button from './Button';
+import { isValidEmail } from '../utils/helpers';
 
-const Auth = ({ onLogin, isAuthenticated }) => {
+const Auth = ({ onLogin }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const redirectPath = location.state?.from || '/';
-  
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
+    name: ''
   });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(redirectPath);
-    }
-  }, [isAuthenticated, navigate, redirectPath]);
-
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!isLogin && !formData.name.trim()) {
-      newErrors.name = t('auth.nameRequired');
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = t('auth.emailRequired');
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = t('auth.invalidEmail');
-    }
-    
-    if (!formData.password) {
-      newErrors.password = t('auth.passwordRequired');
-    } else if (formData.password.length < 6) {
-      newErrors.password = t('auth.passwordTooShort');
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    // Clear error when typing
-    if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: '',
-      });
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear validation error when user types
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: null }));
     }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.email) {
+      errors.email = t('Email is required');
+    } else if (!isValidEmail(formData.email)) {
+      errors.email = t('Please enter a valid email address');
+    }
+    
+    if (!formData.password) {
+      errors.password = t('Password is required');
+    } else if (formData.password.length < 6) {
+      errors.password = t('Password must be at least 6 characters');
+    }
+    
+    if (!isLogin && !formData.name) {
+      errors.name = t('Name is required');
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
@@ -72,39 +56,19 @@ const Auth = ({ onLogin, isAuthenticated }) => {
       return;
     }
     
-    setLoading(true);
-    setMessage('');
-    
     try {
-      const endpoint = isLogin ? '/api/login' : '/api/register';
-      const payload = isLogin 
-        ? { email: formData.email, password: formData.password } 
-        : { name: formData.name, email: formData.email, password: formData.password };
+      setLoading(true);
+      setError(null);
       
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        credentials: 'include',
-      });
+      // For registration, include all fields
+      // For login, just email and password
+      const data = isLogin 
+        ? { email: formData.email, password: formData.password }
+        : formData;
       
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Authentication failed');
-      }
-      
-      if (onLogin) {
-        onLogin(data);
-      }
-      
-      // Redirect
-      navigate(redirectPath);
-      
-    } catch (error) {
-      setMessage(error.message);
+      await onLogin(data);
+    } catch (err) {
+      setError(err.message || 'Authentication failed');
     } finally {
       setLoading(false);
     }
@@ -112,39 +76,38 @@ const Auth = ({ onLogin, isAuthenticated }) => {
 
   const toggleAuthMode = () => {
     setIsLogin(!isLogin);
-    setErrors({});
-    setMessage('');
+    setError(null);
+    setValidationErrors({});
   };
 
   return (
     <div className="auth-container">
       <div className="auth-form-container">
-        <h2 className="auth-title">
-          {isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}
-        </h2>
-        
+        <h1 className="auth-title">{isLogin ? t('Welcome back') : t('Create your free account')}</h1>
         <p className="auth-subtitle">
-          {isLogin ? t('auth.loginSubtitle') : t('auth.registerSubtitle')}
+          {isLogin 
+            ? t('Sign in to download your resume and save your progress')
+            : t('Sign up to download your resume and save your progress - 100% free!')}
         </p>
         
-        {message && (
+        {error && (
           <div className="auth-message error">
-            {message}
+            {error}
           </div>
         )}
         
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="auth-form">
           {!isLogin && (
             <div className="form-group">
               <Input
                 id="name"
                 name="name"
-                label={t('auth.nameLabel')}
+                label={t('Full Name')}
+                placeholder={t('Enter your full name')}
                 value={formData.name}
                 onChange={handleChange}
-                placeholder={t('auth.namePlaceholder')}
-                error={errors.name}
-                icon="user"
+                error={validationErrors.name}
+                required
               />
             </div>
           )}
@@ -154,12 +117,12 @@ const Auth = ({ onLogin, isAuthenticated }) => {
               id="email"
               name="email"
               type="email"
-              label={t('auth.emailLabel')}
+              label={t('Email Address')}
+              placeholder={t('Enter your email address')}
               value={formData.email}
               onChange={handleChange}
-              placeholder={t('auth.emailPlaceholder')}
-              error={errors.email}
-              icon="envelope"
+              error={validationErrors.email}
+              required
             />
           </div>
           
@@ -168,12 +131,12 @@ const Auth = ({ onLogin, isAuthenticated }) => {
               id="password"
               name="password"
               type="password"
-              label={t('auth.passwordLabel')}
+              label={t('Password')}
+              placeholder={t('Create a password')}
               value={formData.password}
               onChange={handleChange}
-              placeholder={t('auth.passwordPlaceholder')}
-              error={errors.password}
-              icon="lock"
+              error={validationErrors.password}
+              required
             />
           </div>
           
@@ -182,45 +145,45 @@ const Auth = ({ onLogin, isAuthenticated }) => {
               type="submit"
               variant="primary"
               fullWidth
-              loading={loading}
               disabled={loading}
+              loading={loading}
             >
-              {isLogin ? t('auth.loginButton') : t('auth.registerButton')}
+              {isLogin ? t('Login') : t('Create Free Account')}
             </Button>
           </div>
         </form>
         
         <div className="auth-toggle">
-          <p>
-            {isLogin ? t('auth.noAccount') : t('auth.hasAccount')}
-            <button
-              type="button"
-              className="auth-toggle-button"
-              onClick={toggleAuthMode}
-            >
-              {isLogin ? t('auth.registerLink') : t('auth.loginLink')}
-            </button>
-          </p>
+          {isLogin ? t('Don\'t have an account?') : t('Already have an account?')}
+          <button
+            type="button"
+            className="auth-toggle-button"
+            onClick={toggleAuthMode}
+            disabled={loading}
+          >
+            {isLogin ? t('Sign up for free') : t('Login')}
+          </button>
         </div>
       </div>
       
       <div className="auth-hero">
-        <div className="auth-hero-content">
-          <h1 className="auth-hero-title">{t('auth.heroTitle')}</h1>
-          <p className="auth-hero-description">{t('auth.heroDescription')}</p>
-          <div className="auth-hero-features">
-            <div className="auth-feature">
-              <div className="auth-feature-icon">✓</div>
-              <div className="auth-feature-text">{t('auth.feature1')}</div>
-            </div>
-            <div className="auth-feature">
-              <div className="auth-feature-icon">✓</div>
-              <div className="auth-feature-text">{t('auth.feature2')}</div>
-            </div>
-            <div className="auth-feature">
-              <div className="auth-feature-icon">✓</div>
-              <div className="auth-feature-text">{t('auth.feature3')}</div>
-            </div>
+        <h2 className="auth-hero-title">{t('Create professional resumes in minutes with Sira')}</h2>
+        <p className="auth-hero-description">
+          {t('Our easy-to-use resume builder helps you create a personalized, professional resume that will impress employers.')}
+        </p>
+        
+        <div className="auth-hero-features">
+          <div className="auth-feature">
+            <div className="auth-feature-icon">✓</div>
+            <div className="auth-feature-text">{t('Professional templates designed by experts')}</div>
+          </div>
+          <div className="auth-feature">
+            <div className="auth-feature-icon">✓</div>
+            <div className="auth-feature-text">{t('Easy to customize and personalize')}</div>
+          </div>
+          <div className="auth-feature">
+            <div className="auth-feature-icon">✓</div>
+            <div className="auth-feature-text">{t('Download your resume as PDF anytime')}</div>
           </div>
         </div>
       </div>
