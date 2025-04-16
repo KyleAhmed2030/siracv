@@ -1,83 +1,42 @@
 import React from 'react';
-import { 
-  TouchableOpacity, 
-  Text, 
-  StyleSheet, 
-  ActivityIndicator,
-  View 
-} from 'react-native';
-import { Feather } from '@expo/vector-icons';
 
 /**
  * Reusable button component with optional icon and loading state
  */
 const Button = ({ 
-  title, 
-  onPress, 
-  color = '#2196F3', 
-  textColor = 'white',
-  icon,
-  loading = false,
+  children, 
+  onClick, 
+  type = 'button', 
+  variant = 'primary', 
+  size = 'medium',
   disabled = false,
-  style,
-  textStyle
+  fullWidth = false,
+  icon = null,
+  loading = false,
+  className = ''
 }) => {
-  const buttonOpacity = disabled || loading ? 0.6 : 1;
+  const getButtonClasses = () => {
+    const baseClass = 'button';
+    const variantClass = `button-${variant}`;
+    const sizeClass = `button-${size}`;
+    const widthClass = fullWidth ? 'button-full-width' : '';
+    const loadingClass = loading ? 'button-loading' : '';
+    
+    return `${baseClass} ${variantClass} ${sizeClass} ${widthClass} ${loadingClass} ${className}`.trim();
+  };
   
   return (
-    <TouchableOpacity
-      style={[
-        styles.button,
-        { backgroundColor: color, opacity: buttonOpacity },
-        style
-      ]}
-      onPress={onPress}
+    <button
+      type={type}
+      className={getButtonClasses()}
+      onClick={onClick}
       disabled={disabled || loading}
-      activeOpacity={0.8}
     >
-      {loading ? (
-        <ActivityIndicator color={textColor} size="small" />
-      ) : (
-        <View style={styles.contentContainer}>
-          {icon && (
-            <Feather 
-              name={icon} 
-              size={18} 
-              color={textColor} 
-              style={styles.icon} 
-            />
-          )}
-          <Text style={[styles.text, { color: textColor }, textStyle]}>
-            {title}
-          </Text>
-        </View>
-      )}
-    </TouchableOpacity>
+      {icon && <span className="button-icon">{icon}</span>}
+      <span className="button-text">{children}</span>
+      {loading && <span className="button-spinner"></span>}
+    </button>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 50,
-  },
-  contentContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  icon: {
-    marginRight: 8,
-  },
-});
 
 export default Button;

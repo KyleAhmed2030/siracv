@@ -1,11 +1,24 @@
-import React, { createContext, useState, useEffect } from 'react';
-import storage from '../utils/storage';
+import React, { createContext, useState } from 'react';
 
-// Create the Resume Context
 export const ResumeContext = createContext();
 
-// Storage key for resume data
-const RESUME_STORAGE_KEY = 'current-resume';
+// Initial resume data structure
+const initialResumeData = {
+  template: 'professional',
+  basicInfo: {
+    fullName: '',
+    jobTitle: '',
+    email: '',
+    phone: '',
+    address: '',
+    linkedin: '',
+    website: ''
+  },
+  education: [],
+  workExperience: [],
+  skills: [],
+  summary: ''
+};
 
 /**
  * Resume Context Provider - Manages the state of the current resume being created
@@ -14,51 +27,7 @@ const RESUME_STORAGE_KEY = 'current-resume';
  * @returns {React.ReactNode} Provider Component
  */
 export const ResumeContextProvider = ({ children }) => {
-  // State for the current resume data
-  const [resumeData, setResumeData] = useState({
-    fullName: '',
-    jobTitle: '',
-    email: '',
-    phone: '',
-    location: '',
-    linkedin: '',
-    website: '',
-    education: [],
-    workExperience: [],
-    skills: [],
-    languages: [],
-    summary: '',
-    template: null,
-  });
-  
-  // Load saved resume data on mount
-  useEffect(() => {
-    const loadResumeData = async () => {
-      try {
-        const savedData = await storage.getItem(RESUME_STORAGE_KEY);
-        if (savedData) {
-          setResumeData(savedData);
-        }
-      } catch (error) {
-        console.error('Error loading resume data:', error);
-      }
-    };
-    
-    loadResumeData();
-  }, []);
-  
-  // Save resume data whenever it changes
-  useEffect(() => {
-    const saveResumeData = async () => {
-      try {
-        await storage.setItem(RESUME_STORAGE_KEY, resumeData);
-      } catch (error) {
-        console.error('Error saving resume data:', error);
-      }
-    };
-    
-    saveResumeData();
-  }, [resumeData]);
+  const [resumeData, setResumeData] = useState(initialResumeData);
   
   /**
    * Update specific parts of the resume data
@@ -66,9 +35,9 @@ export const ResumeContextProvider = ({ children }) => {
    * @param {Object} updates - Object containing the updated fields
    */
   const updateResumeData = (updates) => {
-    setResumeData(prev => ({
-      ...prev,
-      ...updates,
+    setResumeData(prevData => ({
+      ...prevData,
+      ...updates
     }));
   };
   
@@ -77,7 +46,7 @@ export const ResumeContextProvider = ({ children }) => {
    * 
    * @param {Object} data - Complete resume data object
    */
-  const setResumeDataObject = (data) => {
+  const setFullResumeData = (data) => {
     setResumeData(data);
   };
   
@@ -85,33 +54,16 @@ export const ResumeContextProvider = ({ children }) => {
    * Clear the resume data (reset to initial state)
    */
   const clearResumeData = () => {
-    setResumeData({
-      fullName: '',
-      jobTitle: '',
-      email: '',
-      phone: '',
-      location: '',
-      linkedin: '',
-      website: '',
-      education: [],
-      workExperience: [],
-      skills: [],
-      languages: [],
-      summary: '',
-      template: null,
-    });
-  };
-  
-  // Context value to be provided
-  const value = {
-    resumeData,
-    updateResumeData,
-    setResumeData: setResumeDataObject,
-    clearResumeData,
+    setResumeData(initialResumeData);
   };
   
   return (
-    <ResumeContext.Provider value={value}>
+    <ResumeContext.Provider value={{ 
+      resumeData, 
+      updateResumeData, 
+      setFullResumeData, 
+      clearResumeData 
+    }}>
       {children}
     </ResumeContext.Provider>
   );
