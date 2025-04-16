@@ -10,18 +10,27 @@ export const ThemeContext = createContext();
  * @returns {React.ReactNode} Provider Component
  */
 export const ThemeContextProvider = ({ children, initialTheme = 'light' }) => {
-  const [theme, setTheme] = useState(initialTheme);
+  // Try to get saved theme from localStorage
+  const getSavedTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : initialTheme;
+  };
   
-  // When theme changes, update localStorage
+  const [theme, setTheme] = useState(getSavedTheme);
+  
+  // When theme changes, update localStorage and apply theme to body
   useEffect(() => {
     localStorage.setItem('theme', theme);
+    document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme';
+    console.log('Theme changed to:', theme);
   }, [theme]);
   
   /**
    * Toggle between light and dark theme
    */
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    console.log('Toggle theme called, current theme:', theme);
+    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
   };
   
   /**
