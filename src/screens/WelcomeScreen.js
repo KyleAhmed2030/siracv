@@ -1,9 +1,19 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 
-const WelcomeScreen = ({ onGetStarted }) => {
+const WelcomeScreen = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  
+  const handleCreateResume = () => {
+    navigate('/templates');
+  };
+  
+  const handleViewTemplates = () => {
+    navigate('/templates');
+  };
   
   return (
     <div className="home-page">
@@ -14,7 +24,7 @@ const WelcomeScreen = ({ onGetStarted }) => {
         <Button 
           variant="primary" 
           fullWidth 
-          onClick={onGetStarted}
+          onClick={handleCreateResume}
         >
           {t('Create Resume')}
         </Button>
@@ -22,6 +32,7 @@ const WelcomeScreen = ({ onGetStarted }) => {
         <Button 
           variant="secondary" 
           fullWidth
+          onClick={handleViewTemplates}
         >
           {t('View Templates')}
         </Button>
