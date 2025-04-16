@@ -6,20 +6,33 @@ import { v4 as uuidv4 } from 'uuid';
 
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
-const SkillsForm = () => {
+const SkillsForm = ({ onValidationChange }) => {
   const { t } = useTranslation();
   const { resumeData, updateResumeData } = useResume();
   const [skillsList, setSkillsList] = useState(resumeData.skills || []);
   const [newSkill, setNewSkill] = useState({ name: '', level: 'Intermediate' });
+  const [error, setError] = useState(null);
   
   // Update local state when resumeData changes
   useEffect(() => {
     setSkillsList(resumeData.skills || []);
   }, [resumeData.skills]);
   
+  // Always validate as true since skills are optional
+  useEffect(() => {
+    if (onValidationChange) {
+      onValidationChange(true);
+    }
+  }, [skillsList, onValidationChange]);
+  
   // Handle skill name input change
   const handleSkillNameChange = (e) => {
     setNewSkill({ ...newSkill, name: e.target.value });
+    
+    // Clear error if user starts typing
+    if (error && e.target.value.trim()) {
+      setError(null);
+    }
   };
   
   // Handle skill level select change
@@ -31,7 +44,16 @@ const SkillsForm = () => {
   const handleAddSkill = (e) => {
     e.preventDefault();
     
-    if (!newSkill.name.trim()) return;
+    if (!newSkill.name.trim()) {
+      setError(t('Please enter a skill name'));
+      return;
+    }
+    
+    // Check for duplicate skill names
+    if (skillsList.some(skill => skill.name.toLowerCase() === newSkill.name.trim().toLowerCase())) {
+      setError(t('This skill is already added'));
+      return;
+    }
     
     const skillToAdd = {
       id: uuidv4(),
@@ -43,6 +65,7 @@ const SkillsForm = () => {
     setSkillsList(updatedList);
     updateResumeData({ skills: updatedList });
     setNewSkill({ name: '', level: 'Intermediate' });
+    setError(null);
   };
   
   // Remove a skill
@@ -52,11 +75,18 @@ const SkillsForm = () => {
     updateResumeData({ skills: updatedList });
   };
   
+  // Error message style
+  const errorMessageStyle = {
+    color: 'var(--error-color)',
+    fontSize: '14px',
+    marginTop: '5px'
+  };
+  
   return (
     <div className="form-section">
       <h3>{t('Skills')}</h3>
       
-      <div className="skills-list">
+      <div className="skills-list" style={{ marginBottom: '20px' }}>
         {skillsList.map(skill => (
           <div key={skill.id} className="skill-item">
             <div className="skill-name">{skill.name}</div>
@@ -88,6 +118,7 @@ const SkillsForm = () => {
               value={newSkill.name}
               onChange={handleSkillNameChange}
               placeholder={t('e.g. JavaScript, Project Management, etc.')}
+              error={error}
             />
           </div>
           <div className="form-group quarter">
