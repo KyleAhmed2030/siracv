@@ -375,9 +375,14 @@ a {
 }
 
 /* Template 1 (Professional) */
+.template1-preview {
+  --template-primary-color: var(--template-primary-color, var(--primary-color));
+  --template-accent-color: var(--template-accent-color, var(--accent-color));
+}
+
 .template1-preview .resume-header {
   margin-bottom: 20px;
-  border-bottom: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--template-primary-color);
   padding-bottom: 15px;
 }
 
@@ -412,7 +417,7 @@ a {
 
 .template1-preview .contact-icon {
   margin-right: 5px;
-  color: var(--primary-color);
+  color: var(--template-primary-color);
 }
 
 .template1-preview .resume-section {
@@ -421,7 +426,7 @@ a {
 
 .template1-preview .resume-section h3 {
   color: var(--secondary-color);
-  border-bottom: 1px solid var(--primary-color);
+  border-bottom: 1px solid var(--template-primary-color);
   padding-bottom: 5px;
   margin-bottom: 15px;
   font-size: 18px;
@@ -490,7 +495,7 @@ a {
 }
 
 .template1-preview .skill-level {
-  background-color: var(--primary-color);
+  background-color: var(--template-primary-color);
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -506,6 +511,8 @@ a {
 .template2-preview {
   padding: 0;
   overflow: hidden;
+  --template-primary-color: var(--template-primary-color, var(--primary-color));
+  --template-accent-color: var(--template-accent-color, #ff6b6b);
 }
 
 .template2-container {
@@ -611,7 +618,7 @@ a {
 
 .skill-progress {
   height: 100%;
-  background-color: #ff6b6b;
+  background-color: var(--template-accent-color);
   border-radius: 3px;
 }
 
@@ -680,7 +687,7 @@ a {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background-color: #ff6b6b;
+  background-color: var(--template-accent-color);
   margin-top: 5px;
   margin-right: 15px;
   flex-shrink: 0;
@@ -751,6 +758,8 @@ a {
 .template3-preview {
   padding: 30px 40px;
   font-family: 'Helvetica', 'Arial', sans-serif;
+  --template-primary-color: var(--template-primary-color, var(--primary-color));
+  --template-accent-color: var(--template-accent-color, #f5f5f5);
 }
 
 .template3-header {
