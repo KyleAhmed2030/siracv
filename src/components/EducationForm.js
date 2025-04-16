@@ -1,368 +1,191 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  ScrollView,
-  Alert
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Feather } from '@expo/vector-icons';
+import { useResume } from '../hooks/useResume';
 import Input from './Input';
-import Button from './Button';
+import { v4 as uuidv4 } from 'uuid';
 
-const EducationForm = ({ data, updateData, errors, theme }) => {
+const EducationForm = () => {
   const { t } = useTranslation();
+  const { resumeData, updateResumeData } = useResume();
+  const [educationList, setEducationList] = useState(resumeData.education || []);
   
-  const [education, setEducation] = useState(data.education || []);
-  const [editIndex, setEditIndex] = useState(-1);
-  const [institution, setInstitution] = useState('');
-  const [degree, setDegree] = useState('');
-  const [fieldOfStudy, setFieldOfStudy] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [description, setDescription] = useState('');
-  const [currentErrors, setCurrentErrors] = useState({});
+  // Update local state when resumeData changes
+  useEffect(() => {
+    setEducationList(resumeData.education || []);
+  }, [resumeData.education]);
   
-  const resetForm = () => {
-    setInstitution('');
-    setDegree('');
-    setFieldOfStudy('');
-    setStartDate('');
-    setEndDate('');
-    setDescription('');
-    setCurrentErrors({});
-    setEditIndex(-1);
-  };
-  
-  const validateForm = () => {
-    let formErrors = {};
-    let isValid = true;
-    
-    if (!institution.trim()) {
-      formErrors.institution = t('institutionRequired');
-      isValid = false;
-    }
-    
-    if (!degree.trim()) {
-      formErrors.degree = t('degreeRequired');
-      isValid = false;
-    }
-    
-    if (!startDate.trim()) {
-      formErrors.startDate = t('startDateRequired');
-      isValid = false;
-    }
-    
-    setCurrentErrors(formErrors);
-    return isValid;
-  };
-  
-  const handleAdd = () => {
-    if (!validateForm()) return;
-    
-    const educationItem = {
-      institution,
-      degree,
-      fieldOfStudy,
-      startDate,
-      endDate,
-      description,
+  // Add new empty education item
+  const handleAddEducation = () => {
+    const newEducation = {
+      id: uuidv4(),
+      institution: '',
+      degree: '',
+      fieldOfStudy: '',
+      startDate: '',
+      endDate: '',
+      location: '',
+      description: '',
+      isCurrent: false
     };
     
-    const updatedEducation = [...education, educationItem];
-    setEducation(updatedEducation);
-    updateData({ education: updatedEducation });
-    resetForm();
+    const updatedList = [...educationList, newEducation];
+    setEducationList(updatedList);
+    updateResumeData({ education: updatedList });
   };
   
-  const handleUpdate = () => {
-    if (!validateForm()) return;
+  // Update a specific education item
+  const handleEducationChange = (id, field, value) => {
+    const updatedList = educationList.map(edu => {
+      if (edu.id === id) {
+        return { ...edu, [field]: value };
+      }
+      return edu;
+    });
     
-    const educationItem = {
-      institution,
-      degree,
-      fieldOfStudy,
-      startDate,
-      endDate,
-      description,
-    };
+    setEducationList(updatedList);
+    updateResumeData({ education: updatedList });
+  };
+  
+  // Handle checkbox for current education
+  const handleCurrentEducation = (id, checked) => {
+    const updatedList = educationList.map(edu => {
+      if (edu.id === id) {
+        return { 
+          ...edu, 
+          isCurrent: checked,
+          endDate: checked ? '' : edu.endDate 
+        };
+      }
+      return edu;
+    });
     
-    const updatedEducation = [...education];
-    updatedEducation[editIndex] = educationItem;
-    
-    setEducation(updatedEducation);
-    updateData({ education: updatedEducation });
-    resetForm();
+    setEducationList(updatedList);
+    updateResumeData({ education: updatedList });
   };
   
-  const handleEdit = (index) => {
-    const item = education[index];
-    setInstitution(item.institution);
-    setDegree(item.degree);
-    setFieldOfStudy(item.fieldOfStudy || '');
-    setStartDate(item.startDate);
-    setEndDate(item.endDate || '');
-    setDescription(item.description || '');
-    setEditIndex(index);
-  };
-  
-  const handleDelete = (index) => {
-    Alert.alert(
-      t('deleteEducation'),
-      t('deleteEducationConfirmation'),
-      [
-        {
-          text: t('cancel'),
-          style: 'cancel',
-        },
-        {
-          text: t('delete'),
-          style: 'destructive',
-          onPress: () => {
-            const updatedEducation = education.filter((_, i) => i !== index);
-            setEducation(updatedEducation);
-            updateData({ education: updatedEducation });
-          },
-        },
-      ]
-    );
-  };
-  
-  const handleCancel = () => {
-    resetForm();
+  // Remove an education item
+  const handleRemoveEducation = (id) => {
+    const updatedList = educationList.filter(edu => edu.id !== id);
+    setEducationList(updatedList);
+    updateResumeData({ education: updatedList });
   };
   
   return (
-    <View style={styles.container}>
-      <Text style={[styles.sectionTitle, { color: theme.text }]}>
-        {t('education')}
-      </Text>
+    <div className="form-section">
+      <h3>{t('Education')}</h3>
       
-      {education.length > 0 && (
-        <View style={styles.educationList}>
-          {education.map((item, index) => (
-            <View 
-              key={index} 
-              style={[
-                styles.educationItem, 
-                { backgroundColor: theme.surface, borderColor: theme.border }
-              ]}
-            >
-              <View style={styles.educationContent}>
-                <Text style={[styles.institutionText, { color: theme.text }]}>
-                  {item.institution}
-                </Text>
-                <Text style={[styles.degreeText, { color: theme.textSecondary }]}>
-                  {item.degree}
-                  {item.fieldOfStudy ? `, ${item.fieldOfStudy}` : ''}
-                </Text>
-                <Text style={[styles.dateText, { color: theme.textSecondary }]}>
-                  {item.startDate} {item.endDate && `- ${item.endDate}`}
-                </Text>
-              </View>
-              
-              <View style={styles.educationActions}>
-                <TouchableOpacity 
-                  style={styles.actionButton}
-                  onPress={() => handleEdit(index)}
-                >
-                  <Feather name="edit-2" size={18} color={theme.primary} />
-                </TouchableOpacity>
-                
-                <TouchableOpacity 
-                  style={styles.actionButton}
-                  onPress={() => handleDelete(index)}
-                >
-                  <Feather name="trash-2" size={18} color={theme.error} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
-        </View>
-      )}
+      {educationList.map((education, index) => (
+        <div key={education.id} className="card mb-3">
+          <div className="card-body">
+            <div className="form-row">
+              <div className="form-group three-quarters">
+                <Input
+                  label={t('Institution')}
+                  name={`institution-${education.id}`}
+                  value={education.institution}
+                  onChange={(e) => handleEducationChange(education.id, 'institution', e.target.value)}
+                  placeholder={t('University or School Name')}
+                />
+              </div>
+              <div className="form-group quarter">
+                <Input
+                  label={t('Location')}
+                  name={`location-${education.id}`}
+                  value={education.location}
+                  onChange={(e) => handleEducationChange(education.id, 'location', e.target.value)}
+                  placeholder={t('City, Country')}
+                />
+              </div>
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group half">
+                <Input
+                  label={t('Degree')}
+                  name={`degree-${education.id}`}
+                  value={education.degree}
+                  onChange={(e) => handleEducationChange(education.id, 'degree', e.target.value)}
+                  placeholder={t('e.g. Bachelor\'s')}
+                />
+              </div>
+              <div className="form-group half">
+                <Input
+                  label={t('Field of Study')}
+                  name={`fieldOfStudy-${education.id}`}
+                  value={education.fieldOfStudy}
+                  onChange={(e) => handleEducationChange(education.id, 'fieldOfStudy', e.target.value)}
+                  placeholder={t('e.g. Computer Science')}
+                />
+              </div>
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group half">
+                <Input
+                  label={t('Start Date')}
+                  name={`startDate-${education.id}`}
+                  type="date"
+                  value={education.startDate}
+                  onChange={(e) => handleEducationChange(education.id, 'startDate', e.target.value)}
+                />
+              </div>
+              <div className="form-group half">
+                <Input
+                  label={t('End Date')}
+                  name={`endDate-${education.id}`}
+                  type="date"
+                  value={education.endDate}
+                  onChange={(e) => handleEducationChange(education.id, 'endDate', e.target.value)}
+                  disabled={education.isCurrent}
+                />
+                <div className="checkbox-group">
+                  <input
+                    type="checkbox"
+                    id={`current-${education.id}`}
+                    checked={education.isCurrent}
+                    onChange={(e) => handleCurrentEducation(education.id, e.target.checked)}
+                  />
+                  <label htmlFor={`current-${education.id}`}>
+                    {t('I am currently studying here')}
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">{t('Description')}</label>
+              <textarea
+                name={`description-${education.id}`}
+                value={education.description}
+                onChange={(e) => handleEducationChange(education.id, 'description', e.target.value)}
+                placeholder={t('Describe your achievements, courses, etc.')}
+                className="form-input"
+                rows={3}
+              />
+            </div>
+            
+            {educationList.length > 1 && (
+              <button
+                type="button"
+                className="button-text delete"
+                onClick={() => handleRemoveEducation(education.id)}
+              >
+                {t('Remove Education')}
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
       
-      <View style={styles.form}>
-        <Text style={[styles.formTitle, { color: theme.text }]}>
-          {editIndex === -1 ? t('addEducation') : t('editEducation')}
-        </Text>
-        
-        <Input
-          label={t('institution')}
-          value={institution}
-          onChangeText={setInstitution}
-          placeholder={t('enterInstitution')}
-          error={currentErrors.institution}
-          theme={theme}
-        />
-        
-        <Input
-          label={t('degree')}
-          value={degree}
-          onChangeText={setDegree}
-          placeholder={t('enterDegree')}
-          error={currentErrors.degree}
-          theme={theme}
-        />
-        
-        <Input
-          label={t('fieldOfStudy')}
-          value={fieldOfStudy}
-          onChangeText={setFieldOfStudy}
-          placeholder={t('enterFieldOfStudyOptional')}
-          theme={theme}
-          optional
-        />
-        
-        <View style={styles.dateContainer}>
-          <View style={styles.dateField}>
-            <Input
-              label={t('startDate')}
-              value={startDate}
-              onChangeText={setStartDate}
-              placeholder={t('enterStartDate')}
-              error={currentErrors.startDate}
-              theme={theme}
-            />
-          </View>
-          
-          <View style={styles.dateFieldSpacer} />
-          
-          <View style={styles.dateField}>
-            <Input
-              label={t('endDate')}
-              value={endDate}
-              onChangeText={setEndDate}
-              placeholder={t('enterEndDateOptional')}
-              theme={theme}
-              optional
-            />
-          </View>
-        </View>
-        
-        <Input
-          label={t('description')}
-          value={description}
-          onChangeText={setDescription}
-          placeholder={t('enterDescriptionOptional')}
-          multiline
-          numberOfLines={3}
-          theme={theme}
-          optional
-        />
-        
-        <View style={styles.buttonContainer}>
-          {editIndex !== -1 && (
-            <TouchableOpacity
-              style={[styles.cancelButton, { borderColor: theme.border }]}
-              onPress={handleCancel}
-            >
-              <Text style={[styles.cancelButtonText, { color: theme.textSecondary }]}>
-                {t('cancel')}
-              </Text>
-            </TouchableOpacity>
-          )}
-          
-          <Button
-            title={editIndex === -1 ? t('add') : t('update')}
-            onPress={editIndex === -1 ? handleAdd : handleUpdate}
-            color={theme.primary}
-            textColor={theme.buttonText}
-            icon={editIndex === -1 ? "plus" : "check"}
-          />
-        </View>
-      </View>
-      
-      {errors.education && (
-        <Text style={[styles.errorText, { color: theme.error }]}>
-          {errors.education}
-        </Text>
-      )}
-    </View>
+      <button
+        type="button"
+        className="button-text"
+        onClick={handleAddEducation}
+      >
+        + {t('Add Education')}
+      </button>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 20,
-  },
-  educationList: {
-    marginBottom: 20,
-  },
-  educationItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-    borderRadius: 8,
-    borderWidth: 1,
-    marginBottom: 10,
-  },
-  educationContent: {
-    flex: 1,
-  },
-  institutionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  degreeText: {
-    fontSize: 14,
-    marginBottom: 4,
-  },
-  dateText: {
-    fontSize: 12,
-  },
-  educationActions: {
-    flexDirection: 'row',
-  },
-  actionButton: {
-    padding: 8,
-    marginLeft: 5,
-  },
-  form: {
-    marginTop: 10,
-  },
-  formTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 15,
-  },
-  dateContainer: {
-    flexDirection: 'row',
-  },
-  dateField: {
-    flex: 1,
-  },
-  dateFieldSpacer: {
-    width: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 10,
-  },
-  cancelButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    borderWidth: 1,
-    marginRight: 10,
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  errorText: {
-    fontSize: 14,
-    marginTop: 10,
-  },
-});
 
 export default EducationForm;

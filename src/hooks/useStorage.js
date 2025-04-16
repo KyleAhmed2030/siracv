@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * Custom hook for AsyncStorage with serialization for objects
@@ -12,50 +11,44 @@ export const useStorage = (key, initialValue) => {
   const [storedValue, setStoredValue] = useState(initialValue);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Load from storage on mount
+
+  // Initialize from localStorage
   useEffect(() => {
-    const getValueFromStorage = async () => {
-      try {
-        setLoading(true);
-        const item = await AsyncStorage.getItem(key);
-        const value = item ? JSON.parse(item) : initialValue;
-        setStoredValue(value);
-      } catch (e) {
-        setError(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    getValueFromStorage();
-  }, [key]);
-  
-  // Function to update the stored value
-  const setValue = async (value) => {
     try {
-      // Allow value to be a function so we have the same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      const item = window.localStorage.getItem(key);
+      setStoredValue(item ? JSON.parse(item) : initialValue);
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
+      setError(error);
+      setStoredValue(initialValue);
+    } finally {
+      setLoading(false);
+    }
+  }, [key, initialValue]);
+
+  // Return a wrapped version of useState's setter function
+  const setValue = (value) => {
+    try {
+      // Allow value to be a function so we have same API as useState
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
       
-      // Save to state
+      // Save state
       setStoredValue(valueToStore);
       
-      // Save to storage
-      await AsyncStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (e) {
-      setError(e);
+      // Save to localStorage
+      if (valueToStore === undefined) {
+        window.localStorage.removeItem(key);
+      } else {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      }
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+      setError(error);
     }
   };
-  
-  // Function to clear the stored value
-  const clearValue = async () => {
-    try {
-      setStoredValue(initialValue);
-      await AsyncStorage.removeItem(key);
-    } catch (e) {
-      setError(e);
-    }
-  };
-  
-  return [storedValue, setValue, clearValue, loading, error];
+
+  return [storedValue, setValue, loading, error];
 };
+
+export default useStorage;
