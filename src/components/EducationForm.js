@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResume } from '../hooks/useResume';
 import Input from './Input';
-import TextArea from './TextArea';
 import { v4 as uuidv4 } from 'uuid';
 
 const EducationForm = ({ onValidationChange }) => {
@@ -279,14 +278,17 @@ const EducationForm = ({ onValidationChange }) => {
               </div>
             </div>
             
-            <TextArea
-              id={`description-${education.id}`}
-              label={t('Description')}
-              value={education.description}
-              onChange={(e) => handleEducationChange(education.id, 'description', e.target.value)}
-              placeholder={t('Describe your achievements, courses, etc.')}
-              rows={3}
-            />
+            <div className="form-group">
+              <label className="form-label">{t('Description')}</label>
+              <textarea
+                name={`description-${education.id}`}
+                value={education.description}
+                onChange={(e) => handleEducationChange(education.id, 'description', e.target.value)}
+                placeholder={t('Describe your achievements, courses, etc.')}
+                className="form-input"
+                rows={3}
+              />
+            </div>
             
             {educationList.length > 1 && (
               <button

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTheme } from '../hooks/useTheme';
-import { useTranslation } from 'react-i18next';
 
 /**
  * Reusable input component with label, icon, and error handling
@@ -11,7 +10,6 @@ const Input = ({
   type = 'text',
   value,
   onChange,
-  onBlur,
   placeholder,
   error,
   required = false,
@@ -22,18 +20,8 @@ const Input = ({
   icon
 }) => {
   const { theme } = useTheme();
-  const { t } = useTranslation();
   
   const inputId = id || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`;
-  
-  // Format error message with translation if it's a standard message
-  const getErrorMessage = (error) => {
-    // Check if error is a standard validation message
-    if (typeof error === 'string') {
-      return t(error);
-    }
-    return error;
-  };
   
   return (
     <div className={`form-group ${className}`}>
@@ -51,7 +39,6 @@ const Input = ({
           type={type}
           value={value}
           onChange={onChange}
-          onBlur={onBlur}
           placeholder={placeholder}
           disabled={disabled}
           min={min}
@@ -61,7 +48,7 @@ const Input = ({
         />
       </div>
       
-      {error && <div className="form-error">{getErrorMessage(error)}</div>}
+      {error && <div className="form-error">{error}</div>}
     </div>
   );
 };

@@ -13,14 +13,10 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Frontend"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Backend"
+args = "Resume Builder Web"
 
 [[workflows.workflow]]
-name = "Backend"
+name = "Resume Builder Web"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -31,30 +27,11 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "node server.js"
+args = "PORT=5000 npm start"
 waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Frontend"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd . && react-scripts start"
-waitForPort = 3000
 
 [deployment]
 run = ["sh", "-c", "PORT=5000 npm start"]
-
-[[ports]]
-localPort = 3000
-externalPort = 3001
 
 [[ports]]
 localPort = 5000
