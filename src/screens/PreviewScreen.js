@@ -1,206 +1,139 @@
-import React, { useContext, useState, useRef } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  Share,
-  Alert,
-  ActivityIndicator,
-  ScrollView
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Feather } from '@expo/vector-icons';
+import { useNavigate } from 'react-router-dom';
 import { useResume } from '../hooks/useResume';
-import { ThemeContext } from '../context/ThemeContext';
-import { lightTheme, darkTheme } from '../styles/theme';
-import ResumePreview from '../components/ResumePreview';
-import PdfGenerator from '../components/PdfGenerator';
 import Button from '../components/Button';
-import * as FileSystem from 'expo-file-system';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PreviewScreen = ({ navigation }) => {
-  const { t } = useTranslation();
-  const { theme } = useContext(ThemeContext);
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
-  const { resumeData } = useResume();
-  
-  const [generating, setGenerating] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [pdfUri, setPdfUri] = useState(null);
-  
-  const resumeViewRef = useRef(null);
-
-  const handleExportPdf = async () => {
-    if (generating) return;
-    
-    setGenerating(true);
-    try {
-      const pdfUri = await PdfGenerator.generatePdf(resumeData);
-      setPdfUri(pdfUri);
-      
-      Alert.alert(
-        t('pdfGenerated'),
-        t('pdfGeneratedMessage'),
-        [
-          {
-            text: t('share'),
-            onPress: () => handleShare(pdfUri),
-          },
-          {
-            text: t('ok'),
-          }
-        ]
-      );
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      Alert.alert(t('error'), t('pdfGenerationError'));
-    } finally {
-      setGenerating(false);
-    }
-  };
-
-  const handleSaveResume = async () => {
-    if (saving) return;
-    
-    setSaving(true);
-    try {
-      // Get existing saved resumes
-      const savedResumesJson = await AsyncStorage.getItem('saved-resumes');
-      const savedResumes = savedResumesJson ? JSON.parse(savedResumesJson) : [];
-      
-      // Create a new resume with ID and date
-      const newResume = {
-        id: Date.now().toString(),
-        date: new Date().toISOString(),
-        data: resumeData,
-      };
-      
-      // Add to array and save back to storage
-      savedResumes.push(newResume);
-      await AsyncStorage.setItem('saved-resumes', JSON.stringify(savedResumes));
-      
-      Alert.alert(
-        t('resumeSaved'),
-        t('resumeSavedMessage')
-      );
-    } catch (error) {
-      console.error('Save resume error:', error);
-      Alert.alert(t('error'), t('resumeSaveError'));
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleShare = async (uri) => {
-    try {
-      await Share.share({
-        url: uri,
-        title: `${resumeData.fullName} - Resume.pdf`,
-      });
-    } catch (error) {
-      console.error('Share error:', error);
-      Alert.alert(t('error'), t('shareFailed'));
-    }
-  };
-
-  const handleEdit = () => {
-    navigation.navigate('ResumeBuilder');
-  };
-
+// Simple Resume Preview - will be replaced with more sophisticated templates
+const ResumePreview = ({ data }) => {
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: currentTheme.text }]}>
-          {t('preview')}
-        </Text>
-        <TouchableOpacity 
-          style={[styles.editButton, { backgroundColor: currentTheme.surface }]}
-          onPress={handleEdit}
-        >
-          <Feather name="edit" size={18} color={currentTheme.primary} />
-          <Text style={[styles.editText, { color: currentTheme.primary }]}>
-            {t('edit')}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView 
-        style={styles.previewContainer}
-        contentContainerStyle={styles.previewContent}
-      >
-        <ResumePreview 
-          data={resumeData} 
-          ref={resumeViewRef}
-        />
-      </ScrollView>
-
-      <View style={styles.footer}>
-        <Button
-          title={generating ? t('generating') : t('exportPdf')}
-          onPress={handleExportPdf}
-          disabled={generating}
-          color={currentTheme.primary}
-          textColor={currentTheme.buttonText}
-          icon={generating ? null : "download"}
-        />
+    <div className="resume-preview">
+      <div className="resume-header">
+        <h1>{data.fullName || 'Your Name'}</h1>
+        <h2>{data.jobTitle || 'Job Title'}</h2>
         
-        <View style={styles.buttonSpacer} />
-        
-        <Button
-          title={saving ? t('saving') : t('saveResume')}
-          onPress={handleSaveResume}
-          disabled={saving}
-          color={currentTheme.secondary}
-          textColor={currentTheme.buttonText}
-          icon={saving ? null : "save"}
-        />
-      </View>
-    </SafeAreaView>
+        <div className="resume-contact-info">
+          {data.email && <div className="contact-item">{data.email}</div>}
+          {data.phone && <div className="contact-item">{data.phone}</div>}
+          {data.address && <div className="contact-item">{data.address}</div>}
+          {data.linkedin && <div className="contact-item">{data.linkedin}</div>}
+          {data.website && <div className="contact-item">{data.website}</div>}
+        </div>
+      </div>
+      
+      {data.summary && (
+        <div className="resume-section">
+          <h3>Professional Summary</h3>
+          <p>{data.summary}</p>
+        </div>
+      )}
+      
+      {data.experience && data.experience.length > 0 && (
+        <div className="resume-section">
+          <h3>Work Experience</h3>
+          {data.experience.map(exp => (
+            <div key={exp.id} className="resume-item">
+              <div className="item-header">
+                <div className="item-title">{exp.position}</div>
+                <div className="item-company">{exp.company}</div>
+                <div className="item-period">
+                  {exp.startDate} - {exp.present ? 'Present' : exp.endDate}
+                </div>
+              </div>
+              <div className="item-location">{exp.location}</div>
+              <div className="item-description">{exp.description}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {data.education && data.education.length > 0 && (
+        <div className="resume-section">
+          <h3>Education</h3>
+          {data.education.map(edu => (
+            <div key={edu.id} className="resume-item">
+              <div className="item-header">
+                <div className="item-title">{edu.degree}</div>
+                <div className="item-company">{edu.school}</div>
+                <div className="item-period">
+                  {edu.startDate} - {edu.present ? 'Present' : edu.endDate}
+                </div>
+              </div>
+              <div className="item-location">{edu.fieldOfStudy}</div>
+              <div className="item-description">{edu.description}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {data.skills && data.skills.length > 0 && (
+        <div className="resume-section">
+          <h3>Skills</h3>
+          <div className="skills-grid">
+            {data.skills.map(skill => (
+              <div key={skill.id} className="skill-chip">
+                {skill.name} <span className="skill-level">({skill.level})</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  editButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  editText: {
-    marginLeft: 5,
-    fontWeight: '500',
-  },
-  previewContainer: {
-    flex: 1,
-  },
-  previewContent: {
-    padding: 20,
-  },
-  footer: {
-    padding: 20,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 25,
-  },
-  buttonSpacer: {
-    height: 10,
-  },
-});
+const PreviewScreen = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { resumeData } = useResume();
+  
+  const handleEdit = () => {
+    navigate('/builder/basic-info');
+  };
+  
+  const handleDownload = () => {
+    // This will be implemented with a proper PDF generation library
+    alert('PDF download functionality coming soon!');
+  };
+  
+  const handleSave = () => {
+    // This will save the resume to local storage or database
+    alert('Save functionality coming soon!');
+  };
+  
+  return (
+    <div className="preview-screen">
+      <h2>{t('Resume Preview')}</h2>
+      
+      <div className="preview-container">
+        <ResumePreview data={resumeData} />
+      </div>
+      
+      <div className="button-group">
+        <Button 
+          variant="secondary" 
+          onClick={handleEdit}
+        >
+          {t('Edit')}
+        </Button>
+        <div>
+          <Button 
+            variant="primary" 
+            onClick={handleSave}
+            style={{ marginRight: '10px' }}
+          >
+            {t('Save')}
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={handleDownload}
+          >
+            {t('Download')}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default PreviewScreen;
