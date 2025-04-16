@@ -1,78 +1,94 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../hooks/useTheme';
 import { useResume } from '../hooks/useResume';
-import Button from '../components/Button';
 import ResumePreview from '../components/ResumePreview';
+import Button from '../components/Button';
+import PdfGenerator from '../components/PdfGenerator';
 
 const PreviewScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { resumeData, saveResume } = useResume();
-  const [downloading, setDownloading] = useState(false);
-  
-  // Handle back to editor
-  const handleBack = () => {
-    navigate('/builder/summary');
-  };
+  const previewRef = useRef(null);
+  const [generating, setGenerating] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null);
   
   // Handle save resume
-  const handleSave = () => {
+  const handleSaveResume = () => {
     saveResume();
-    // Navigate to saved resumes
-    navigate('/saved-resumes');
+    setSaveStatus('success');
+    
+    // Clear status after 3 seconds
+    setTimeout(() => {
+      setSaveStatus(null);
+    }, 3000);
   };
   
-  // Handle PDF download
-  const handleDownload = async () => {
-    setDownloading(true);
-    
+  // Handle download PDF
+  const handleDownloadPdf = async () => {
     try {
-      // For now we'll just simulate PDF download
-      // This will be replaced with actual PDF generation
-      setTimeout(() => {
-        alert('PDF download functionality will be implemented soon!');
-        setDownloading(false);
-      }, 1000);
+      setGenerating(true);
+      
+      // Generate file name based on user data
+      const firstName = resumeData.basicInfo?.firstName || '';
+      const lastName = resumeData.basicInfo?.lastName || '';
+      const fileName = `${firstName}_${lastName}_Resume.pdf`.replace(/\s+/g, '_');
+      
+      // Generate PDF
+      const pdfBlob = await PdfGenerator.generatePdf(resumeData);
+      PdfGenerator.downloadPdf(pdfBlob, fileName);
+      
+      setGenerating(false);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      setDownloading(false);
+      setGenerating(false);
+      alert(t('Error generating PDF'));
     }
   };
   
+  // Handle back to edit
+  const handleBackToEdit = () => {
+    navigate('/builder/summary');
+  };
+  
   return (
-    <div className="preview-screen">
-      <h2>{t('Resume Preview')}</h2>
-      <p>{t('This is how your resume will look when downloaded.')}</p>
+    <div className={`preview-screen ${theme}`}>
+      <div className="preview-header">
+        <h2>{t('Resume Preview')}</h2>
+        <p>{t('This is how your resume will look when downloaded.')}</p>
+      </div>
       
-      <div className="preview-container">
+      <div className="preview-container" ref={previewRef}>
         <ResumePreview resumeData={resumeData} />
       </div>
       
-      <div className="button-group">
+      <div className="preview-actions">
         <Button 
           variant="secondary" 
-          onClick={handleBack}
+          onClick={handleBackToEdit}
+          disabled={generating}
         >
           {t('Back to Edit')}
         </Button>
         
-        <div className="button-group-right">
-          <Button 
-            variant="secondary" 
-            onClick={handleSave}
-          >
-            {t('Save Resume')}
-          </Button>
-          
-          <Button 
-            variant="primary" 
-            onClick={handleDownload}
-            loading={downloading}
-          >
-            {t('Download PDF')}
-          </Button>
-        </div>
+        <Button 
+          variant="primary" 
+          onClick={handleSaveResume}
+          disabled={generating || saveStatus === 'success'}
+        >
+          {saveStatus === 'success' ? t('PDF Generated Successfully') : t('Save Resume')}
+        </Button>
+        
+        <Button 
+          variant="primary" 
+          onClick={handleDownloadPdf}
+          disabled={generating}
+        >
+          {generating ? t('Generating PDF...') : t('Download PDF')}
+        </Button>
       </div>
     </div>
   );

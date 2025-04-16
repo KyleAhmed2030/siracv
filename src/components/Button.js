@@ -3,38 +3,37 @@ import React from 'react';
 /**
  * Reusable button component with optional icon and loading state
  */
-const Button = ({ 
-  children, 
-  onClick, 
-  type = 'button', 
-  variant = 'primary', 
-  size = 'medium',
-  disabled = false,
+const Button = ({
+  children,
+  variant = 'primary',
+  type = 'button',
   fullWidth = false,
-  icon = null,
+  disabled = false,
+  onClick,
   loading = false,
-  className = ''
+  icon = null
 }) => {
-  const getButtonClasses = () => {
-    const baseClass = 'button';
-    const variantClass = `button-${variant}`;
-    const sizeClass = `button-${size}`;
-    const widthClass = fullWidth ? 'button-full-width' : '';
-    const loadingClass = loading ? 'button-loading' : '';
-    
-    return `${baseClass} ${variantClass} ${sizeClass} ${widthClass} ${loadingClass} ${className}`.trim();
-  };
+  const baseClasses = 'button';
+  const variantClass = `button-${variant}`;
+  const widthClass = fullWidth ? 'button-full-width' : '';
+  const loadingClass = loading ? 'button-loading' : '';
+  
+  const classNames = [
+    baseClasses,
+    variantClass,
+    widthClass,
+    loadingClass
+  ].filter(Boolean).join(' ');
   
   return (
     <button
       type={type}
-      className={getButtonClasses()}
+      className={classNames}
       onClick={onClick}
       disabled={disabled || loading}
     >
       {icon && <span className="button-icon">{icon}</span>}
-      <span className="button-text">{children}</span>
-      {loading && <span className="button-spinner"></span>}
+      <span className="button-text">{loading ? 'Loading...' : children}</span>
     </button>
   );
 };
