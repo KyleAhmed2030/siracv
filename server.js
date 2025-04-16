@@ -47,8 +47,18 @@ app.get('/api/localization/status', (req, res) => {
   });
 });
 
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, 'build')));
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`API available at http://localhost:${PORT}/api/hello`);
   console.log(`Localization status API available at http://localhost:${PORT}/api/localization/status`);
+  console.log(`Serving React app at http://localhost:${PORT}/`);
 });
