@@ -1,24 +1,23 @@
 import React, { createContext, useState } from 'react';
 
-export const ResumeContext = createContext();
-
-// Initial resume data structure
+// Initial state for the resume data
 const initialResumeData = {
-  template: 'professional',
-  basicInfo: {
-    fullName: '',
-    jobTitle: '',
-    email: '',
-    phone: '',
-    address: '',
-    linkedin: '',
-    website: ''
-  },
+  template: '',
+  fullName: '',
+  jobTitle: '',
+  email: '',
+  phone: '',
+  address: '',
+  linkedin: '',
+  website: '',
+  summary: '',
   education: [],
-  workExperience: [],
-  skills: [],
-  summary: ''
+  experience: [],
+  skills: []
 };
+
+// Create the context
+export const ResumeContext = createContext();
 
 /**
  * Resume Context Provider - Manages the state of the current resume being created
@@ -34,7 +33,7 @@ export const ResumeContextProvider = ({ children }) => {
    * 
    * @param {Object} updates - Object containing the updated fields
    */
-  const updateResumeData = (updates) => {
+  const updateResume = (updates) => {
     setResumeData(prevData => ({
       ...prevData,
       ...updates
@@ -46,25 +45,27 @@ export const ResumeContextProvider = ({ children }) => {
    * 
    * @param {Object} data - Complete resume data object
    */
-  const setFullResumeData = (data) => {
+  const setResumeDataComplete = (data) => {
     setResumeData(data);
   };
   
   /**
    * Clear the resume data (reset to initial state)
    */
-  const clearResumeData = () => {
+  const clearResume = () => {
     setResumeData(initialResumeData);
   };
   
   return (
-    <ResumeContext.Provider value={{ 
-      resumeData, 
-      updateResumeData, 
-      setFullResumeData, 
-      clearResumeData 
+    <ResumeContext.Provider value={{
+      resumeData,
+      updateResume,
+      setResumeDataComplete,
+      clearResume
     }}>
       {children}
     </ResumeContext.Provider>
   );
 };
+
+export default ResumeContextProvider;

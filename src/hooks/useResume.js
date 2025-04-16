@@ -15,3 +15,5 @@ export const useResume = () => {
   
   return context;
 };
+
+export default useResume;

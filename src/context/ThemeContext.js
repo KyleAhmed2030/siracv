@@ -10,19 +10,11 @@ export const ThemeContext = createContext();
  * @returns {React.ReactNode} Provider Component
  */
 export const ThemeContextProvider = ({ children, initialTheme = 'light' }) => {
-  // Try to get saved theme from localStorage
-  const getSavedTheme = () => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : initialTheme;
-  };
+  const [theme, setTheme] = useState(initialTheme);
   
-  const [theme, setTheme] = useState(getSavedTheme);
-  
-  // When theme changes, update localStorage and apply theme to body
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    // Apply theme to body
     document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme';
-    console.log('Theme changed to:', theme);
   }, [theme]);
   
   /**
@@ -30,7 +22,10 @@ export const ThemeContextProvider = ({ children, initialTheme = 'light' }) => {
    */
   const toggleTheme = () => {
     console.log('Toggle theme called, current theme:', theme);
-    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    console.log('Current theme:', newTheme);
+    setTheme(newTheme);
+    console.log('Theme changed to:', newTheme);
   };
   
   /**
@@ -40,13 +35,21 @@ export const ThemeContextProvider = ({ children, initialTheme = 'light' }) => {
    */
   const setSpecificTheme = (newTheme) => {
     if (newTheme === 'light' || newTheme === 'dark') {
+      console.log('Current theme:', newTheme);
       setTheme(newTheme);
+      console.log('Theme changed to:', newTheme);
     }
   };
   
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme: setSpecificTheme }}>
+    <ThemeContext.Provider value={{
+      theme,
+      toggleTheme,
+      setTheme: setSpecificTheme
+    }}>
       {children}
     </ThemeContext.Provider>
   );
 };
+
+export default ThemeContextProvider;
