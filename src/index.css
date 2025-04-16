@@ -2056,6 +2056,35 @@ a {
   }
 }
 
+/* Authentication notice in preview */
+.auth-notice {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.3);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.dark .auth-notice {
+  background-color: rgba(52, 152, 219, 0.2);
+  border-color: rgba(52, 152, 219, 0.4);
+}
+
+.auth-notice p {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: var(--gray-800);
+}
+
+.dark .auth-notice p {
+  color: var(--gray-200);
+}
+
+.auth-notice button {
+  margin: 0 auto;
+}
+
 /* Loading indicator */
 .loading {
   display: flex;
