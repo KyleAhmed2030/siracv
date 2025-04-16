@@ -14,6 +14,12 @@ const arTranslation = {
   "Back": "رجوع",
   "Continue": "استمرار",
   "View Saved Resumes": "عرض السير الذاتية المحفوظة",
+  "Home": "الرئيسية",
+  "Templates": "القوالب",
+  "Main Navigation": "التنقل الرئيسي",
+  "Open menu": "فتح القائمة",
+  "Close menu": "إغلاق القائمة",
+  "Go to home page": "الذهاب إلى الصفحة الرئيسية",
 
   // Welcome Screen
   "Welcome to Resume Builder": "مرحباً بك في سيرة",
