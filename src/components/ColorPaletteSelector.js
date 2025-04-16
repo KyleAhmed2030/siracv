@@ -1,16 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useResume } from '../hooks/useResume';
-import { useTheme } from '../hooks/useTheme';
+import { COLOR_PALETTES } from '../context/ResumeContext';
 
 /**
- * Color Palette Selector Component
- * Allows users to select primary and accent colors for their resume
+ * Component for selecting primary and accent colors for resume templates
+ * Allows users to customize the look of their resume
  */
 const ColorPaletteSelector = () => {
-  const { resumeData, colorPalettes, updateColorScheme, getColorValue } = useResume();
-  const { theme } = useTheme();
+  const { t } = useTranslation();
+  const { resumeData, updateColorScheme, getColorValue } = useResume();
   
-  const { colorScheme = { primary: 'blue', accent: 'teal' } } = resumeData;
+  const colorScheme = resumeData.colorScheme || { primary: 'blue', accent: 'teal' };
   
   /**
    * Handle color selection
@@ -22,73 +23,64 @@ const ColorPaletteSelector = () => {
   };
   
   return (
-    <div className={`color-palette-selector ${theme}`}>
+    <div className="color-palette-selector">
       <div className="color-section">
-        <h3 className="color-section-title">Primary Color</h3>
-        <p className="color-section-description">
-          This will be used for headings and section titles
-        </p>
-        <div className="color-options">
-          {colorPalettes.primary.map(color => (
+        <h4>{t('Primary Color')}</h4>
+        <p className="color-description">{t('Used for headings, section titles, and important elements')}</p>
+        <div className="color-grid">
+          {Object.keys(COLOR_PALETTES.primary).map(colorId => (
             <button
-              key={`primary-${color.id}`}
-              className={`color-option ${colorScheme.primary === color.id ? 'selected' : ''}`}
-              style={{ backgroundColor: color.color }}
-              onClick={() => handleColorSelect('primary', color.id)}
-              aria-label={`Select ${color.name} as primary color`}
-              title={color.name}
-            >
-              {colorScheme.primary === color.id && <span className="color-check">✓</span>}
-            </button>
+              key={colorId}
+              className={`color-button ${colorScheme.primary === colorId ? 'selected' : ''}`}
+              style={{ backgroundColor: COLOR_PALETTES.primary[colorId] }}
+              onClick={() => handleColorSelect('primary', colorId)}
+              aria-label={`${t('Primary color')}: ${colorId}`}
+              title={colorId}
+            />
           ))}
         </div>
       </div>
       
       <div className="color-section">
-        <h3 className="color-section-title">Accent Color</h3>
-        <p className="color-section-description">
-          This will be used for highlights and emphasis
-        </p>
-        <div className="color-options">
-          {colorPalettes.accent.map(color => (
+        <h4>{t('Accent Color')}</h4>
+        <p className="color-description">{t('Used for highlights, links, and secondary elements')}</p>
+        <div className="color-grid">
+          {Object.keys(COLOR_PALETTES.accent).map(colorId => (
             <button
-              key={`accent-${color.id}`}
-              className={`color-option ${colorScheme.accent === color.id ? 'selected' : ''}`}
-              style={{ backgroundColor: color.color }}
-              onClick={() => handleColorSelect('accent', color.id)}
-              aria-label={`Select ${color.name} as accent color`}
-              title={color.name}
-            >
-              {colorScheme.accent === color.id && <span className="color-check">✓</span>}
-            </button>
+              key={colorId}
+              className={`color-button ${colorScheme.accent === colorId ? 'selected' : ''}`}
+              style={{ backgroundColor: COLOR_PALETTES.accent[colorId] }}
+              onClick={() => handleColorSelect('accent', colorId)}
+              aria-label={`${t('Accent color')}: ${colorId}`}
+              title={colorId}
+            />
           ))}
         </div>
       </div>
       
       <div className="color-preview">
-        <h4>Preview</h4>
-        <div 
-          className="color-sample" 
-          style={{ 
-            backgroundColor: getColorValue('primary', colorScheme.primary),
-            color: '#fff',
-            padding: '10px',
-            borderRadius: '5px 5px 0 0',
-            marginBottom: '2px'
-          }}
-        >
-          Primary Color
+        <div className="preview-header">
+          <div className="preview-title">{t('Preview')}</div>
+          <div className="preview-subtitle">{t('See how your colors work together')}</div>
         </div>
         <div 
-          className="color-sample" 
+          className="preview-box" 
           style={{ 
-            backgroundColor: getColorValue('accent', colorScheme.accent),
-            color: '#fff',
-            padding: '10px',
-            borderRadius: '0 0 5px 5px'
+            backgroundColor: getColorValue('primary', colorScheme.primary),
+            color: '#ffffff',
+            borderColor: getColorValue('accent', colorScheme.accent)
           }}
         >
-          Accent Color
+          <div className="preview-text">{t('Primary Color')}</div>
+        </div>
+        <div 
+          className="preview-box" 
+          style={{ 
+            backgroundColor: getColorValue('accent', colorScheme.accent),
+            color: '#ffffff'
+          }}
+        >
+          <div className="preview-text">{t('Accent Color')}</div>
         </div>
       </div>
     </div>

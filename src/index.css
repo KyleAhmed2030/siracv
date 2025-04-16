@@ -1490,6 +1490,123 @@ a {
   color: var(--gray-400);
 }
 
+/* Color Palette Selector */
+.color-palette-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 100%;
+}
+
+.color-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.color-section h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.color-description {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin: 0 0 5px 0;
+}
+
+.dark .color-description {
+  color: var(--gray-400);
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.color-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.color-button:hover {
+  transform: scale(1.1);
+}
+
+.color-button.selected {
+  border-color: var(--dark-bg);
+  transform: scale(1.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark .color-button.selected {
+  border-color: var(--light-bg);
+}
+
+.color-preview {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  background-color: var(--light-element-bg);
+  box-shadow: var(--box-shadow);
+}
+
+.dark .color-preview {
+  background-color: var(--dark-element-bg);
+}
+
+.preview-header {
+  margin-bottom: 10px;
+}
+
+.preview-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.preview-subtitle {
+  font-size: 14px;
+  color: var(--gray-600);
+}
+
+.dark .preview-subtitle {
+  color: var(--gray-400);
+}
+
+.preview-box {
+  padding: 15px;
+  border-radius: var(--border-radius);
+  margin-bottom: 10px;
+  border: 2px solid transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .color-grid {
+    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+  }
+  
+  .color-button {
+    width: 35px;
+    height: 35px;
+  }
+}
+
 .builder-header {
   margin-bottom: 30px;
 }
