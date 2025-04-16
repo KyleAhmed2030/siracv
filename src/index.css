@@ -1476,6 +1476,20 @@ a {
   margin-bottom: 20px;
 }
 
+.settings-section {
+  margin-bottom: 30px;
+}
+
+.settings-description {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin-bottom: 15px;
+}
+
+.dark .settings-description {
+  color: var(--gray-400);
+}
+
 .builder-header {
   margin-bottom: 30px;
 }

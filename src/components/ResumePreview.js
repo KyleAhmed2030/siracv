@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTheme } from '../hooks/useTheme';
+import { useResume } from '../hooks/useResume';
 import { formatDate } from '../utils/helpers';
 
 const ResumePreview = ({ resumeData }) => {
   const { theme } = useTheme();
+  const { getColorValue } = useResume();
   
   if (!resumeData) {
     return <div className="resume-preview-empty">No resume data available</div>;
@@ -15,27 +17,57 @@ const ResumePreview = ({ resumeData }) => {
     workExperience = [],
     skills = [],
     summary = '',
-    template = 'template1'
+    template = 'template1',
+    colorScheme = { primary: 'blue', accent: 'teal' }
   } = resumeData;
+
+  // Get actual color values
+  const primaryColor = getColorValue('primary', colorScheme.primary);
+  const accentColor = getColorValue('accent', colorScheme.accent);
 
   // Render different template based on selection
   switch (template) {
     case 'template2':
-      return <Template2Preview resumeData={resumeData} theme={theme} />;
+      return <Template2Preview 
+        resumeData={resumeData} 
+        theme={theme} 
+        primaryColor={primaryColor}
+        accentColor={accentColor}
+      />;
     case 'template3':
-      return <Template3Preview resumeData={resumeData} theme={theme} />;
+      return <Template3Preview 
+        resumeData={resumeData} 
+        theme={theme} 
+        primaryColor={primaryColor}
+        accentColor={accentColor}
+      />;
     case 'template4':
-      return <Template4Preview resumeData={resumeData} theme={theme} />;
+      return <Template4Preview 
+        resumeData={resumeData} 
+        theme={theme} 
+        primaryColor={primaryColor}
+        accentColor={accentColor}
+      />;
     case 'template5':
-      return <Template5Preview resumeData={resumeData} theme={theme} />;
+      return <Template5Preview 
+        resumeData={resumeData} 
+        theme={theme} 
+        primaryColor={primaryColor}
+        accentColor={accentColor}
+      />;
     case 'template1':
     default:
-      return <Template1Preview resumeData={resumeData} theme={theme} />;
+      return <Template1Preview 
+        resumeData={resumeData} 
+        theme={theme} 
+        primaryColor={primaryColor}
+        accentColor={accentColor}
+      />;
   }
 };
 
 // Template 1 (Professional)
-const Template1Preview = ({ resumeData, theme }) => {
+const Template1Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
   const {
     basicInfo = {},
     education = [],
@@ -43,9 +75,15 @@ const Template1Preview = ({ resumeData, theme }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  
+  // CSS custom properties for colors
+  const customStyles = {
+    '--template-primary-color': primaryColor,
+    '--template-accent-color': accentColor,
+  };
 
   return (
-    <div className={`resume-preview template1-preview ${theme}`}>
+    <div className={`resume-preview template1-preview ${theme}`} style={customStyles}>
       <div className="resume-header">
         <h1>{basicInfo.firstName} {basicInfo.lastName}</h1>
         <h2>{basicInfo.jobTitle}</h2>
@@ -162,7 +200,7 @@ const Template1Preview = ({ resumeData, theme }) => {
 };
 
 // Template 2 (Creative)
-const Template2Preview = ({ resumeData, theme }) => {
+const Template2Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
   const {
     basicInfo = {},
     education = [],
@@ -170,6 +208,12 @@ const Template2Preview = ({ resumeData, theme }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  
+  // CSS custom properties for colors
+  const customStyles = {
+    '--template-primary-color': primaryColor,
+    '--template-accent-color': accentColor,
+  };
 
   // Get initials for avatar
   const getInitials = (firstName, lastName) => {
@@ -177,7 +221,7 @@ const Template2Preview = ({ resumeData, theme }) => {
   };
 
   return (
-    <div className={`resume-preview template2-preview ${theme}`}>
+    <div className={`resume-preview template2-preview ${theme}`} style={customStyles}>
       <div className="template2-container">
         <div className="template2-sidebar">
           <div className="sidebar-header">
@@ -297,7 +341,7 @@ const Template2Preview = ({ resumeData, theme }) => {
 };
 
 // Template 3 (Minimal)
-const Template3Preview = ({ resumeData, theme }) => {
+const Template3Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
   const {
     basicInfo = {},
     education = [],
@@ -305,9 +349,15 @@ const Template3Preview = ({ resumeData, theme }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  
+  // CSS custom properties for colors
+  const customStyles = {
+    '--template-primary-color': primaryColor,
+    '--template-accent-color': accentColor,
+  };
 
   return (
-    <div className={`resume-preview template3-preview ${theme}`}>
+    <div className={`resume-preview template3-preview ${theme}`} style={customStyles}>
       <div className="template3-header">
         <div className="header-main">
           <h1 className="header-name">{basicInfo.firstName} {basicInfo.lastName}</h1>
@@ -384,7 +434,7 @@ const Template3Preview = ({ resumeData, theme }) => {
 };
 
 // Template 4 (Modern)
-const Template4Preview = ({ resumeData, theme }) => {
+const Template4Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
   const {
     basicInfo = {},
     education = [],
@@ -392,6 +442,12 @@ const Template4Preview = ({ resumeData, theme }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  
+  // CSS custom properties for colors
+  const customStyles = {
+    '--template-primary-color': primaryColor,
+    '--template-accent-color': accentColor,
+  };
 
   return (
     <div className={`resume-preview template4-preview ${theme}`}>
