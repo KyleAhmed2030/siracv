@@ -6,38 +6,16 @@ import { useStorage } from '../hooks/useStorage';
 const CURRENT_RESUME_KEY = 'current-resume';
 const SAVED_RESUMES_KEY = 'saved-resumes';
 
-// Color palettes configuration
-export const COLOR_PALETTES = {
-  primary: [
-    { id: 'blue', name: 'Blue', color: '#3498db' },
-    { id: 'green', name: 'Green', color: '#2ecc71' },
-    { id: 'purple', name: 'Purple', color: '#9b59b6' },
-    { id: 'red', name: 'Red', color: '#e74c3c' },
-    { id: 'orange', name: 'Orange', color: '#f39c12' },
-    { id: 'teal', name: 'Teal', color: '#1abc9c' },
-    { id: 'navy', name: 'Navy', color: '#34495e' },
-    { id: 'gray', name: 'Gray', color: '#7f8c8d' }
-  ],
-  accent: [
-    { id: 'blue', name: 'Blue', color: '#3498db' },
-    { id: 'green', name: 'Green', color: '#2ecc71' },
-    { id: 'purple', name: 'Purple', color: '#9b59b6' },
-    { id: 'red', name: 'Red', color: '#e74c3c' },
-    { id: 'orange', name: 'Orange', color: '#f39c12' },
-    { id: 'teal', name: 'Teal', color: '#1abc9c' },
-    { id: 'navy', name: 'Navy', color: '#34495e' },
-    { id: 'gray', name: 'Gray', color: '#7f8c8d' }
-  ]
+// Default template colors (no customization)
+export const DEFAULT_COLORS = {
+  primary: '#3498db',
+  accent: '#1abc9c'
 };
 
 // Initial resume data structure
 const initialResumeData = {
   id: '',
   template: 'template1',
-  colorScheme: {
-    primary: 'blue',
-    accent: 'teal'
-  },
   createdAt: null,
   updatedAt: null,
   basicInfo: {
@@ -81,9 +59,7 @@ export const ResumeContextProvider = ({ children }) => {
     { 
       ...initialResumeData, 
       id: uuidv4(), 
-      createdAt: new Date().toISOString(),
-      // Ensure color scheme exists even for existing data
-      colorScheme: initialResumeData.colorScheme
+      createdAt: new Date().toISOString()
     }
   );
   
@@ -96,15 +72,6 @@ export const ResumeContextProvider = ({ children }) => {
   // Set loading to false once mounted
   useEffect(() => {
     setIsLoading(false);
-    
-    // Ensure color scheme exists in current resume data
-    if (!currentResumeData.colorScheme) {
-      setCurrentResumeData(prevData => ({
-        ...prevData,
-        colorScheme: initialResumeData.colorScheme,
-        updatedAt: new Date().toISOString()
-      }));
-    }
   }, []);
   
   /**
@@ -126,14 +93,8 @@ export const ResumeContextProvider = ({ children }) => {
    * @param {Object} data - Complete resume data object
    */
   const setResumeData = (data) => {
-    // Ensure color scheme exists
-    const finalData = data.colorScheme ? data : {
-      ...data,
-      colorScheme: initialResumeData.colorScheme
-    };
-    
     setCurrentResumeData({
-      ...finalData,
+      ...data,
       updatedAt: new Date().toISOString()
     });
   };
@@ -150,44 +111,24 @@ export const ResumeContextProvider = ({ children }) => {
     });
   };
   
-  /**
-   * Update the color scheme of the resume
-   * 
-   * @param {string} colorType - The type of color to update ('primary' or 'accent')
-   * @param {string} colorId - ID of the selected color
-   */
-  const updateColorScheme = (colorType, colorId) => {
-    setCurrentResumeData(prevData => ({
-      ...prevData,
-      colorScheme: {
-        ...(prevData.colorScheme || initialResumeData.colorScheme),
-        [colorType]: colorId
-      },
-      updatedAt: new Date().toISOString()
-    }));
-  };
+  // Color customization removed
   
   /**
-   * Get the actual color value from a color ID
+   * Get the default color value
    * 
    * @param {string} colorType - The type of color ('primary' or 'accent')
-   * @param {string} colorId - ID of the color
    * @returns {string} The hex color value
    */
-  const getColorValue = (colorType, colorId) => {
-    const palette = COLOR_PALETTES[colorType] || [];
-    const color = palette.find(c => c.id === colorId);
-    return color ? color.color : COLOR_PALETTES[colorType][0].color;
+  const getColorValue = (colorType) => {
+    return DEFAULT_COLORS[colorType] || DEFAULT_COLORS.primary;
   };
   
   /**
    * Save current resume to saved resumes list
    */
   const saveResume = () => {
-    // Ensure color scheme exists
     const resumeToSave = {
       ...currentResumeData,
-      colorScheme: currentResumeData.colorScheme || initialResumeData.colorScheme,
       updatedAt: new Date().toISOString()
     };
     
@@ -227,10 +168,8 @@ export const ResumeContextProvider = ({ children }) => {
   const loadResume = (id) => {
     const resume = savedResumes.find(resume => resume.id === id);
     if (resume) {
-      // Ensure color scheme exists
       const resumeToLoad = {
         ...resume,
-        colorScheme: resume.colorScheme || initialResumeData.colorScheme,
         updatedAt: new Date().toISOString()
       };
       
@@ -251,11 +190,9 @@ export const ResumeContextProvider = ({ children }) => {
         resumeData: currentResumeData,
         savedResumes,
         isLoading,
-        colorPalettes: COLOR_PALETTES,
         updateResumeData,
         setResumeData,
         clearResumeData,
-        updateColorScheme,
         getColorValue,
         saveResume,
         deleteResume,
