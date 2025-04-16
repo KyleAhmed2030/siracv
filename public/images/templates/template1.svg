@@ -1,0 +1,39 @@
+<svg width="300" height="420" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+  <!-- Professional Template -->
+  <rect width="300" height="420" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="300" height="80" fill="#2c3e50"/>
+  <text x="20" y="45" font-family="Arial" font-size="24" font-weight="bold" fill="#ffffff">JOHN DOE</text>
+  <text x="20" y="65" font-family="Arial" font-size="14" fill="#ecf0f1">MARKETING SPECIALIST</text>
+  
+  <!-- Contact Info -->
+  <rect x="0" y="80" width="300" height="30" fill="#34495e"/>
+  <text x="20" y="100" font-family="Arial" font-size="12" fill="#ffffff">john@example.com | (123) 456-7890 | linkedin.com/in/johndoe</text>
+  
+  <!-- Main Content -->
+  <text x="20" y="135" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50">PROFESSIONAL SUMMARY</text>
+  <line x1="20" y1="140" x2="280" y2="140" stroke="#2c3e50" stroke-width="2"/>
+  <text x="20" y="155" font-family="Arial" font-size="12" fill="#333333" width="260">Experienced marketing specialist with over 5 years in digital marketing campaigns...</text>
+  
+  <text x="20" y="195" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50">EXPERIENCE</text>
+  <line x1="20" y1="200" x2="280" y2="200" stroke="#2c3e50" stroke-width="2"/>
+  <text x="20" y="220" font-family="Arial" font-size="14" font-weight="bold" fill="#2c3e50">Marketing Specialist</text>
+  <text x="20" y="235" font-family="Arial" font-size="12" fill="#7f8c8d">ABC Company | 2018 - Present</text>
+  <text x="20" y="255" font-family="Arial" font-size="12" fill="#333333">• Led digital marketing campaigns resulting in 30% growth</text>
+  <text x="20" y="270" font-family="Arial" font-size="12" fill="#333333">• Managed social media strategy across platforms</text>
+  
+  <text x="20" y="300" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50">EDUCATION</text>
+  <line x1="20" y1="305" x2="280" y2="305" stroke="#2c3e50" stroke-width="2"/>
+  <text x="20" y="325" font-family="Arial" font-size="14" font-weight="bold" fill="#2c3e50">Bachelor of Business Administration</text>
+  <text x="20" y="340" font-family="Arial" font-size="12" fill="#7f8c8d">University of Business | 2014 - 2018</text>
+  
+  <text x="20" y="370" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50">SKILLS</text>
+  <line x1="20" y1="375" x2="280" y2="375" stroke="#2c3e50" stroke-width="2"/>
+  <rect x="20" y="385" width="70" height="20" rx="10" fill="#3498db"/>
+  <text x="35" y="400" font-family="Arial" font-size="12" fill="#ffffff">SEO</text>
+  <rect x="100" y="385" width="70" height="20" rx="10" fill="#3498db"/>
+  <text x="115" y="400" font-family="Arial" font-size="12" fill="#ffffff">SEM</text>
+  <rect x="180" y="385" width="70" height="20" rx="10" fill="#3498db"/>
+  <text x="195" y="400" font-family="Arial" font-size="12" fill="#ffffff">Analytics</text>
+</svg>
