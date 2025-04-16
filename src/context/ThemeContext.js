@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 
+// Define theme storage key as constant
+export const THEME_STORAGE_KEY = 'user-theme';
 export const ThemeContext = createContext();
 
 /**
@@ -10,43 +12,52 @@ export const ThemeContext = createContext();
  * @returns {React.ReactNode} Provider Component
  */
 export const ThemeContextProvider = ({ children, initialTheme = 'light' }) => {
-  const [theme, setTheme] = useState(initialTheme);
+  const [theme, setThemeState] = useState(initialTheme);
   
+  // Apply theme changes to DOM and persist in localStorage
   useEffect(() => {
-    // Apply theme to body
-    document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme';
+    // Apply theme to HTML element for global scope
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Apply theme to body element
+    if (theme === 'dark') {
+      document.body.className = 'dark';
+    } else {
+      document.body.className = '';
+    }
+    
+    // Save theme preference to localStorage
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
   
   /**
    * Toggle between light and dark theme
    */
   const toggleTheme = () => {
-    console.log('Toggle theme called, current theme:', theme);
     const newTheme = theme === 'light' ? 'dark' : 'light';
-    console.log('Current theme:', newTheme);
-    setTheme(newTheme);
-    console.log('Theme changed to:', newTheme);
+    setThemeState(newTheme);
   };
   
   /**
-   * Set a specific theme
+   * Set a specific theme and persist it
    * 
    * @param {string} newTheme - Theme to set ('light' or 'dark')
    */
-  const setSpecificTheme = (newTheme) => {
+  const setTheme = (newTheme) => {
     if (newTheme === 'light' || newTheme === 'dark') {
-      console.log('Current theme:', newTheme);
-      setTheme(newTheme);
-      console.log('Theme changed to:', newTheme);
+      setThemeState(newTheme);
     }
   };
   
+  // Expose theme context
+  const contextValue = {
+    theme,
+    toggleTheme,
+    setTheme
+  };
+  
   return (
-    <ThemeContext.Provider value={{
-      theme,
-      toggleTheme,
-      setTheme: setSpecificTheme
-    }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );
