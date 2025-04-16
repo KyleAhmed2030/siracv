@@ -13,12 +13,22 @@ const PreviewScreen = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { resumeData, saveResume } = useResume();
+  const { isAuthenticated } = useAuth();
   const previewRef = useRef(null);
   const [generating, setGenerating] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
+  const [showAuthMessage, setShowAuthMessage] = useState(false);
   
   // Handle save resume
   const handleSaveResume = () => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      setShowAuthMessage(true);
+      // Redirect to auth screen with a return path
+      navigate('/auth', { state: { from: '/preview' } });
+      return;
+    }
+    
     saveResume();
     setSaveStatus('success');
     
@@ -30,6 +40,14 @@ const PreviewScreen = () => {
   
   // Handle download PDF
   const handleDownloadPdf = async () => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      setShowAuthMessage(true);
+      // Redirect to auth screen with a return path
+      navigate('/auth', { state: { from: '/preview' } });
+      return;
+    }
+    
     try {
       setGenerating(true);
       
@@ -60,6 +78,19 @@ const PreviewScreen = () => {
       <div className="preview-header">
         <h2>{t('Resume Preview')}</h2>
         <p>{t('This is how your resume will look when downloaded.')}</p>
+        
+        {/* Authentication notice */}
+        {!isAuthenticated && (
+          <div className="auth-notice">
+            <p>{t('Please sign in or create a free account to download your resume')}</p>
+            <Button 
+              variant="primary" 
+              onClick={() => navigate('/auth', { state: { from: '/preview' } })}
+            >
+              {t('Create a free account to download')}
+            </Button>
+          </div>
+        )}
       </div>
       
       <div className="preview-container" ref={previewRef}>
