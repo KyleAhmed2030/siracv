@@ -4,10 +4,13 @@ import { useResume } from '../hooks/useResume';
 import Input from './Input';
 import { v4 as uuidv4 } from 'uuid';
 
-const EducationForm = () => {
+const EducationForm = ({ onValidationChange }) => {
   const { t } = useTranslation();
   const { resumeData, updateResumeData } = useResume();
   const [educationList, setEducationList] = useState(resumeData.education || []);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [isValid, setIsValid] = useState(true);
   
   // Update local state when resumeData changes
   useEffect(() => {
@@ -44,6 +47,21 @@ const EducationForm = () => {
     
     setEducationList(updatedList);
     updateResumeData({ education: updatedList });
+    
+    // Clear error for this field if it exists
+    const errorKey = `${id}-${field}`;
+    if (errors[errorKey]) {
+      setErrors({
+        ...errors,
+        [errorKey]: null
+      });
+    }
+    
+    // Mark field as touched
+    setTouched({
+      ...touched,
+      [errorKey]: true
+    });
   };
   
   // Handle checkbox for current education
@@ -68,7 +86,108 @@ const EducationForm = () => {
     const updatedList = educationList.filter(edu => edu.id !== id);
     setEducationList(updatedList);
     updateResumeData({ education: updatedList });
+    
+    // Remove errors for this education entry
+    const newErrors = { ...errors };
+    Object.keys(newErrors).forEach(key => {
+      if (key.startsWith(`${id}-`)) {
+        delete newErrors[key];
+      }
+    });
+    setErrors(newErrors);
+    
+    // Remove touched state for this education entry
+    const newTouched = { ...touched };
+    Object.keys(newTouched).forEach(key => {
+      if (key.startsWith(`${id}-`)) {
+        delete newTouched[key];
+      }
+    });
+    setTouched(newTouched);
   };
+  
+  // Field blur handler
+  const handleBlur = (id, field, value) => {
+    const errorKey = `${id}-${field}`;
+    setTouched({
+      ...touched,
+      [errorKey]: true
+    });
+    validateField(id, field, value);
+  };
+  
+  // Validate individual field
+  const validateField = (id, field, value) => {
+    const errorKey = `${id}-${field}`;
+    let error = null;
+    
+    // Only perform validation on fields that are required
+    if (field === 'institution' && (!value || value.trim() === '')) {
+      error = t('Institution name is required');
+    }
+    
+    // Check for valid date format
+    if ((field === 'startDate' || field === 'endDate') && value) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        error = t('Please enter a valid date');
+      }
+    }
+    
+    // Validate that start date is before end date
+    if (field === 'endDate' && value) {
+      const education = educationList.find(edu => edu.id === id);
+      if (education && education.startDate && new Date(value) < new Date(education.startDate)) {
+        error = t('End date must be after start date');
+      }
+    }
+    
+    setErrors({
+      ...errors,
+      [errorKey]: error
+    });
+    
+    return !error;
+  };
+  
+  // Validate all education entries
+  const validateEducation = () => {
+    // If there are no education entries, consider it valid
+    if (educationList.length === 0) {
+      setIsValid(true);
+      return true;
+    }
+    
+    const newErrors = { ...errors };
+    let formIsValid = true;
+    
+    educationList.forEach(education => {
+      // Institution is required
+      if (!education.institution || education.institution.trim() === '') {
+        formIsValid = false;
+        newErrors[`${education.id}-institution`] = t('Institution name is required');
+      }
+      
+      // If we have dates, validate them
+      if (education.startDate && education.endDate && !education.isCurrent) {
+        if (new Date(education.endDate) < new Date(education.startDate)) {
+          formIsValid = false;
+          newErrors[`${education.id}-endDate`] = t('End date must be after start date');
+        }
+      }
+    });
+    
+    setErrors(newErrors);
+    setIsValid(formIsValid);
+    return formIsValid;
+  };
+  
+  // Update parent component when validation status changes
+  useEffect(() => {
+    const formIsValid = validateEducation();
+    if (onValidationChange) {
+      onValidationChange(formIsValid);
+    }
+  }, [educationList, onValidationChange]);
   
   return (
     <div className="form-section">
@@ -84,7 +203,10 @@ const EducationForm = () => {
                   name={`institution-${education.id}`}
                   value={education.institution}
                   onChange={(e) => handleEducationChange(education.id, 'institution', e.target.value)}
+                  onBlur={(e) => handleBlur(education.id, 'institution', e.target.value)}
                   placeholder={t('University or School Name')}
+                  error={errors[`${education.id}-institution`]}
+                  required
                 />
               </div>
               <div className="form-group quarter">
@@ -127,6 +249,8 @@ const EducationForm = () => {
                   type="date"
                   value={education.startDate}
                   onChange={(e) => handleEducationChange(education.id, 'startDate', e.target.value)}
+                  onBlur={(e) => handleBlur(education.id, 'startDate', e.target.value)}
+                  error={errors[`${education.id}-startDate`]}
                 />
               </div>
               <div className="form-group half">
@@ -136,7 +260,9 @@ const EducationForm = () => {
                   type="date"
                   value={education.endDate}
                   onChange={(e) => handleEducationChange(education.id, 'endDate', e.target.value)}
+                  onBlur={(e) => handleBlur(education.id, 'endDate', e.target.value)}
                   disabled={education.isCurrent}
+                  error={errors[`${education.id}-endDate`]}
                 />
                 <div className="checkbox-group">
                   <input
