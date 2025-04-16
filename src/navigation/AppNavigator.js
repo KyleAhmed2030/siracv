@@ -1,167 +1,58 @@
-import React, { useContext } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { I18nManager } from 'react-native';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Feather } from '@expo/vector-icons';
 
 // Screens
 import WelcomeScreen from '../screens/WelcomeScreen';
-import ResumeBuilderScreen from '../screens/ResumeBuilderScreen';
 import TemplateSelectionScreen from '../screens/TemplateSelectionScreen';
+import ResumeBuilderScreen from '../screens/ResumeBuilderScreen';
 import PreviewScreen from '../screens/PreviewScreen';
-import PaymentScreen from '../screens/PaymentScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import SavedResumesScreen from '../screens/SavedResumesScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
-// Context
-import { ThemeContext } from '../context/ThemeContext';
-
-// Styles
-import { darkTheme, lightTheme } from '../styles/theme';
-
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
-
-function MainTabs() {
-  const { t } = useTranslation();
-  const { theme } = useContext(ThemeContext);
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
-
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarStyle: { 
-          backgroundColor: currentTheme.background,
-          borderTopColor: currentTheme.border,
-        },
-        tabBarActiveTintColor: currentTheme.primary,
-        tabBarInactiveTintColor: currentTheme.text,
-        headerStyle: {
-          backgroundColor: currentTheme.background,
-        },
-        headerTintColor: currentTheme.text,
-      }}
-    >
-      <Tab.Screen 
-        name="NewResume" 
-        component={ResumeStackNavigator} 
-        options={{
-          tabBarLabel: t('newResume'),
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="file-plus" size={size} color={color} />
-          ),
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen 
-        name="SavedResumes" 
-        component={SavedResumesScreen} 
-        options={{
-          tabBarLabel: t('savedResumes'),
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="folder" size={size} color={color} />
-          ),
-          title: t('savedResumes'),
-        }}
-      />
-      <Tab.Screen 
-        name="Settings" 
-        component={SettingsScreen} 
-        options={{
-          tabBarLabel: t('settings'),
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="settings" size={size} color={color} />
-          ),
-          title: t('settings'),
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
-
-function ResumeStackNavigator() {
-  const { t } = useTranslation();
-  const { theme } = useContext(ThemeContext);
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
-
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: currentTheme.background,
-        },
-        headerTintColor: currentTheme.text,
-        cardStyle: { backgroundColor: currentTheme.background }
-      }}
-    >
-      <Stack.Screen 
-        name="ResumeBuilder" 
-        component={ResumeBuilderScreen} 
-        options={{ 
-          title: t('buildResume'),
-        }} 
-      />
-      <Stack.Screen 
-        name="TemplateSelection" 
-        component={TemplateSelectionScreen} 
-        options={{ 
-          title: t('chooseTemplate'),
-        }} 
-      />
-      <Stack.Screen 
-        name="Preview" 
-        component={PreviewScreen} 
-        options={{ 
-          title: t('preview'),
-        }} 
-      />
-      <Stack.Screen 
-        name="Payment" 
-        component={PaymentScreen} 
-        options={{ 
-          title: t('payment'),
-        }} 
-      />
-    </Stack.Navigator>
-  );
-}
-
-export default function AppNavigator({ initialLanguage }) {
-  // Force RTL if language is Arabic
-  React.useEffect(() => {
-    if (initialLanguage === 'ar' && !I18nManager.isRTL) {
-      I18nManager.forceRTL(true);
+const AppNavigator = ({ initialLanguage }) => {
+  const { i18n } = useTranslation();
+  
+  // Set the initial language
+  useEffect(() => {
+    if (initialLanguage) {
+      i18n.changeLanguage(initialLanguage);
+      
+      // Set document direction based on language
+      document.documentElement.dir = initialLanguage === 'ar' ? 'rtl' : 'ltr';
     }
-  }, [initialLanguage]);
-
-  const { theme } = useContext(ThemeContext);
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
-
+  }, [i18n, initialLanguage]);
+  
   return (
-    <NavigationContainer
-      theme={{
-        dark: theme === 'dark',
-        colors: {
-          primary: currentTheme.primary,
-          background: currentTheme.background,
-          card: currentTheme.surface,
-          text: currentTheme.text,
-          border: currentTheme.border,
-          notification: currentTheme.primary,
-        },
-      }}
-    >
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          cardStyle: { backgroundColor: currentTheme.background }
-        }}
-      >
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="MainApp" component={MainTabs} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Router>
+      <Routes>
+        {/* Welcome screen */}
+        <Route path="/" element={<WelcomeScreen />} />
+        
+        {/* Template selection */}
+        <Route path="/templates" element={<TemplateSelectionScreen />} />
+        
+        {/* Resume builder steps */}
+        <Route path="/builder/basicInfo" element={<ResumeBuilderScreen step="basicInfo" />} />
+        <Route path="/builder/education" element={<ResumeBuilderScreen step="education" />} />
+        <Route path="/builder/workExperience" element={<ResumeBuilderScreen step="workExperience" />} />
+        <Route path="/builder/skills" element={<ResumeBuilderScreen step="skills" />} />
+        <Route path="/builder/summary" element={<ResumeBuilderScreen step="summary" />} />
+        
+        {/* Preview */}
+        <Route path="/preview" element={<PreviewScreen />} />
+        
+        {/* Saved resumes */}
+        <Route path="/saved" element={<SavedResumesScreen />} />
+        
+        {/* Settings */}
+        <Route path="/settings" element={<SettingsScreen />} />
+        
+        {/* Fallback route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
-}
+};
+
+export default AppNavigator;
