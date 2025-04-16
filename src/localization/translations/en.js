@@ -85,6 +85,7 @@ const enTranslation = {
   "Country": "Country",
   "Website": "Website",
   "LinkedIn": "LinkedIn",
+  "Location": "Location",
 
   "Enter your first name": "Enter your first name",
   "Enter your last name": "Enter your last name",
@@ -150,6 +151,10 @@ const enTranslation = {
   "Write a professional summary that highlights your experience and skills": "Write a professional summary that highlights your experience and skills",
   "Briefly describe your professional background, key skills, and what makes you unique...": "Briefly describe your professional background, key skills, and what makes you unique...",
   "A good summary should be 3-5 sentences that quickly summarizes your background and skills": "A good summary should be 3-5 sentences that quickly summarizes your background and skills",
+  "Your summary is a bit short. Consider adding more details.": "Your summary is a bit short. Consider adding more details.",
+  "Your summary is quite long. Consider making it more concise.": "Your summary is quite long. Consider making it more concise.",
+  "Great summary length!": "Great summary length!",
+  "characters": "characters",
 
   // Preview
   "Resume Preview": "Resume Preview",
@@ -180,6 +185,21 @@ const enTranslation = {
   "PDF Generated Successfully": "PDF Generated Successfully",
   "Error generating PDF": "Error generating PDF",
   "Present": "Present",
+  
+  // Form Validation
+  "This field is required": "This field is required",
+  "Please fill in this field": "Please fill in this field",
+  "Please enter your name": "Please enter your name",
+  "Please enter a valid email": "Please enter a valid email",
+  "Please enter a valid phone number": "Please enter a valid phone number",
+  "Please select a date": "Please select a date",
+  "This field cannot be empty": "This field cannot be empty",
+  "Please enter a valid date": "Please enter a valid date",
+  "End date must be after start date": "End date must be after start date",
+  "Institution name is required": "Institution name is required",
+  "Job title is required when employer is specified": "Job title is required when employer is specified",
+  "Employer is required when job title is specified": "Employer is required when job title is specified",
+  "Please enter a valid URL starting with http:// or https://": "Please enter a valid URL starting with http:// or https://",
 };
 
 export default enTranslation;

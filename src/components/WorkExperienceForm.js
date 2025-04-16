@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResume } from '../hooks/useResume';
 import Input from './Input';
+import TextArea from './TextArea';
 import { v4 as uuidv4 } from 'uuid';
 
 const WorkExperienceForm = ({ onValidationChange }) => {
@@ -297,17 +298,14 @@ const WorkExperienceForm = ({ onValidationChange }) => {
               </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">{t('Job Description')}</label>
-              <textarea
-                name={`description-${experience.id}`}
-                value={experience.description}
-                onChange={(e) => handleExperienceChange(experience.id, 'description', e.target.value)}
-                placeholder={t('Describe your responsibilities and achievements')}
-                className="form-input"
-                rows={4}
-              />
-            </div>
+            <TextArea
+              id={`description-${experience.id}`}
+              label={t('Job Description')}
+              value={experience.description}
+              onChange={(e) => handleExperienceChange(experience.id, 'description', e.target.value)}
+              placeholder={t('Describe your responsibilities and achievements')}
+              rows={4}
+            />
             
             {experienceList.length > 1 && (
               <button
