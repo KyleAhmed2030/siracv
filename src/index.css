@@ -910,13 +910,15 @@ a {
 .template4-preview {
   padding: 0;
   overflow: hidden;
+  --template-primary-color: var(--template-primary-color, var(--primary-color));
+  --template-accent-color: var(--template-accent-color, #2ecc71);
 }
 
 .template4-header {
   display: flex;
   justify-content: space-between;
   padding: 30px;
-  background: linear-gradient(135deg, var(--primary-color), #2ecc71);
+  background: linear-gradient(135deg, var(--template-primary-color), var(--template-accent-color));
   color: white;
 }
 
@@ -991,11 +993,11 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--primary-color);
+  color: var(--template-primary-color);
   font-size: 16px;
   margin: 0 0 15px;
   padding-bottom: 8px;
-  border-bottom: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--template-primary-color);
 }
 
 .template4-section .section-icon {
@@ -1016,7 +1018,7 @@ a {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: var(--primary-color);
+  background-color: var(--template-primary-color);
 }
 
 .timeline-item:after {
@@ -1026,7 +1028,7 @@ a {
   top: 16px;
   width: 2px;
   height: calc(100% - 10px);
-  background-color: var(--primary-color);
+  background-color: var(--template-primary-color);
   opacity: 0.3;
 }
 
@@ -1051,7 +1053,7 @@ a {
 }
 
 .timeline-period {
-  color: var(--primary-color);
+  color: var(--template-primary-color);
   font-size: 13px;
 }
 
@@ -1130,10 +1132,12 @@ a {
 .template5-preview {
   padding: 0;
   font-family: 'Georgia', 'Times New Roman', serif;
+  --template-primary-color: var(--template-primary-color, var(--primary-color));
+  --template-accent-color: var(--template-accent-color, #6A5ACD);
 }
 
 .template5-header {
-  background-color: #483D8B;
+  background-color: var(--template-primary-color);
   color: white;
   padding: 40px;
 }
@@ -1159,7 +1163,7 @@ a {
 .title-underline {
   height: 2px;
   width: 100px;
-  background-color: #836FFF;
+  background-color: var(--template-accent-color);
   margin: 10px auto;
 }
 
@@ -1199,7 +1203,7 @@ a {
 }
 
 .template5-section .section-title {
-  color: #483D8B;
+  color: var(--template-primary-color);
   font-size: 18px;
   margin: 0 0 15px;
   font-weight: normal;
@@ -1210,7 +1214,7 @@ a {
 }
 
 .dark .template5-section .section-title {
-  color: var(--primary-color);
+  color: var(--template-primary-color);
   border-bottom-color: var(--gray-700);
 }
 
@@ -1248,13 +1252,13 @@ a {
 }
 
 .template5-section .item-period {
-  color: #6A5ACD;
+  color: var(--template-accent-color);
   font-style: italic;
   font-size: 14px;
 }
 
 .dark .template5-section .item-period {
-  color: #A89AFF;
+  color: var(--template-accent-color);
 }
 
 .template5-section .item-subtitle {
