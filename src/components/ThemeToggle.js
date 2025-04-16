@@ -9,6 +9,8 @@ const ThemeToggle = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { t } = useTranslation();
   
+  console.log('Current theme:', theme); // Debugging log
+  
   return (
     <div className="theme-toggle">
       <span>{t(theme === 'dark' ? 'Dark' : 'Light')}</span>

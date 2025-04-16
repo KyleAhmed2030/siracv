@@ -150,6 +150,23 @@ header {
   color: #ffffff;
 }
 
+.dark-theme .home-page h1 {
+  color: #61dafb;
+}
+
+.dark-theme .home-page p {
+  color: #cccccc;
+}
+
+.dark-theme header {
+  border-bottom-color: #333;
+}
+
+.dark-theme .language-btn {
+  border-color: #555;
+  color: #ddd;
+}
+
 .light-theme {
   background-color: #ffffff;
   color: #121212;
