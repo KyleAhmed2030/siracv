@@ -14,6 +14,7 @@
     "html2canvas": "^1.4.1",
     "i18next": "^22.4.15",
     "jspdf": "^3.0.1",
+    "openai": "^4.94.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.2.2",
