@@ -1,26 +1,28 @@
-import React, { useContext } from 'react';
-import { ThemeContext } from '../context/ThemeContext';
+import React from 'react';
+import { useTheme } from '../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
 
 /**
  * Toggle switch component for dark/light mode switching
  */
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useTheme();
   const { t } = useTranslation();
-  
-  console.log('Current theme:', theme); // Debugging log
   
   return (
     <div className="theme-toggle">
-      <span>{t(theme === 'dark' ? 'Dark' : 'Light')}</span>
       <label className="switch">
-        <input 
-          type="checkbox" 
-          checked={theme === 'dark'} 
+        <input
+          type="checkbox"
+          checked={theme === 'dark'}
           onChange={toggleTheme}
+          aria-label={t('Toggle dark mode')}
         />
-        <span className="slider round"></span>
+        <span className="slider round">
+          <span className="icon">
+            {theme === 'dark' ? '☾' : '☀'}
+          </span>
+        </span>
       </label>
     </div>
   );
