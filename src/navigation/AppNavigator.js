@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 
@@ -15,7 +15,7 @@ import SavedResumesScreen from '../screens/SavedResumesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 // Layout component that decides whether to show the header
-const AppLayout = ({ children }) => {
+const MainLayout = () => {
   const location = useLocation();
   const { theme } = useTheme();
   
@@ -34,7 +34,7 @@ const AppLayout = ({ children }) => {
   return (
     <div className={theme}>
       {showHeader && <Header />}
-      {children}
+      <Outlet />
     </div>
   );
 };
@@ -55,67 +55,19 @@ const AppNavigator = ({ initialLanguage }) => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={
-          <AppLayout>
-            <WelcomeScreen />
-          </AppLayout>
-        } />
-        
-        <Route path="/templates" element={
-          <AppLayout>
-            <TemplateSelectionScreen />
-          </AppLayout>
-        } />
-        
-        <Route path="/builder/basicInfo" element={
-          <AppLayout>
-            <ResumeBuilderScreen step="basicInfo" />
-          </AppLayout>
-        } />
-        
-        <Route path="/builder/education" element={
-          <AppLayout>
-            <ResumeBuilderScreen step="education" />
-          </AppLayout>
-        } />
-        
-        <Route path="/builder/workExperience" element={
-          <AppLayout>
-            <ResumeBuilderScreen step="workExperience" />
-          </AppLayout>
-        } />
-        
-        <Route path="/builder/skills" element={
-          <AppLayout>
-            <ResumeBuilderScreen step="skills" />
-          </AppLayout>
-        } />
-        
-        <Route path="/builder/summary" element={
-          <AppLayout>
-            <ResumeBuilderScreen step="summary" />
-          </AppLayout>
-        } />
-        
-        <Route path="/preview" element={
-          <AppLayout>
-            <PreviewScreen />
-          </AppLayout>
-        } />
-        
-        <Route path="/saved" element={
-          <AppLayout>
-            <SavedResumesScreen />
-          </AppLayout>
-        } />
-        
-        <Route path="/settings" element={
-          <AppLayout>
-            <SettingsScreen />
-          </AppLayout>
-        } />
-        
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<WelcomeScreen />} />
+          <Route path="/templates" element={<TemplateSelectionScreen />} />
+          <Route path="/builder/basicInfo" element={<ResumeBuilderScreen step="basicInfo" />} />
+          <Route path="/builder/education" element={<ResumeBuilderScreen step="education" />} />
+          <Route path="/builder/workExperience" element={<ResumeBuilderScreen step="workExperience" />} />
+          <Route path="/builder/skills" element={<ResumeBuilderScreen step="skills" />} />
+          <Route path="/builder/summary" element={<ResumeBuilderScreen step="summary" />} />
+          <Route path="/preview" element={<PreviewScreen />} />
+          <Route path="/saved" element={<SavedResumesScreen />} />
+          <Route path="/settings" element={<SettingsScreen />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
       </Routes>
     </Router>
   );

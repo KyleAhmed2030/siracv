@@ -79,7 +79,7 @@ a {
 
 .dark .button-secondary {
   background-color: var(--primary-dark);
-  color: white;
+  color: white !important;
   font-weight: 600;
 }
 
@@ -149,7 +149,7 @@ a {
 
 .button-secondary {
   background-color: var(--gray-200);
-  color: var(--dark-bg);
+  color: #333333;
   font-weight: 600;
 }
 
