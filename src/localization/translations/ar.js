@@ -1,6 +1,6 @@
 const arTranslation = {
   // General
-  'Welcome to Resume Builder': 'مرحبًا بك في منشئ السيرة الذاتية',
+  'Welcome to Resume Builder': 'مرحبًا بك في سيرة',
   'Create professional resumes easily': 'إنشاء سير ذاتية احترافية بسهولة',
   'Create Resume': 'إنشاء سيرة ذاتية',
   'View Templates': 'عرض القوالب',
