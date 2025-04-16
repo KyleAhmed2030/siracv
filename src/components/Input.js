@@ -4,44 +4,44 @@ import React from 'react';
  * Reusable input component with label, icon, and error handling
  */
 const Input = ({
-  id,
+  label,
   name,
   type = 'text',
-  label,
   value,
   onChange,
   placeholder,
-  error,
-  disabled = false,
   required = false,
+  error = null,
   icon = null,
-  className = ''
+  className = '',
+  disabled = false
 }) => {
   return (
-    <div className={`form-group ${error ? 'has-error' : ''} ${className}`}>
+    <div className={`input-container ${className} ${error ? 'input-error' : ''}`}>
       {label && (
-        <label className="form-label" htmlFor={id || name}>
+        <label htmlFor={name} className="form-label">
           {label}
-          {required && <span className="required-marker">*</span>}
+          {required && <span className="required-mark">*</span>}
         </label>
       )}
       
-      <div className="input-container">
-        {icon && <div className="input-icon">{icon}</div>}
+      <div className="input-wrapper">
+        {icon && <span className="input-icon">{icon}</span>}
+        
         <input
-          id={id || name}
-          name={name}
           type={type}
+          id={name}
+          name={name}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          disabled={disabled}
+          className="form-input"
           required={required}
-          className={`form-input ${icon ? 'has-icon' : ''}`}
+          disabled={disabled}
         />
       </div>
       
-      {error && <div className="form-error">{error}</div>}
+      {error && <div className="input-error-message">{error}</div>}
     </div>
   );
 };

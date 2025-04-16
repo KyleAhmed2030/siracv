@@ -1,391 +1,122 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  ScrollView,
-  Alert,
-  FlatList
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Feather } from '@expo/vector-icons';
+import { useResume } from '../hooks/useResume';
 import Input from './Input';
-import Button from './Button';
+import { v4 as uuidv4 } from 'uuid';
 
-const SkillsForm = ({ data, updateData, errors, theme }) => {
+const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+
+const SkillsForm = () => {
   const { t } = useTranslation();
+  const { resumeData, updateResumeData } = useResume();
+  const [skillsList, setSkillsList] = useState(resumeData.skills || []);
+  const [newSkill, setNewSkill] = useState({ name: '', level: 'Intermediate' });
   
-  const [skills, setSkills] = useState(data.skills || []);
-  const [languages, setLanguages] = useState(data.languages || []);
-  const [skillName, setSkillName] = useState('');
-  const [languageName, setLanguageName] = useState('');
-  const [proficiency, setProficiency] = useState('');
-  const [currentErrors, setCurrentErrors] = useState({});
+  // Update local state when resumeData changes
+  useEffect(() => {
+    setSkillsList(resumeData.skills || []);
+  }, [resumeData.skills]);
   
-  const proficiencyLevels = [
-    { id: 'beginner', name: t('beginner') },
-    { id: 'intermediate', name: t('intermediate') },
-    { id: 'advanced', name: t('advanced') },
-    { id: 'expert', name: t('expert') },
-    { id: 'native', name: t('native') },
-  ];
-  
-  const resetSkillForm = () => {
-    setSkillName('');
-    setCurrentErrors({});
+  // Handle skill name input change
+  const handleSkillNameChange = (e) => {
+    setNewSkill({ ...newSkill, name: e.target.value });
   };
   
-  const resetLanguageForm = () => {
-    setLanguageName('');
-    setProficiency('');
+  // Handle skill level select change
+  const handleSkillLevelChange = (e) => {
+    setNewSkill({ ...newSkill, level: e.target.value });
   };
   
-  const validateSkillForm = () => {
-    if (!skillName.trim()) {
-      setCurrentErrors({ skillName: t('skillNameRequired') });
-      return false;
-    }
-    return true;
-  };
-  
-  const validateLanguageForm = () => {
-    if (!languageName.trim()) {
-      setCurrentErrors({ languageName: t('languageNameRequired') });
-      return false;
-    }
-    if (!proficiency) {
-      setCurrentErrors({ proficiency: t('proficiencyRequired') });
-      return false;
-    }
-    return true;
-  };
-  
-  const handleAddSkill = () => {
-    if (!validateSkillForm()) return;
+  // Add a new skill
+  const handleAddSkill = (e) => {
+    e.preventDefault();
     
-    // Check if skill already exists
-    if (skills.some(skill => skill.toLowerCase() === skillName.toLowerCase())) {
-      setCurrentErrors({ skillName: t('skillAlreadyExists') });
-      return;
-    }
+    if (!newSkill.name.trim()) return;
     
-    const updatedSkills = [...skills, skillName];
-    setSkills(updatedSkills);
-    updateData({ skills: updatedSkills });
-    resetSkillForm();
-  };
-  
-  const handleAddLanguage = () => {
-    if (!validateLanguageForm()) return;
-    
-    // Check if language already exists
-    if (languages.some(lang => lang.name.toLowerCase() === languageName.toLowerCase())) {
-      setCurrentErrors({ languageName: t('languageAlreadyExists') });
-      return;
-    }
-    
-    const language = {
-      name: languageName,
-      proficiency,
+    const skillToAdd = {
+      id: uuidv4(),
+      name: newSkill.name.trim(),
+      level: newSkill.level
     };
     
-    const updatedLanguages = [...languages, language];
-    setLanguages(updatedLanguages);
-    updateData({ languages: updatedLanguages });
-    resetLanguageForm();
+    const updatedList = [...skillsList, skillToAdd];
+    setSkillsList(updatedList);
+    updateResumeData({ skills: updatedList });
+    setNewSkill({ name: '', level: 'Intermediate' });
   };
   
-  const handleDeleteSkill = (index) => {
-    const updatedSkills = skills.filter((_, i) => i !== index);
-    setSkills(updatedSkills);
-    updateData({ skills: updatedSkills });
-  };
-  
-  const handleDeleteLanguage = (index) => {
-    const updatedLanguages = languages.filter((_, i) => i !== index);
-    setLanguages(updatedLanguages);
-    updateData({ languages: updatedLanguages });
-  };
-  
-  const renderSkill = ({ item, index }) => (
-    <View 
-      style={[
-        styles.skillItem, 
-        { backgroundColor: theme.surface, borderColor: theme.border }
-      ]}
-    >
-      <Text style={[styles.skillText, { color: theme.text }]}>
-        {item}
-      </Text>
-      <TouchableOpacity 
-        style={styles.deleteButton}
-        onPress={() => handleDeleteSkill(index)}
-      >
-        <Feather name="x" size={18} color={theme.error} />
-      </TouchableOpacity>
-    </View>
-  );
-  
-  const renderLanguage = ({ item, index }) => (
-    <View 
-      style={[
-        styles.languageItem, 
-        { backgroundColor: theme.surface, borderColor: theme.border }
-      ]}
-    >
-      <View style={styles.languageContent}>
-        <Text style={[styles.languageText, { color: theme.text }]}>
-          {item.name}
-        </Text>
-        <Text style={[styles.proficiencyText, { color: theme.textSecondary }]}>
-          {getProficiencyName(item.proficiency)}
-        </Text>
-      </View>
-      <TouchableOpacity 
-        style={styles.deleteButton}
-        onPress={() => handleDeleteLanguage(index)}
-      >
-        <Feather name="x" size={18} color={theme.error} />
-      </TouchableOpacity>
-    </View>
-  );
-  
-  const getProficiencyName = (id) => {
-    const level = proficiencyLevels.find(level => level.id === id);
-    return level ? level.name : id;
+  // Remove a skill
+  const handleRemoveSkill = (id) => {
+    const updatedList = skillsList.filter(skill => skill.id !== id);
+    setSkillsList(updatedList);
+    updateResumeData({ skills: updatedList });
   };
   
   return (
-    <View style={styles.container}>
-      <View style={styles.skillsSection}>
-        <Text style={[styles.sectionTitle, { color: theme.text }]}>
-          {t('skills')}
-        </Text>
+    <div className="form-section">
+      <h3>{t('Skills')}</h3>
+      
+      <div className="skills-list">
+        {skillsList.map(skill => (
+          <div key={skill.id} className="skill-item">
+            <div className="skill-name">{skill.name}</div>
+            <div className="skill-info">
+              <span className="skill-level">{t(skill.level)}</span>
+              <button
+                type="button"
+                className="button-icon"
+                onClick={() => handleRemoveSkill(skill.id)}
+                aria-label={t('Remove skill')}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        ))}
         
-        <View style={styles.skillInputRow}>
-          <View style={styles.skillInputContainer}>
+        {skillsList.length === 0 && (
+          <p className="empty-list-message">{t('No skills added yet.')}</p>
+        )}
+      </div>
+      
+      <form onSubmit={handleAddSkill} className="add-skill-form">
+        <div className="form-row">
+          <div className="form-group three-quarters">
             <Input
-              value={skillName}
-              onChangeText={setSkillName}
-              placeholder={t('enterSkill')}
-              error={currentErrors.skillName}
-              theme={theme}
+              label={t('Add Skill')}
+              name="skillName"
+              value={newSkill.name}
+              onChange={handleSkillNameChange}
+              placeholder={t('e.g. JavaScript, Project Management, etc.')}
             />
-          </View>
-          
-          <TouchableOpacity 
-            style={[
-              styles.addButton, 
-              { backgroundColor: theme.primary }
-            ]}
-            onPress={handleAddSkill}
-          >
-            <Feather name="plus" size={22} color={theme.buttonText} />
-          </TouchableOpacity>
-        </View>
-        
-        {skills.length > 0 && (
-          <FlatList
-            data={skills}
-            renderItem={renderSkill}
-            keyExtractor={(_, index) => `skill-${index}`}
-            numColumns={2}
-            columnWrapperStyle={styles.skillsRow}
-            scrollEnabled={false}
-          />
-        )}
-      </View>
-      
-      <View style={styles.languagesSection}>
-        <Text style={[styles.sectionTitle, { color: theme.text }]}>
-          {t('languages')}
-        </Text>
-        
-        <View style={styles.languageForm}>
-          <Input
-            label={t('language')}
-            value={languageName}
-            onChangeText={setLanguageName}
-            placeholder={t('enterLanguage')}
-            error={currentErrors.languageName}
-            theme={theme}
-          />
-          
-          <View style={styles.proficiencySelector}>
-            <Text style={[styles.proficiencyLabel, { color: theme.textSecondary }]}>
-              {t('proficiency')}
-            </Text>
-            
-            <View style={styles.proficiencyButtons}>
-              {proficiencyLevels.map((level) => (
-                <TouchableOpacity
-                  key={level.id}
-                  style={[
-                    styles.proficiencyButton,
-                    proficiency === level.id && { 
-                      backgroundColor: theme.primary,
-                      borderColor: theme.primary
-                    },
-                    proficiency !== level.id && { 
-                      backgroundColor: theme.surface,
-                      borderColor: theme.border
-                    }
-                  ]}
-                  onPress={() => setProficiency(level.id)}
-                >
-                  <Text
-                    style={[
-                      styles.proficiencyButtonText,
-                      proficiency === level.id && { color: theme.buttonText },
-                      proficiency !== level.id && { color: theme.text }
-                    ]}
-                  >
-                    {level.name}
-                  </Text>
-                </TouchableOpacity>
+          </div>
+          <div className="form-group quarter">
+            <label className="form-label">{t('Level')}</label>
+            <select
+              name="skillLevel"
+              value={newSkill.level}
+              onChange={handleSkillLevelChange}
+              className="form-input"
+            >
+              {SKILL_LEVELS.map(level => (
+                <option key={level} value={level}>
+                  {t(level)}
+                </option>
               ))}
-            </View>
-            
-            {currentErrors.proficiency && (
-              <Text style={[styles.errorText, { color: theme.error }]}>
-                {currentErrors.proficiency}
-              </Text>
-            )}
-          </View>
-          
-          <Button
-            title={t('addLanguage')}
-            onPress={handleAddLanguage}
-            color={theme.primary}
-            textColor={theme.buttonText}
-            icon="plus"
-          />
-        </View>
+            </select>
+          </div>
+        </div>
         
-        {languages.length > 0 && (
-          <FlatList
-            data={languages}
-            renderItem={renderLanguage}
-            keyExtractor={(_, index) => `language-${index}`}
-            scrollEnabled={false}
-            style={styles.languagesList}
-          />
-        )}
-      </View>
-      
-      {errors.skills && (
-        <Text style={[styles.errorText, { color: theme.error }]}>
-          {errors.skills}
-        </Text>
-      )}
-    </View>
+        <button
+          type="submit"
+          className="button button-primary"
+          disabled={!newSkill.name.trim()}
+        >
+          {t('Add Skill')}
+        </button>
+      </form>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 15,
-  },
-  skillsSection: {
-    marginBottom: 30,
-  },
-  skillInputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  skillInputContainer: {
-    flex: 1,
-    marginRight: 10,
-  },
-  addButton: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  skillsRow: {
-    justifyContent: 'space-between',
-    marginBottom: 8,
-  },
-  skillItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginBottom: 8,
-    width: '48%',
-  },
-  skillText: {
-    flex: 1,
-    fontSize: 14,
-  },
-  deleteButton: {
-    padding: 2,
-  },
-  languagesSection: {
-    marginBottom: 20,
-  },
-  languageForm: {
-    marginBottom: 15,
-  },
-  proficiencySelector: {
-    marginBottom: 15,
-  },
-  proficiencyLabel: {
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  proficiencyButtons: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  proficiencyButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  proficiencyButtonText: {
-    fontSize: 14,
-  },
-  languagesList: {
-    marginTop: 5,
-  },
-  languageItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    marginBottom: 8,
-  },
-  languageContent: {
-    flex: 1,
-  },
-  languageText: {
-    fontSize: 16,
-    marginBottom: 2,
-  },
-  proficiencyText: {
-    fontSize: 14,
-  },
-  errorText: {
-    fontSize: 14,
-    marginTop: 5,
-  },
-});
 
 export default SkillsForm;

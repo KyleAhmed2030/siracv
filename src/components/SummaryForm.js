@@ -1,133 +1,46 @@
-import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TextInput,
-  ScrollView
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import Input from './Input';
+import { useResume } from '../hooks/useResume';
 
-const SummaryForm = ({ data, updateData, errors, theme }) => {
+const SummaryForm = () => {
   const { t } = useTranslation();
+  const { resumeData, updateResumeData } = useResume();
+  const [summary, setSummary] = useState(resumeData.summary || '');
   
-  const handleSummaryChange = (text) => {
-    updateData({ summary: text });
+  // Update local state when resumeData changes
+  useEffect(() => {
+    setSummary(resumeData.summary || '');
+  }, [resumeData.summary]);
+  
+  // Handle summary text change
+  const handleSummaryChange = (e) => {
+    const value = e.target.value;
+    setSummary(value);
+    updateResumeData({ summary: value });
   };
   
   return (
-    <View style={styles.container}>
-      <Text style={[styles.sectionTitle, { color: theme.text }]}>
-        {t('summary')}
-      </Text>
+    <div className="form-section">
+      <h3>{t('Professional Summary')}</h3>
       
-      <Text style={[styles.description, { color: theme.textSecondary }]}>
-        {t('summaryDescription')}
-      </Text>
-      
-      <Input
-        value={data.summary || ''}
-        onChangeText={handleSummaryChange}
-        placeholder={t('enterSummary')}
-        multiline
-        numberOfLines={8}
-        textAlignVertical="top"
-        error={errors.summary}
-        theme={theme}
-      />
-      
-      <View style={styles.exampleContainer}>
-        <Text style={[styles.exampleTitle, { color: theme.text }]}>
-          {t('example')}:
-        </Text>
-        <Text style={[styles.exampleText, { color: theme.textSecondary }]}>
-          {t('summaryExample')}
-        </Text>
-      </View>
-      
-      <View style={styles.tipsContainer}>
-        <Text style={[styles.tipsTitle, { color: theme.text }]}>
-          {t('tips')}:
-        </Text>
-        
-        <View style={styles.tipItem}>
-          <View style={[styles.bulletPoint, { backgroundColor: theme.primary }]} />
-          <Text style={[styles.tipText, { color: theme.textSecondary }]}>
-            {t('summaryTip1')}
-          </Text>
-        </View>
-        
-        <View style={styles.tipItem}>
-          <View style={[styles.bulletPoint, { backgroundColor: theme.primary }]} />
-          <Text style={[styles.tipText, { color: theme.textSecondary }]}>
-            {t('summaryTip2')}
-          </Text>
-        </View>
-        
-        <View style={styles.tipItem}>
-          <View style={[styles.bulletPoint, { backgroundColor: theme.primary }]} />
-          <Text style={[styles.tipText, { color: theme.textSecondary }]}>
-            {t('summaryTip3')}
-          </Text>
-        </View>
-      </View>
-    </View>
+      <div className="form-group">
+        <label className="form-label">
+          {t('Write a professional summary that highlights your experience and skills')}
+        </label>
+        <textarea
+          name="summary"
+          value={summary}
+          onChange={handleSummaryChange}
+          placeholder={t('Briefly describe your professional background, key skills, and what makes you unique...')}
+          className="form-input"
+          rows={6}
+        />
+        <div className="form-hint">
+          {t('A good summary should be 3-5 sentences that quickly summarizes your background and skills')}
+        </div>
+      </div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 14,
-    marginBottom: 20,
-  },
-  exampleContainer: {
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  exampleTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 5,
-  },
-  exampleText: {
-    fontSize: 14,
-    fontStyle: 'italic',
-    lineHeight: 20,
-  },
-  tipsContainer: {
-    marginTop: 20,
-  },
-  tipsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 10,
-  },
-  tipItem: {
-    flexDirection: 'row',
-    marginBottom: 8,
-    paddingRight: 10,
-  },
-  bulletPoint: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginTop: 7,
-    marginRight: 8,
-  },
-  tipText: {
-    flex: 1,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-});
 
 export default SummaryForm;
