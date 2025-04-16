@@ -119,6 +119,8 @@ const enTranslation = {
 
   // Work Experience
   "Work Experience": "Work Experience",
+  "Professional Experience": "Professional Experience",
+  "Experience": "Experience",
   "Employer": "Employer",
   "Job Description": "Job Description",
   "I currently work here": "I currently work here",
@@ -129,6 +131,8 @@ const enTranslation = {
 
   // Skills
   "Skills": "Skills",
+  "Core Competencies": "Core Competencies",
+  "Contact": "Contact",
   "Add Skill": "Add Skill",
   "Level": "Level",
   "e.g. JavaScript, Project Management, etc.": "e.g. JavaScript, Project Management, etc.",
@@ -140,6 +144,9 @@ const enTranslation = {
 
   // Summary
   "Professional Summary": "Professional Summary",
+  "Executive Summary": "Executive Summary",
+  "Summary": "Summary",
+  "Profile": "Profile",
   "Write a professional summary that highlights your experience and skills": "Write a professional summary that highlights your experience and skills",
   "Briefly describe your professional background, key skills, and what makes you unique...": "Briefly describe your professional background, key skills, and what makes you unique...",
   "A good summary should be 3-5 sentences that quickly summarizes your background and skills": "A good summary should be 3-5 sentences that quickly summarizes your background and skills",

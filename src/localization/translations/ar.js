@@ -122,6 +122,8 @@ const arTranslation = {
 
   // Work Experience
   "Work Experience": "الخبرة العملية",
+  "Professional Experience": "الخبرة المهنية",
+  "Experience": "الخبرة",
   "Employer": "جهة العمل",
   "Job Description": "الوصف الوظيفي",
   "I currently work here": "أنا أعمل حالياً هنا",
@@ -132,6 +134,8 @@ const arTranslation = {
 
   // Skills
   "Skills": "المهارات",
+  "Core Competencies": "الكفاءات الرئيسية",
+  "Contact": "معلومات الاتصال",
   "Add Skill": "إضافة مهارة",
   "Level": "المستوى",
   "e.g. JavaScript, Project Management, etc.": "مثال: جافاسكريبت، إدارة المشاريع، إلخ.",
@@ -143,6 +147,9 @@ const arTranslation = {
 
   // Summary
   "Professional Summary": "الملخص المهني",
+  "Executive Summary": "الملخص التنفيذي",
+  "Summary": "الملخص",
+  "Profile": "الملف الشخصي",
   "Write a professional summary that highlights your experience and skills": "اكتب ملخصاً مهنياً يسلط الضوء على خبرتك ومهاراتك",
   "Briefly describe your professional background, key skills, and what makes you unique...": "صف بإيجاز خلفيتك المهنية، مهاراتك الرئيسية، وما يميزك...",
   "A good summary should be 3-5 sentences that quickly summarizes your background and skills": "الملخص الجيد يجب أن يكون 3-5 جمل تلخص بسرعة خلفيتك ومهاراتك",
