@@ -153,10 +153,6 @@ const arTranslation = {
   "Write a professional summary that highlights your experience and skills": "اكتب ملخصاً مهنياً يسلط الضوء على خبرتك ومهاراتك",
   "Briefly describe your professional background, key skills, and what makes you unique...": "صف بإيجاز خلفيتك المهنية، مهاراتك الرئيسية، وما يميزك...",
   "A good summary should be 3-5 sentences that quickly summarizes your background and skills": "الملخص الجيد يجب أن يكون 3-5 جمل تلخص بسرعة خلفيتك ومهاراتك",
-  "Your summary is a bit short. Consider adding more details.": "ملخصك قصير بعض الشيء. فكر في إضافة المزيد من التفاصيل.",
-  "Your summary is quite long. Consider making it more concise.": "ملخصك طويل نسبيًا. فكر في جعله أكثر إيجازًا.",
-  "Great summary length!": "طول الملخص ممتاز!",
-  "characters": "حرف",
 
   // Preview
   "Resume Preview": "معاينة السيرة الذاتية",
@@ -187,21 +183,6 @@ const arTranslation = {
   "PDF Generated Successfully": "تم إنشاء PDF بنجاح",
   "Error generating PDF": "خطأ في إنشاء PDF",
   "Present": "حتى الآن",
-  
-  // Form Validation
-  "This field is required": "هذا الحقل مطلوب",
-  "Please fill in this field": "يرجى ملء هذا الحقل",
-  "Please enter your name": "يرجى إدخال اسمك",
-  "Please enter a valid email": "يرجى إدخال بريد إلكتروني صحيح",
-  "Please enter a valid phone number": "يرجى إدخال رقم هاتف صحيح",
-  "Please select a date": "يرجى اختيار تاريخ",
-  "This field cannot be empty": "لا يمكن أن يكون هذا الحقل فارغاً",
-  "Please enter a valid date": "يرجى إدخال تاريخ صالح",
-  "End date must be after start date": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء",
-  "Institution name is required": "اسم المؤسسة التعليمية مطلوب",
-  "Job title is required when employer is specified": "المسمى الوظيفي مطلوب عند تحديد جهة العمل",
-  "Employer is required when job title is specified": "جهة العمل مطلوبة عند تحديد المسمى الوظيفي",
-  "Please enter a valid URL starting with http:// or https://": "الرجاء إدخال رابط صالح يبدأ بـ http:// أو https://",
 };
 
 export default arTranslation;
