@@ -20,6 +20,9 @@ function AppContent() {
   return (
     <div className="app-container">
       <header>
+        <div className="header-logo">
+          <h1 className="logo">Sira</h1>
+        </div>
         <div className="header-controls">
           <LanguageSelector />
           <ThemeToggle />
