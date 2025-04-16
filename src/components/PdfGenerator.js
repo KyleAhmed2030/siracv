@@ -818,9 +818,312 @@ class PdfGenerator {
    * @returns {string} HTML content
    */
   static generateTemplate4Html(data) {
-    // Template 4 implementation similar to other templates
-    // For brevity, I'm including a simplified version
-    return this.generateTemplate1Html(data); // Fallback to template 1
+    const {
+      basicInfo = {},
+      education = [],
+      workExperience = [],
+      skills = [],
+      summary = ''
+    } = data;
+    
+    // Format education items
+    const educationHtml = education.map(edu => `
+      <div class="resume-item">
+        <div class="item-header">
+          <span class="item-title">${edu.degree}${edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ''}</span>
+          <span class="item-period">${this.formatDate(edu.startDate)} - ${edu.isCurrent ? 'Present' : this.formatDate(edu.endDate)}</span>
+        </div>
+        <div class="item-subtitle">${edu.institution}</div>
+        ${edu.location ? `<div class="item-location">${edu.location}</div>` : ''}
+        ${edu.description ? `<div class="item-description">${edu.description}</div>` : ''}
+      </div>
+    `).join('');
+    
+    // Format work experience items
+    const workExperienceHtml = workExperience.map(exp => `
+      <div class="resume-item">
+        <div class="item-header">
+          <span class="item-title">${exp.jobTitle}</span>
+          <span class="item-period">${this.formatDate(exp.startDate)} - ${exp.isCurrentJob ? 'Present' : this.formatDate(exp.endDate)}</span>
+        </div>
+        <div class="item-subtitle">${exp.employer}</div>
+        ${exp.location ? `<div class="item-location">${exp.location}</div>` : ''}
+        ${exp.description ? `<div class="item-description">${exp.description}</div>` : ''}
+      </div>
+    `).join('');
+    
+    // Format skills
+    const skillsHtml = skills.map(skill => `
+      <div class="skill-item">
+        <div class="skill-name">${skill.name}</div>
+        <div class="skill-bar">
+          <div class="skill-level" style="width: ${(parseInt(skill.level) / 5) * 100}%"></div>
+        </div>
+      </div>
+    `).join('');
+    
+    // Create the full HTML for Modern Template (Template 4)
+    return `
+      <div class="resume-pdf template4">
+        <div class="resume-header">
+          <div class="header-main">
+            <h1>${basicInfo.firstName || ''} ${basicInfo.lastName || ''}</h1>
+            <h2>${basicInfo.jobTitle || ''}</h2>
+          </div>
+          <div class="header-side">
+            ${basicInfo.email ? `<div class="contact-item"><span class="contact-icon">✉</span> ${basicInfo.email}</div>` : ''}
+            ${basicInfo.phone ? `<div class="contact-item"><span class="contact-icon">✆</span> ${basicInfo.phone}</div>` : ''}
+            ${basicInfo.location ? `<div class="contact-item"><span class="contact-icon">⌂</span> ${basicInfo.location}</div>` : ''}
+            ${basicInfo.website ? `<div class="contact-item"><span class="contact-icon">🔗</span> ${basicInfo.website}</div>` : ''}
+            ${basicInfo.linkedIn ? `<div class="contact-item"><span class="contact-icon">in</span> ${basicInfo.linkedIn}</div>` : ''}
+          </div>
+        </div>
+        
+        <div class="resume-body">
+          <div class="main-column">
+            ${summary ? `
+              <div class="resume-section">
+                <h3><span class="section-icon">👤</span> Professional Summary</h3>
+                <div class="section-content">
+                  <p>${summary}</p>
+                </div>
+              </div>
+            ` : ''}
+            
+            ${workExperience.length > 0 ? `
+              <div class="resume-section">
+                <h3><span class="section-icon">💼</span> Work Experience</h3>
+                <div class="section-content timeline">
+                  ${workExperienceHtml}
+                </div>
+              </div>
+            ` : ''}
+            
+            ${education.length > 0 ? `
+              <div class="resume-section">
+                <h3><span class="section-icon">🎓</span> Education</h3>
+                <div class="section-content timeline">
+                  ${educationHtml}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+          
+          <div class="side-column">
+            ${skills.length > 0 ? `
+              <div class="resume-section">
+                <h3><span class="section-icon">🔧</span> Skills</h3>
+                <div class="section-content skills-container">
+                  ${skillsHtml}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+      
+      <style>
+        .resume-pdf {
+          font-family: 'Roboto', 'Arial', sans-serif;
+          color: #333;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        .template4 {
+          --primary-color: #3498db;
+          --secondary-color: #2ecc71;
+          --text-color: #333;
+          --accent-color: #f39c12;
+          --bg-color: #fff;
+          --section-bg: #f8f9fa;
+          --border-color: #e9ecef;
+        }
+        
+        .resume-header {
+          display: flex;
+          justify-content: space-between;
+          padding: 30px;
+          background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+          color: white;
+          border-radius: 5px 5px 0 0;
+        }
+        
+        .header-main h1 {
+          margin: 0 0 5px;
+          font-size: 28px;
+          font-weight: 700;
+        }
+        
+        .header-main h2 {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 400;
+          opacity: 0.9;
+        }
+        
+        .header-side {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          font-size: 14px;
+        }
+        
+        .contact-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .contact-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          background-color: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          font-size: 12px;
+        }
+        
+        .resume-body {
+          display: flex;
+          padding: 0;
+          background-color: var(--bg-color);
+          border-radius: 0 0 5px 5px;
+        }
+        
+        .main-column {
+          flex: 2;
+          padding: 30px;
+          border-right: 1px solid var(--border-color);
+        }
+        
+        .side-column {
+          flex: 1;
+          padding: 30px;
+          background-color: var(--section-bg);
+        }
+        
+        .resume-section {
+          margin-bottom: 25px;
+        }
+        
+        .resume-section h3 {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: var(--primary-color);
+          font-size: 18px;
+          margin: 0 0 15px;
+          padding-bottom: 8px;
+          border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .section-icon {
+          font-size: 16px;
+        }
+        
+        .section-content {
+          padding: 0 0 0 10px;
+        }
+        
+        .timeline .resume-item {
+          position: relative;
+          padding-left: 20px;
+          margin-bottom: 20px;
+        }
+        
+        .timeline .resume-item:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 6px;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: var(--primary-color);
+        }
+        
+        .timeline .resume-item:after {
+          content: "";
+          position: absolute;
+          left: 4px;
+          top: 16px;
+          width: 2px;
+          height: calc(100% - 10px);
+          background-color: var(--primary-color);
+          opacity: 0.3;
+        }
+        
+        .timeline .resume-item:last-child:after {
+          display: none;
+        }
+        
+        .item-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 5px;
+        }
+        
+        .item-title {
+          font-weight: bold;
+          color: var(--text-color);
+        }
+        
+        .item-period {
+          color: var(--primary-color);
+          font-size: 14px;
+        }
+        
+        .item-subtitle {
+          font-weight: 500;
+          margin-bottom: 5px;
+        }
+        
+        .item-location {
+          font-style: italic;
+          margin-bottom: 5px;
+          font-size: 14px;
+          color: #666;
+        }
+        
+        .item-description {
+          font-size: 14px;
+          line-height: 1.5;
+          color: #555;
+        }
+        
+        .skills-container {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+        
+        .skill-item {
+          margin-bottom: 5px;
+        }
+        
+        .skill-name {
+          margin-bottom: 5px;
+          font-weight: 500;
+        }
+        
+        .skill-bar {
+          height: 8px;
+          background-color: #e0e0e0;
+          border-radius: 4px;
+          overflow: hidden;
+        }
+        
+        .skill-level {
+          height: 100%;
+          background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+          border-radius: 4px;
+        }
+      </style>
+    `;
   }
   
   /**
@@ -829,9 +1132,293 @@ class PdfGenerator {
    * @returns {string} HTML content
    */
   static generateTemplate5Html(data) {
-    // Template 5 implementation similar to other templates
-    // For brevity, I'm including a simplified version
-    return this.generateTemplate2Html(data); // Fallback to template 2
+    const {
+      basicInfo = {},
+      education = [],
+      workExperience = [],
+      skills = [],
+      summary = ''
+    } = data;
+    
+    // Format education items
+    const educationHtml = education.map(edu => `
+      <div class="resume-item">
+        <div class="item-header">
+          <span class="item-title">${edu.degree}${edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ''}</span>
+          <span class="item-period">${this.formatDate(edu.startDate)} - ${edu.isCurrent ? 'Present' : this.formatDate(edu.endDate)}</span>
+        </div>
+        <div class="item-subtitle">${edu.institution}</div>
+        ${edu.location ? `<div class="item-location">${edu.location}</div>` : ''}
+        ${edu.description ? `<div class="item-description">${edu.description}</div>` : ''}
+      </div>
+    `).join('');
+    
+    // Format work experience items
+    const workExperienceHtml = workExperience.map(exp => `
+      <div class="resume-item">
+        <div class="item-header">
+          <span class="item-title">${exp.jobTitle}</span>
+          <span class="item-period">${this.formatDate(exp.startDate)} - ${exp.isCurrentJob ? 'Present' : this.formatDate(exp.endDate)}</span>
+        </div>
+        <div class="item-subtitle">${exp.employer}</div>
+        ${exp.location ? `<div class="item-location">${exp.location}</div>` : ''}
+        ${exp.description ? `<div class="item-description">${exp.description}</div>` : ''}
+      </div>
+    `).join('');
+    
+    // Format skills
+    const skillsHtml = skills.map(skill => `
+      <div class="skill-item">
+        <span class="skill-name">${skill.name}</span>
+        <span class="skill-rating">
+          ${Array(parseInt(skill.level)).fill('<span class="rating-dot filled"></span>').join('')}
+          ${Array(5 - parseInt(skill.level)).fill('<span class="rating-dot"></span>').join('')}
+        </span>
+      </div>
+    `).join('');
+    
+    // Create the full HTML for Executive Template (Template 5)
+    return `
+      <div class="resume-pdf template5">
+        <div class="resume-header">
+          <div class="header-content">
+            <div class="name-title">
+              <h1>${basicInfo.firstName || ''} ${basicInfo.lastName || ''}</h1>
+              <div class="title-underline"></div>
+              <h2>${basicInfo.jobTitle || ''}</h2>
+            </div>
+            
+            <div class="contact-info">
+              ${basicInfo.email ? `<div class="contact-item">${basicInfo.email}</div>` : ''}
+              ${basicInfo.phone ? `<div class="contact-item">${basicInfo.phone}</div>` : ''}
+              ${basicInfo.location ? `<div class="contact-item">${basicInfo.location}</div>` : ''}
+              ${basicInfo.website ? `<div class="contact-item">${basicInfo.website}</div>` : ''}
+              ${basicInfo.linkedIn ? `<div class="contact-item">${basicInfo.linkedIn}</div>` : ''}
+            </div>
+          </div>
+        </div>
+        
+        <div class="resume-content">
+          ${summary ? `
+            <div class="resume-section summary-section">
+              <h3>Executive Summary</h3>
+              <div class="section-content">
+                <p>${summary}</p>
+              </div>
+            </div>
+          ` : ''}
+          
+          <div class="two-column-layout">
+            <div class="left-column">
+              ${workExperience.length > 0 ? `
+                <div class="resume-section">
+                  <h3>Professional Experience</h3>
+                  <div class="section-content">
+                    ${workExperienceHtml}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+            
+            <div class="right-column">
+              ${education.length > 0 ? `
+                <div class="resume-section">
+                  <h3>Education</h3>
+                  <div class="section-content">
+                    ${educationHtml}
+                  </div>
+                </div>
+              ` : ''}
+              
+              ${skills.length > 0 ? `
+                <div class="resume-section">
+                  <h3>Core Competencies</h3>
+                  <div class="section-content skills-section">
+                    ${skillsHtml}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <style>
+        .resume-pdf {
+          font-family: 'Georgia', 'Times New Roman', serif;
+          color: #333;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          background-color: #fff;
+        }
+        
+        .template5 {
+          --primary-color: #483D8B;
+          --secondary-color: #6A5ACD;
+          --text-color: #333;
+          --light-color: #f8f8f8;
+          --border-color: #ddd;
+          --accent-color: #836FFF;
+        }
+        
+        .resume-header {
+          padding: 40px;
+          background-color: var(--primary-color);
+          color: white;
+        }
+        
+        .header-content {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        
+        .name-title {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        
+        .name-title h1 {
+          margin: 0;
+          font-size: 32px;
+          font-weight: normal;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+        }
+        
+        .title-underline {
+          height: 2px;
+          width: 120px;
+          background-color: var(--accent-color);
+          margin: 10px auto;
+        }
+        
+        .name-title h2 {
+          margin: 10px 0 0;
+          font-size: 18px;
+          font-weight: normal;
+          letter-spacing: 1px;
+        }
+        
+        .contact-info {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 20px;
+          font-size: 14px;
+        }
+        
+        .resume-content {
+          padding: 40px;
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        
+        .summary-section {
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 25px;
+          margin-bottom: 30px;
+        }
+        
+        .two-column-layout {
+          display: flex;
+          gap: 40px;
+        }
+        
+        .left-column {
+          flex: 3;
+        }
+        
+        .right-column {
+          flex: 2;
+        }
+        
+        .resume-section {
+          margin-bottom: 30px;
+        }
+        
+        .resume-section h3 {
+          color: var(--primary-color);
+          font-size: 20px;
+          margin: 0 0 15px;
+          font-weight: normal;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          padding-bottom: 8px;
+          border-bottom: 1px solid var(--border-color);
+        }
+        
+        .resume-item {
+          margin-bottom: 20px;
+        }
+        
+        .item-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 5px;
+        }
+        
+        .item-title {
+          font-weight: bold;
+          color: var(--text-color);
+        }
+        
+        .item-period {
+          color: var(--secondary-color);
+          font-style: italic;
+        }
+        
+        .item-subtitle {
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        
+        .item-location {
+          font-style: italic;
+          margin-bottom: 5px;
+          color: #555;
+        }
+        
+        .item-description {
+          font-size: 14px;
+          line-height: 1.5;
+          color: #444;
+        }
+        
+        .skills-section {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        
+        .skill-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        
+        .skill-name {
+          font-size: 14px;
+        }
+        
+        .skill-rating {
+          display: flex;
+          gap: 3px;
+        }
+        
+        .rating-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: var(--border-color);
+          display: inline-block;
+        }
+        
+        .rating-dot.filled {
+          background-color: var(--primary-color);
+        }
+      </style>
+    `;
   }
   
   /**
