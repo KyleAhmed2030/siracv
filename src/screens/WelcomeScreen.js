@@ -21,9 +21,35 @@ const WelcomeScreen = () => {
     navigate('/saved');
   };
   
+  // Logo style for the welcome screen
+  const appLogoStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '20px'
+  };
+  
+  const logoIconStyle = {
+    fontSize: '36px',
+    marginRight: '10px'
+  };
+  
+  const logoTextStyle = {
+    fontSize: '36px',
+    fontWeight: 700,
+    color: theme === 'dark' ? '#3498db' : '#2c3e50',
+    margin: 0
+  };
+  
   return (
     <div className={`welcome-screen ${theme}`}>
       <div className="welcome-container">
+        {/* App Logo & Name */}
+        <div style={appLogoStyle}>
+          <span style={logoIconStyle}>📝</span>
+          <h1 style={logoTextStyle}>{t('Sira')}</h1>
+        </div>
+        
         <div className="welcome-header">
           <h1>{t('Welcome to Resume Builder')}</h1>
           <h2>{t('Build Your Professional Resume')}</h2>
