@@ -27,6 +27,11 @@
   --container-width: 1200px;
   --header-height: 70px;
   --footer-height: 60px;
+  
+  /* Button text colors - these ensure button text is always visible */
+  --button-primary-text: white;
+  --button-secondary-text: #333333;
+  --button-secondary-dark-text: white;
 }
 
 * {
@@ -88,6 +93,20 @@ a {
   max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 16px;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Header */

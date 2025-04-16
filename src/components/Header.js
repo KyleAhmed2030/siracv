@@ -15,11 +15,42 @@ const Header = () => {
     navigate('/');
   };
   
+  // Ensure header is visible regardless of theme
+  const headerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '16px 24px',
+    backgroundColor: theme === 'dark' ? '#222' : '#fff',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    position: 'sticky',
+    top: 0,
+    zIndex: 100
+  };
+  
+  // Style logo and title for visibility
+  const logoStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer'
+  };
+  
+  const iconStyle = {
+    fontSize: '24px',
+    marginRight: '8px'
+  };
+  
+  const titleStyle = {
+    fontSize: '24px',
+    fontWeight: 700,
+    margin: 0,
+    color: theme === 'dark' ? '#3498db' : '#2c3e50'
+  };
+  
   return (
-    <header className={`app-header ${theme}`}>
-      <div className="app-logo" onClick={handleLogoClick}>
-        <span className="logo-icon">📝</span>
-        <h1 className="app-title">{t('Sira')}</h1>
+    <header style={headerStyle}>
+      <div style={logoStyle} onClick={handleLogoClick}>
+        <span style={iconStyle}>📝</span>
+        <h1 style={titleStyle}>{t('Sira')}</h1>
       </div>
     </header>
   );
