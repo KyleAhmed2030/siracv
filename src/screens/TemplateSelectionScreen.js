@@ -6,6 +6,11 @@ import Button from '../components/Button';
 
 // Template Cards
 const TemplateCard = ({ id, title, description, isSelected, onClick }) => {
+  // Map template id to image path
+  const getTemplatePath = (templateId) => {
+    return `/images/templates/${templateId}.svg`;
+  };
+
   return (
     <div 
       className={`template-card ${isSelected ? 'selected' : ''}`}
@@ -14,10 +19,11 @@ const TemplateCard = ({ id, title, description, isSelected, onClick }) => {
       <h3>{title}</h3>
       <p>{description}</p>
       <div className="template-preview">
-        {/* Template preview image would go here */}
-        <div className="template-preview-placeholder" style={{ background: '#f0f0f0', height: '150px', borderRadius: '4px' }}>
-          <div style={{ padding: '20px', textAlign: 'center' }}>Template Preview</div>
-        </div>
+        <img 
+          src={getTemplatePath(id)} 
+          alt={`${title} template`} 
+          className="template-image"
+        />
       </div>
     </div>
   );

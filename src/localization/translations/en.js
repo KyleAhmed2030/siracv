@@ -2,6 +2,7 @@ const enTranslation = {
   // General
   'Welcome to Resume Builder': 'Welcome to Sira',
   'Create professional resumes easily': 'Create professional resumes easily',
+  'Get Started': 'Get Started',
   'Create Resume': 'Create Resume',
   'View Templates': 'View Templates',
   'My Resumes': 'My Resumes',

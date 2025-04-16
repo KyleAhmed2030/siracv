@@ -1,0 +1,36 @@
+<svg width="300" height="420" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+  <!-- Executive Template -->
+  <rect width="300" height="420" fill="#ffffff"/>
+  
+  <!-- Elegant Header -->
+  <rect x="0" y="0" width="300" height="100" fill="#1a2a3a"/>
+  <text x="150" y="40" font-family="Times New Roman, serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">JONATHAN SMITH</text>
+  <text x="150" y="65" font-family="Times New Roman, serif" font-size="16" fill="#e0e0e0" text-anchor="middle">CHIEF EXECUTIVE OFFICER</text>
+  <line x1="100" y1="80" x2="200" y2="80" stroke="#c0aa70" stroke-width="2"/>
+  
+  <!-- Contact Info in Elegant Style -->
+  <rect x="0" y="100" width="300" height="35" fill="#f5f5f5"/>
+  <text x="150" y="122" font-family="Times New Roman, serif" font-size="12" fill="#333333" text-anchor="middle">jsmith@executive.com | (212) 555-0123 | New York, NY</text>
+  
+  <!-- Professional Summary -->
+  <text x="30" y="165" font-family="Times New Roman, serif" font-size="16" font-weight="bold" fill="#1a2a3a">EXECUTIVE SUMMARY</text>
+  <line x1="30" y1="175" x2="270" y2="175" stroke="#c0aa70" stroke-width="1"/>
+  <text x="30" y="195" font-family="Times New Roman, serif" font-size="12" fill="#333333" width="240">Accomplished executive with 15+ years of leadership experience in driving organizational growth...</text>
+  
+  <!-- Professional Experience -->
+  <text x="30" y="230" font-family="Times New Roman, serif" font-size="16" font-weight="bold" fill="#1a2a3a">PROFESSIONAL EXPERIENCE</text>
+  <line x1="30" y1="240" x2="270" y2="240" stroke="#c0aa70" stroke-width="1"/>
+  
+  <text x="30" y="260" font-family="Times New Roman, serif" font-size="14" font-weight="bold" fill="#1a2a3a">Chief Executive Officer</text>
+  <text x="30" y="275" font-family="Times New Roman, serif" font-size="14" font-style="italic" fill="#1a2a3a">Global Enterprises Inc.</text>
+  <text x="30" y="290" font-family="Times New Roman, serif" font-size="12" fill="#555555">2015 - Present</text>
+  <text x="30" y="310" font-family="Times New Roman, serif" font-size="12" fill="#333333">• Led company through 300% revenue growth over 5 years</text>
+  <text x="30" y="325" font-family="Times New Roman, serif" font-size="12" fill="#333333">• Spearheaded international expansion into 12 new markets</text>
+  
+  <!-- Education -->
+  <text x="30" y="360" font-family="Times New Roman, serif" font-size="16" font-weight="bold" fill="#1a2a3a">EDUCATION</text>
+  <line x1="30" y1="370" x2="270" y2="370" stroke="#c0aa70" stroke-width="1"/>
+  
+  <text x="30" y="390" font-family="Times New Roman, serif" font-size="14" font-weight="bold" fill="#1a2a3a">MBA, Business Administration</text>
+  <text x="30" y="405" font-family="Times New Roman, serif" font-size="14" font-style="italic" fill="#1a2a3a">Harvard Business School</text>
+</svg>

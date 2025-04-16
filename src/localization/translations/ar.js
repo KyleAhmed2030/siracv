@@ -2,6 +2,7 @@ const arTranslation = {
   // General
   'Welcome to Resume Builder': 'مرحبًا بك في سيرة',
   'Create professional resumes easily': 'إنشاء سير ذاتية احترافية بسهولة',
+  'Get Started': 'ابدأ الآن',
   'Create Resume': 'إنشاء سيرة ذاتية',
   'View Templates': 'عرض القوالب',
   'My Resumes': 'سيري الذاتية',

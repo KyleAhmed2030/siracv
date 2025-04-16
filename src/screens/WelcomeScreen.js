@@ -7,11 +7,7 @@ const WelcomeScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   
-  const handleCreateResume = () => {
-    navigate('/templates');
-  };
-  
-  const handleViewTemplates = () => {
+  const handleGetStarted = () => {
     navigate('/templates');
   };
   
@@ -24,17 +20,9 @@ const WelcomeScreen = () => {
         <Button 
           variant="primary" 
           fullWidth 
-          onClick={handleCreateResume}
+          onClick={handleGetStarted}
         >
-          {t('Create Resume')}
-        </Button>
-        
-        <Button 
-          variant="secondary" 
-          fullWidth
-          onClick={handleViewTemplates}
-        >
-          {t('View Templates')}
+          {t('Get Started')}
         </Button>
       </div>
     </div>
