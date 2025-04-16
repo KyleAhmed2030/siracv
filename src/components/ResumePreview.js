@@ -404,7 +404,7 @@ const Template3Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
 
       {education.length > 0 && (
         <div className="template3-section">
-          <h2 className="section-title">Education</h2>
+          <h2 className="section-title">{t('Education')}</h2>
           <div className="education-container">
             {education.map(edu => (
               <div key={edu.id} className="education-item">
@@ -424,7 +424,7 @@ const Template3Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
 
       {skills.length > 0 && (
         <div className="template3-section">
-          <h2 className="section-title">Skills</h2>
+          <h2 className="section-title">{t('Skills')}</h2>
           <div className="skills-container">
             {skills.map(skill => (
               <div key={skill.id} className="skill-badge">
@@ -447,6 +447,7 @@ const Template4Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  const { t } = useTranslation();
   
   // CSS custom properties for colors
   const customStyles = {
@@ -474,7 +475,7 @@ const Template4Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
         <div className="template4-main">
           {summary && (
             <div className="template4-section">
-              <h3 className="section-title"><span className="section-icon">👤</span> Professional Summary</h3>
+              <h3 className="section-title"><span className="section-icon">👤</span> {t('Professional Summary')}</h3>
               <div className="section-content">
                 <p>{summary}</p>
               </div>
@@ -483,7 +484,7 @@ const Template4Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
           
           {workExperience.length > 0 && (
             <div className="template4-section">
-              <h3 className="section-title"><span className="section-icon">💼</span> Work Experience</h3>
+              <h3 className="section-title"><span className="section-icon">💼</span> {t('Work Experience')}</h3>
               <div className="section-content timeline">
                 {workExperience.map(exp => (
                   <div key={exp.id} className="timeline-item">
@@ -504,7 +505,7 @@ const Template4Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
           
           {education.length > 0 && (
             <div className="template4-section">
-              <h3 className="section-title"><span className="section-icon">🎓</span> Education</h3>
+              <h3 className="section-title"><span className="section-icon">🎓</span> {t('Education')}</h3>
               <div className="section-content timeline">
                 {education.map(edu => (
                   <div key={edu.id} className="timeline-item">
@@ -527,7 +528,7 @@ const Template4Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
         <div className="template4-side">
           {skills.length > 0 && (
             <div className="template4-section">
-              <h3 className="section-title"><span className="section-icon">🔧</span> Skills</h3>
+              <h3 className="section-title"><span className="section-icon">🔧</span> {t('Skills')}</h3>
               <div className="section-content skills-container">
                 {skills.map(skill => (
                   <div key={skill.id} className="skill-item">
@@ -558,6 +559,7 @@ const Template5Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
     skills = [],
     summary = ''
   } = resumeData;
+  const { t } = useTranslation();
   
   // CSS custom properties for colors
   const customStyles = {
@@ -588,7 +590,7 @@ const Template5Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
       <div className="template5-content">
         {summary && (
           <div className="template5-section summary-section">
-            <h3 className="section-title">Executive Summary</h3>
+            <h3 className="section-title">{t('Executive Summary')}</h3>
             <div className="section-content">
               <p>{summary}</p>
             </div>
@@ -599,7 +601,7 @@ const Template5Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
           <div className="left-column">
             {workExperience.length > 0 && (
               <div className="template5-section">
-                <h3 className="section-title">Professional Experience</h3>
+                <h3 className="section-title">{t('Professional Experience')}</h3>
                 <div className="section-content">
                   {workExperience.map(exp => (
                     <div key={exp.id} className="resume-item">
@@ -622,7 +624,7 @@ const Template5Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
           <div className="right-column">
             {education.length > 0 && (
               <div className="template5-section">
-                <h3 className="section-title">Education</h3>
+                <h3 className="section-title">{t('Education')}</h3>
                 <div className="section-content">
                   {education.map(edu => (
                     <div key={edu.id} className="resume-item">
@@ -643,7 +645,7 @@ const Template5Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
             
             {skills.length > 0 && (
               <div className="template5-section">
-                <h3 className="section-title">Core Competencies</h3>
+                <h3 className="section-title">{t('Core Competencies')}</h3>
                 <div className="section-content skills-section">
                   {skills.map(skill => (
                     <div key={skill.id} className="skill-item">
