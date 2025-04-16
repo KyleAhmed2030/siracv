@@ -1,84 +1,117 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useTheme } from '../hooks/useTheme';
 import { useResume } from '../hooks/useResume';
-import Button from '../components/Button';
-import ProgressBar from '../components/ProgressBar';
 import BasicInfoForm from '../components/BasicInfoForm';
 import EducationForm from '../components/EducationForm';
 import WorkExperienceForm from '../components/WorkExperienceForm';
 import SkillsForm from '../components/SkillsForm';
 import SummaryForm from '../components/SummaryForm';
+import ProgressBar from '../components/ProgressBar';
+import Button from '../components/Button';
 
-const STEPS = [
-  { id: 'basicInfo', label: 'Basic Info', component: BasicInfoForm },
-  { id: 'education', label: 'Education', component: EducationForm },
-  { id: 'workExperience', label: 'Work Experience', component: WorkExperienceForm },
-  { id: 'skills', label: 'Skills', component: SkillsForm },
-  { id: 'summary', label: 'Summary', component: SummaryForm }
-];
-
-const ResumeBuilderScreen = () => {
+const ResumeBuilderScreen = ({ step }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { resumeData, saveResume } = useResume();
-  const { step = 'basicInfo' } = useParams();
+  const { theme } = useTheme();
+  const { resumeData, isLoading } = useResume();
   
-  // Find current step index
-  const currentStepIndex = STEPS.findIndex(s => s.id === step);
-  const currentStep = currentStepIndex !== -1 ? currentStepIndex : 0;
+  // Define steps and their order
+  const steps = [
+    { id: 'basicInfo', label: 'Personal Information' },
+    { id: 'education', label: 'Education' },
+    { id: 'workExperience', label: 'Work Experience' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'summary', label: 'Professional Summary' }
+  ];
   
-  // Get current step component
-  const StepComponent = STEPS[currentStep].component;
+  // Get current step index
+  const currentStepIndex = steps.findIndex(s => s.id === step);
+  const currentStep = steps[currentStepIndex];
+  const isFirstStep = currentStepIndex === 0;
+  const isLastStep = currentStepIndex === steps.length - 1;
   
-  // Navigate to previous step
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      navigate(`/builder/${STEPS[currentStep - 1].id}`);
+  // Get previous and next step IDs
+  const prevStepId = isFirstStep ? null : steps[currentStepIndex - 1].id;
+  const nextStepId = isLastStep ? null : steps[currentStepIndex + 1].id;
+  
+  // Handle next button
+  const handleNext = () => {
+    if (nextStepId) {
+      navigate(`/builder/${nextStepId}`);
+    } else {
+      navigate('/preview');
+    }
+  };
+  
+  // Handle back button
+  const handleBack = () => {
+    if (prevStepId) {
+      navigate(`/builder/${prevStepId}`);
     } else {
       navigate('/templates');
     }
   };
   
-  // Navigate to next step
-  const handleNext = () => {
-    if (currentStep < STEPS.length - 1) {
-      navigate(`/builder/${STEPS[currentStep + 1].id}`);
-    } else {
-      // Final step - save and go to preview
-      saveResume();
-      navigate('/preview');
+  // Render current form component based on step
+  const renderFormComponent = () => {
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+    
+    switch (step) {
+      case 'basicInfo':
+        return <BasicInfoForm />;
+      case 'education':
+        return <EducationForm />;
+      case 'workExperience':
+        return <WorkExperienceForm />;
+      case 'skills':
+        return <SkillsForm />;
+      case 'summary':
+        return <SummaryForm />;
+      default:
+        return <div>Invalid step</div>;
     }
   };
   
   return (
-    <div className="resume-builder-screen">
-      <h2>{t('Create Your Resume')}</h2>
-      
-      <div className="builder-progress">
-        <span className="step-info">
-          {t('Step {{current}} of {{total}}', { current: currentStep + 1, total: STEPS.length })} - {t(STEPS[currentStep].label)}
-        </span>
-        <ProgressBar currentStep={currentStep + 1} totalSteps={STEPS.length} />
+    <div className={`resume-builder-screen ${theme}`}>
+      <div className="builder-header">
+        <h2>{t('Create Your Resume')}</h2>
+        <p>
+          {t('Step {{current}} of {{total}}', {
+            current: currentStepIndex + 1,
+            total: steps.length
+          })}
+        </p>
+        
+        <ProgressBar 
+          currentStep={currentStepIndex + 1} 
+          totalSteps={steps.length} 
+        />
+        
+        <h3>{t(currentStep?.label || '')}</h3>
       </div>
       
       <div className="form-container">
-        <StepComponent />
+        {renderFormComponent()}
       </div>
       
-      <div className="button-group">
+      <div className="navigation-buttons">
         <Button 
           variant="secondary" 
-          onClick={handlePrevious}
+          onClick={handleBack}
         >
-          {currentStep === 0 ? t('Back to Templates') : t('Previous')}
+          {isFirstStep ? t('Back to Templates') : t('Previous')}
         </Button>
         
         <Button 
           variant="primary" 
           onClick={handleNext}
         >
-          {currentStep === STEPS.length - 1 ? t('Preview Resume') : t('Next')}
+          {isLastStep ? t('Preview Resume') : t('Next')}
         </Button>
       </div>
     </div>
