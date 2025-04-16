@@ -16,11 +16,13 @@ export const formatDate = (dateString, locale = 'en-US') => {
       return dateString;
     }
     
-    return date.toLocaleDateString(locale, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    // Format options
+    const options = { 
+      year: 'numeric', 
+      month: 'short'
+    };
+    
+    return date.toLocaleDateString(locale, options);
   } catch (error) {
     console.error('Error formatting date:', error);
     return dateString;
@@ -35,7 +37,9 @@ export const formatDate = (dateString, locale = 'en-US') => {
  * @returns {string} Truncated text with ellipsis if needed
  */
 export const truncateText = (text, maxLength = 50) => {
-  if (!text || text.length <= maxLength) {
+  if (!text) return '';
+  
+  if (text.length <= maxLength) {
     return text;
   }
   
@@ -49,6 +53,8 @@ export const truncateText = (text, maxLength = 50) => {
  * @returns {boolean} True if email is valid, false otherwise
  */
 export const isValidEmail = (email) => {
+  if (!email) return false;
+  
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
@@ -59,7 +65,8 @@ export const isValidEmail = (email) => {
  * @returns {string} Unique ID
  */
 export const generateId = () => {
-  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  return Math.random().toString(36).substring(2, 15) + 
+         Math.random().toString(36).substring(2, 15);
 };
 
 /**
@@ -71,13 +78,13 @@ export const generateId = () => {
 export const getInitials = (name) => {
   if (!name) return '';
   
-  const nameParts = name.trim().split(' ');
+  const names = name.trim().split(' ');
   
-  if (nameParts.length === 1) {
-    return nameParts[0].charAt(0).toUpperCase();
+  if (names.length === 1) {
+    return names[0].charAt(0).toUpperCase();
   }
   
-  return (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+  return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
 };
 
 /**
@@ -89,7 +96,8 @@ export const getInitials = (name) => {
 export const isRTL = (text) => {
   if (!text) return false;
   
-  const rtlChars = /[\u0591-\u07FF\u200F\u202B\u202E\uFB1D-\uFDFD\uFE70-\uFEFC]/;
+  // The Unicode RTL characters range
+  const rtlChars = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
   return rtlChars.test(text);
 };
 
@@ -101,25 +109,31 @@ export const isRTL = (text) => {
  * @returns {object} Merged object
  */
 export const deepMerge = (target, source) => {
-  const isObject = (obj) => obj && typeof obj === 'object';
+  const output = Object.assign({}, target);
   
-  if (!isObject(target) || !isObject(source)) {
-    return source;
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          Object.assign(output, { [key]: source[key] });
+        } else {
+          output[key] = deepMerge(target[key], source[key]);
+        }
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
   }
   
-  const output = { ...target };
-  
-  Object.keys(source).forEach(key => {
-    if (isObject(source[key])) {
-      if (!(key in target)) {
-        output[key] = source[key];
-      } else {
-        output[key] = deepMerge(target[key], source[key]);
-      }
-    } else {
-      output[key] = source[key];
-    }
-  });
-  
   return output;
+};
+
+/**
+ * Checks if value is an object
+ * 
+ * @param {any} item - Value to check
+ * @returns {boolean} True if value is an object
+ */
+const isObject = (item) => {
+  return (item && typeof item === 'object' && !Array.isArray(item));
 };

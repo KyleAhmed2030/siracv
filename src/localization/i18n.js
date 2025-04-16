@@ -3,9 +3,9 @@ import { initReactI18next } from 'react-i18next';
 import enTranslation from './translations/en';
 import arTranslation from './translations/ar';
 
-// Initialize i18next
+// Configure i18next
 i18n
-  .use(initReactI18next) // Passes i18n down to react-i18next
+  .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources: {
       en: {
@@ -15,10 +15,13 @@ i18n
         translation: arTranslation
       }
     },
-    lng: 'en', // Default language
-    fallbackLng: 'en',
+    lng: 'en', // default language
+    fallbackLng: 'en', // fallback language
     interpolation: {
-      escapeValue: false // React already safes from XSS
+      escapeValue: false // not needed for react
+    },
+    react: {
+      useSuspense: false
     }
   });
 

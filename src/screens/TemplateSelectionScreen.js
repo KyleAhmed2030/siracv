@@ -1,61 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useResume } from '../hooks/useResume';
 import Button from '../components/Button';
+import TemplateCard from '../components/TemplateCard';
 
-// Template Cards
-const TemplateCard = ({ id, title, description, isSelected, onClick }) => {
-  // Map template id to image path
-  const getTemplatePath = (templateId) => {
-    return `/images/templates/${templateId}.svg`;
-  };
-
-  return (
-    <div 
-      className={`template-card ${isSelected ? 'selected' : ''}`}
-      onClick={() => onClick(id)}
-    >
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <div className="template-preview">
-        <img 
-          src={getTemplatePath(id)} 
-          alt={`${title} template`} 
-          className="template-image"
-        />
-      </div>
-    </div>
-  );
-};
+// Template data
+const TEMPLATES = [
+  {
+    id: 'template1',
+    title: 'Professional',
+    description: 'Clean and professional design suitable for most industries.',
+    image: '/images/templates/template1.svg'
+  },
+  {
+    id: 'template2',
+    title: 'Creative',
+    description: 'Modern and creative design for creative industries.',
+    image: '/images/templates/template2.svg'
+  },
+  {
+    id: 'template3',
+    title: 'Minimal',
+    description: 'Simple and minimal design with clean typography.',
+    image: '/images/templates/template3.svg'
+  },
+  {
+    id: 'template4',
+    title: 'Modern',
+    description: 'Contemporary design with a touch of color.',
+    image: '/images/templates/template4.svg'
+  },
+  {
+    id: 'template5',
+    title: 'Executive',
+    description: 'Sophisticated design for senior positions.',
+    image: '/images/templates/template5.svg'
+  }
+];
 
 const TemplateSelectionScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { updateResume } = useResume();
-  const [selectedTemplate, setSelectedTemplate] = React.useState(null);
+  const { resumeData, updateResumeData } = useResume();
+  const [selectedTemplate, setSelectedTemplate] = useState(resumeData.template || '');
   
-  const templates = [
-    { id: 'template1', title: t('Professional'), description: t('Classic and clean design suitable for most industries') },
-    { id: 'template2', title: t('Creative'), description: t('Modern and stylish with a creative twist') },
-    { id: 'template3', title: t('Minimal'), description: t('Simple and elegant with a focus on content') },
-    { id: 'template4', title: t('Modern'), description: t('Contemporary design with a professional look') },
-    { id: 'template5', title: t('Executive'), description: t('Sophisticated design for senior positions') }
-  ];
+  // Update selected template when resumeData changes
+  useEffect(() => {
+    if (resumeData.template) {
+      setSelectedTemplate(resumeData.template);
+    }
+  }, [resumeData.template]);
   
+  // Handle template selection
   const handleTemplateSelect = (templateId) => {
     setSelectedTemplate(templateId);
+    updateResumeData({ template: templateId });
   };
   
+  // Handle continue button
   const handleContinue = () => {
-    if (selectedTemplate) {
-      // Save the selected template to resume context
-      updateResume({ template: selectedTemplate });
-      // Navigate to the first step of resume builder
-      navigate('/builder/basic-info');
-    }
+    navigate('/builder/basicInfo');
   };
-
+  
+  // Handle back button
   const handleBack = () => {
     navigate('/');
   };
@@ -66,12 +74,13 @@ const TemplateSelectionScreen = () => {
       <p>{t('Select a template for your resume')}</p>
       
       <div className="template-grid">
-        {templates.map(template => (
+        {TEMPLATES.map(template => (
           <TemplateCard 
             key={template.id}
             id={template.id}
             title={template.title}
             description={template.description}
+            image={template.image}
             isSelected={selectedTemplate === template.id}
             onClick={handleTemplateSelect}
           />

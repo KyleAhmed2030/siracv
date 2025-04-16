@@ -1,98 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useResume } from '../hooks/useResume';
 import Button from '../components/Button';
-
-// Saved Resume Item Component
-const SavedResumeItem = ({ resume, onSelect, onDelete }) => {
-  return (
-    <div className="saved-resume-item">
-      <div className="resume-info">
-        <h3>{resume.name || resume.fullName || 'Untitled Resume'}</h3>
-        <p>{resume.jobTitle || 'No job title'}</p>
-        <p className="last-updated">
-          {resume.lastUpdated 
-            ? `Last updated: ${new Date(resume.lastUpdated).toLocaleDateString()}`
-            : 'Recently created'
-          }
-        </p>
-      </div>
-      <div className="resume-actions">
-        <button 
-          className="button-text"
-          onClick={() => onSelect(resume)}
-        >
-          View
-        </button>
-        <button 
-          className="button-text delete"
-          onClick={() => onDelete(resume.id)}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  );
-};
+import SavedResumeItem from '../components/SavedResumeItem';
+import { formatDate } from '../utils/helpers';
 
 const SavedResumesScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { savedResumes, loadResume, deleteResume, startNewResume } = useResume();
+  const [deleting, setDeleting] = useState(false);
   
-  // This would eventually come from local storage or a database
-  const [savedResumes, setSavedResumes] = React.useState([]);
-  
-  const handleCreateNew = () => {
-    navigate('/templates');
+  // Handle edit resume
+  const handleEditResume = (id) => {
+    loadResume(id);
+    navigate('/builder/basicInfo');
   };
   
-  const handleSelectResume = (resume) => {
-    // In a real app, we would load this resume data into the context
-    // and then navigate to the preview screen
+  // Handle preview resume
+  const handlePreviewResume = (id) => {
+    loadResume(id);
     navigate('/preview');
   };
   
-  const handleDeleteResume = (id) => {
-    // In a real app, we would remove the resume from storage
-    setSavedResumes(savedResumes.filter(resume => resume.id !== id));
+  // Handle delete resume
+  const handleDeleteResume = async (id) => {
+    if (window.confirm(t('Are you sure you want to delete this resume?'))) {
+      setDeleting(true);
+      deleteResume(id);
+      setDeleting(false);
+    }
+  };
+  
+  // Handle create new resume
+  const handleCreateNew = () => {
+    startNewResume();
+    navigate('/templates');
   };
   
   return (
     <div className="saved-resumes-screen">
-      <h2>{t('My Resumes')}</h2>
+      <h2>{t('Saved Resumes')}</h2>
       
-      {savedResumes.length === 0 ? (
-        <div className="empty-state">
-          <p>{t('No saved resumes')}</p>
-          <p className="empty-state-subtitle">{t('Create your first resume')}</p>
-          <Button 
-            variant="primary"
-            onClick={handleCreateNew}
-          >
-            {t('Create Resume')}
-          </Button>
+      {savedResumes.length > 0 ? (
+        <div className="saved-resumes-list">
+          {savedResumes.map(resume => (
+            <SavedResumeItem
+              key={resume.id}
+              name={`${resume.basicInfo?.firstName || ''} ${resume.basicInfo?.lastName || ''}`.trim() || t('Untitled Resume')}
+              jobTitle={resume.basicInfo?.jobTitle || ''}
+              lastUpdated={formatDate(resume.updatedAt)}
+              onEdit={() => handleEditResume(resume.id)}
+              onPreview={() => handlePreviewResume(resume.id)}
+              onDelete={() => handleDeleteResume(resume.id)}
+              disabled={deleting}
+            />
+          ))}
         </div>
       ) : (
-        <>
-          <div className="saved-resumes-list">
-            {savedResumes.map(resume => (
-              <SavedResumeItem 
-                key={resume.id}
-                resume={resume}
-                onSelect={handleSelectResume}
-                onDelete={handleDeleteResume}
-              />
-            ))}
-          </div>
+        <div className="empty-state">
+          <p>{t('You haven\'t saved any resumes yet.')}</p>
+          <p className="empty-state-subtitle">{t('Create a resume to get started.')}</p>
+          
           <div className="create-new-container">
-            <Button 
+            <Button
               variant="primary"
               onClick={handleCreateNew}
             >
               {t('Create New Resume')}
             </Button>
           </div>
-        </>
+        </div>
+      )}
+      
+      {savedResumes.length > 0 && (
+        <div className="create-new-container">
+          <Button
+            variant="primary"
+            onClick={handleCreateNew}
+          >
+            {t('Create New Resume')}
+          </Button>
+        </div>
       )}
     </div>
   );

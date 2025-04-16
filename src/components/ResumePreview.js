@@ -1,61 +1,137 @@
-import React, { forwardRef } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import Template1 from '../templates/Template1';
-import Template2 from '../templates/Template2';
-import Template3 from '../templates/Template3';
-import Template4 from '../templates/Template4';
-import Template5 from '../templates/Template5';
+import React from 'react';
+import { useTheme } from '../hooks/useTheme';
+import { formatDate } from '../utils/helpers';
 
-const ResumePreview = forwardRef(({ data }, ref) => {
-  // Select the appropriate template based on the template ID
-  const renderTemplate = () => {
-    switch (data.template) {
-      case 'template1':
-        return <Template1 data={data} />;
-      case 'template2':
-        return <Template2 data={data} />;
-      case 'template3':
-        return <Template3 data={data} />;
-      case 'template4':
-        return <Template4 data={data} />;
-      case 'template5':
-        return <Template5 data={data} />;
-      default:
-        return <Template1 data={data} />;
-    }
-  };
+const ResumePreview = ({ resumeData }) => {
+  const { theme } = useTheme();
+  
+  if (!resumeData) {
+    return <div className="resume-preview-empty">No resume data available</div>;
+  }
+  
+  const {
+    basicInfo = {},
+    education = [],
+    workExperience = [],
+    skills = [],
+    summary = ''
+  } = resumeData;
 
   return (
-    <View style={styles.container} ref={ref} collapsable={false}>
-      <ScrollView 
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        {renderTemplate()}
-      </ScrollView>
-    </View>
+    <div className={`resume-preview ${theme}`}>
+      <div className="resume-header">
+        <h1>{basicInfo.firstName} {basicInfo.lastName}</h1>
+        <h2>{basicInfo.jobTitle}</h2>
+        
+        <div className="resume-contact-info">
+          {basicInfo.email && (
+            <div className="contact-item">
+              <span className="contact-icon">✉</span>
+              <span>{basicInfo.email}</span>
+            </div>
+          )}
+          
+          {basicInfo.phone && (
+            <div className="contact-item">
+              <span className="contact-icon">☎</span>
+              <span>{basicInfo.phone}</span>
+            </div>
+          )}
+          
+          {basicInfo.location && (
+            <div className="contact-item">
+              <span className="contact-icon">📍</span>
+              <span>{basicInfo.location}</span>
+            </div>
+          )}
+          
+          {basicInfo.website && (
+            <div className="contact-item">
+              <span className="contact-icon">🌐</span>
+              <span>{basicInfo.website}</span>
+            </div>
+          )}
+          
+          {basicInfo.linkedIn && (
+            <div className="contact-item">
+              <span className="contact-icon">in</span>
+              <span>{basicInfo.linkedIn}</span>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {summary && (
+        <div className="resume-section">
+          <h3>Professional Summary</h3>
+          <p className="resume-summary">{summary}</p>
+        </div>
+      )}
+      
+      {workExperience.length > 0 && (
+        <div className="resume-section">
+          <h3>Work Experience</h3>
+          
+          {workExperience.map((experience) => (
+            <div key={experience.id} className="resume-item">
+              <div className="item-header">
+                <div className="item-title">{experience.jobTitle}</div>
+                <div className="item-period">
+                  {formatDate(experience.startDate)} - {experience.isCurrentJob ? 'Present' : formatDate(experience.endDate)}
+                </div>
+              </div>
+              
+              <div className="item-company">{experience.employer}</div>
+              {experience.location && <div className="item-location">{experience.location}</div>}
+              
+              {experience.description && (
+                <div className="item-description">{experience.description}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {education.length > 0 && (
+        <div className="resume-section">
+          <h3>Education</h3>
+          
+          {education.map((edu) => (
+            <div key={edu.id} className="resume-item">
+              <div className="item-header">
+                <div className="item-title">{edu.degree}{edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ''}</div>
+                <div className="item-period">
+                  {formatDate(edu.startDate)} - {edu.isCurrent ? 'Present' : formatDate(edu.endDate)}
+                </div>
+              </div>
+              
+              <div className="item-company">{edu.institution}</div>
+              {edu.location && <div className="item-location">{edu.location}</div>}
+              
+              {edu.description && (
+                <div className="item-description">{edu.description}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {skills.length > 0 && (
+        <div className="resume-section">
+          <h3>Skills</h3>
+          
+          <div className="skills-grid">
+            {skills.map((skill) => (
+              <div key={skill.id} className="skill-chip">
+                {skill.name}
+                <span className="skill-level">{skill.level}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    paddingBottom: 20,
-  },
-});
+};
 
 export default ResumePreview;
