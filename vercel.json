@@ -1,6 +1,5 @@
 {
-  "buildCommand": "./vercel-build.sh",
-  "outputDirectory": "public",
+  "framework": "create-react-app",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
