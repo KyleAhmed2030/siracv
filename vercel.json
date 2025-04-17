@@ -1,4 +1,6 @@
 {
+  "buildCommand": "react-scripts build && cp -r build/* public/",
+  "outputDirectory": "public",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
