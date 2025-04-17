@@ -1,23 +1,25 @@
 #!/bin/bash
 
-# Display Node.js and npm versions
-echo "Node.js version: $(node -v)"
-echo "npm version: $(npm -v)"
+# This script is specifically for Vercel deployment
+echo "Starting Vercel deployment preparation..."
 
-# Install dependencies
-echo "Installing dependencies..."
-npm install
+# Run the build command
+echo "Building React app..."
+react-scripts build
 
-# Build the React application
-echo "Building the application..."
-node_modules/.bin/react-scripts build
+# Ensure public directory exists
+mkdir -p public
 
-# Ensure build directory exists
-if [ -d "build" ]; then
-  echo "Build directory exists. Checking contents..."
-  ls -la build
-  echo "Build completed successfully!"
+# Copy build files to public directory
+echo "Copying build files to public directory..."
+cp -r build/* public/
+
+# Verify the public directory has the index.html file
+if [ -f "public/index.html" ]; then
+  echo "Successfully prepared public/index.html for Vercel deployment"
 else
-  echo "Error: Build directory not found!"
+  echo "ERROR: public/index.html is missing after copy operation!"
   exit 1
 fi
+
+echo "Vercel deployment preparation completed successfully!"
