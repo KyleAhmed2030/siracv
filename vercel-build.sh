@@ -22,4 +22,8 @@ else
   exit 1
 fi
 
+# Add Google AdSense meta tag to index.html
+echo "Adding Google AdSense meta tag..."
+node add-adsense.js
+
 echo "Vercel deployment preparation completed successfully!"

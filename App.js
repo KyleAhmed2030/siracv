@@ -3,6 +3,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ResumeContextProvider } from './src/context/ResumeContext';
 import { ThemeContextProvider } from './src/context/ThemeContext';
+import { Analytics } from '@vercel/analytics/react';
 
 // Import components
 import LanguageSelector from './src/components/LanguageSelector';
@@ -90,6 +91,7 @@ function App() {
             </Routes>
           </main>
         </div>
+        <Analytics />
       </ResumeContextProvider>
     </ThemeContextProvider>
   );
