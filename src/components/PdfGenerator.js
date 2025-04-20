@@ -18,19 +18,36 @@ class PdfGenerator {
       container.style.left = '-9999px';
       container.style.top = '0';
       container.style.width = '794px'; // A4 width in pixels at 96 DPI
+      container.style.backgroundColor = '#fff'; // Ensure white background
       document.body.appendChild(container);
       
+      // Get primary and accent colors from the data to match preview
+      const { colorScheme = { primary: 'blue', accent: 'teal' } } = data;
+      const primaryColor = this.getColorValue(colorScheme.primary);
+      const accentColor = this.getColorValue(colorScheme.accent);
+      
+      // Add custom CSS to ensure PDF matches preview
+      const styleElement = document.createElement('style');
+      styleElement.textContent = `
+        :root {
+          --template-primary-color: ${primaryColor};
+          --template-accent-color: ${accentColor};
+        }
+      `;
+      container.appendChild(styleElement);
+      
       // Add HTML content based on template
-      container.innerHTML = await this.getHtmlFromTemplate(data);
+      container.innerHTML += await this.getHtmlFromTemplate(data);
       
       // Wait for images to load
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 800));
       
       // Generate PDF using html2canvas and jsPDF
       const canvas = await html2canvas(container, {
-        scale: 2, // higher scale for better quality
+        scale: 2.5, // higher scale for better quality
         useCORS: true,
-        logging: false
+        logging: false,
+        backgroundColor: '#FFFFFF' // Set background explicitly
       });
       
       const imgData = canvas.toDataURL('image/png');
@@ -1458,6 +1475,41 @@ class PdfGenerator {
     }
     
     return initials || '?';
+  }
+  
+  /**
+   * Get color value from color ID
+   * @param {string} colorId Color ID (e.g., 'blue', 'red', etc.)
+   * @returns {string} CSS color value
+   */
+  static getColorValue(colorId) {
+    const colorMap = {
+      // Primary colors
+      'blue': '#3498db',
+      'red': '#e74c3c',
+      'green': '#2ecc71',
+      'purple': '#9b59b6',
+      'orange': '#e67e22',
+      'teal': '#1abc9c',
+      'navy': '#34495e',
+      'pink': '#e84393',
+      'indigo': '#6c5ce7',
+      'brown': '#795548',
+      
+      // Accent colors
+      'lightBlue': '#85d6ff',
+      'coral': '#ff7675',
+      'mint': '#00b894',
+      'lavender': '#a29bfe',
+      'amber': '#ffa502',
+      'turquoise': '#55efc4',
+      'slate': '#607d8b',
+      'rose': '#fd79a8',
+      'skyBlue': '#74b9ff',
+      'tan': '#bcaaa4'
+    };
+    
+    return colorMap[colorId] || '#3498db'; // Default to blue if color not found
   }
   
   /**
