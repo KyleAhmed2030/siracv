@@ -2,5 +2,5 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://sira-resume.replit.app/sitemap.xml
+# Sitemap location
+Sitemap: https://sira-resume.vercel.app/sitemap.xml
