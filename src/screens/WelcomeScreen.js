@@ -163,9 +163,11 @@ const WelcomeScreen = () => {
           animation: 'fadeIn 0.8s ease-out 0.2s forwards',
           opacity: 0
         }}>
-          <h1 style={headingStyle}>{t('Welcome to Resume Builder')}</h1>
-          <h2 style={subheadingStyle}>{t('Build Your Professional Resume')}</h2>
-          <p style={paragraphStyle}>{t('Create a professional resume in minutes with our easy-to-use builder.')}</p>
+          <h1 style={headingStyle}>{t('Free Online Resume Builder')}</h1>
+          <h2 style={subheadingStyle}>{t('Create a Professional CV That Gets You Hired')}</h2>
+          <p style={paragraphStyle}>
+            {t('Create standout resumes in minutes with our easy-to-use builder. Choose from multiple professional templates, customize colors, and export as PDF. Get hired faster with Sira - the free resume builder trusted by job seekers worldwide.')}
+          </p>
         </div>
         
         <div className="welcome-actions" style={{ 
@@ -214,6 +216,50 @@ const WelcomeScreen = () => {
           <div className="settings-item">
             <ThemeToggle />
           </div>
+        </div>
+        
+        {/* SEO Footer Content */}
+        <div style={{ 
+          marginTop: '30px', 
+          padding: '20px 0 0', 
+          borderTop: `1px solid ${theme === 'dark' ? '#444' : '#eee'}`,
+          animation: 'fadeIn 0.8s ease-out 0.8s forwards',
+          opacity: 0
+        }}>
+          <h3 style={{ 
+            fontSize: '16px', 
+            color: theme === 'dark' ? '#e0e0e0' : '#424242',
+            marginBottom: '10px' 
+          }}>
+            {t('Why Choose Sira Resume Builder?')}
+          </h3>
+          
+          <ul style={{ 
+            padding: '0 0 0 20px', 
+            margin: '0 0 15px',
+            color: theme === 'dark' ? '#b0b0b0' : '#616161',
+            fontSize: '14px',
+            lineHeight: '1.6'
+          }}>
+            <li>{t('Professional templates designed by career experts')}</li>
+            <li>{t('Easy-to-use interface with step-by-step guidance')}</li>
+            <li>{t('ATS-friendly formats to pass applicant tracking systems')}</li>
+            <li>{t('Customizable designs with multiple color schemes')}</li>
+            <li>{t('Instant PDF download in high resolution')}</li>
+            <li>{t('100% free to use with no hidden fees')}</li>
+          </ul>
+          
+          <p style={{ 
+            fontSize: '12px', 
+            color: theme === 'dark' ? '#999' : '#757575',
+            textAlign: 'center',
+            marginTop: '20px'
+          }}>
+            © {new Date().getFullYear()} Sira Resume Builder • 
+            <a href="#" style={{ color: theme === 'dark' ? '#3498db' : '#1e88e5', marginLeft: '5px' }}>
+              {t('Privacy Policy')}
+            </a>
+          </p>
         </div>
       </div>
     </div>
