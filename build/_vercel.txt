@@ -1,1 +1,1 @@
-This file helps Vercel identify that this is the deployment directory.
+Ready for Vercel deployment
