@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ResumeContextProvider } from './context/ResumeContext';
 import { ThemeContextProvider, THEME_STORAGE_KEY } from './context/ThemeContext';
 import AppNavigator from './navigation/AppNavigator';
+import { Analytics } from '@vercel/analytics/react';
 import './localization/i18n';
 import './index.css';
 
@@ -39,6 +40,7 @@ function App() {
     <ThemeContextProvider initialTheme={initialTheme}>
       <ResumeContextProvider>
         <AppNavigator initialLanguage={initialLanguage} />
+        <Analytics />
       </ResumeContextProvider>
     </ThemeContextProvider>
   );
