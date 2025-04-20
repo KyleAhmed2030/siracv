@@ -171,12 +171,17 @@ const WelcomeScreen = () => {
         <div className="welcome-actions" style={{ 
           marginBottom: '30px',
           animation: 'fadeIn 0.8s ease-out 0.4s forwards',
-          opacity: 0
+          opacity: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%'
         }}>
           <Button 
             variant="primary" 
             onClick={handleGetStarted}
             fullWidth
+            style={{ maxWidth: isMobile ? '100%' : '280px' }}
           >
             {t('Get Started')}
           </Button>
@@ -185,7 +190,10 @@ const WelcomeScreen = () => {
             variant="secondary" 
             onClick={handleViewSavedResumes}
             fullWidth
-            style={{ marginTop: '12px' }}
+            style={{ 
+              marginTop: '12px',
+              maxWidth: isMobile ? '100%' : '280px'
+            }}
           >
             {t('View Saved Resumes')}
           </Button>
