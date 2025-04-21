@@ -150,7 +150,7 @@ const TermsOfServiceScreen = () => {
               {t('If you have any questions about these Terms, please contact us at:')}
             </p>
             <p>
-              <strong>{t('Email')}: </strong>contact@siraresume.com
+              <strong>{t('Email')}: </strong>siracv95@gmail.com
             </p>
           </section>
         </div>

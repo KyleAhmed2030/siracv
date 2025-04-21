@@ -194,13 +194,13 @@ const ContactScreen = () => {
               <p style={{ marginBottom: '5px' }}>
                 <strong>{t('Email')}: </strong>
                 <a 
-                  href="mailto:contact@siraresume.com" 
+                  href="mailto:siracv95@gmail.com" 
                   style={{ 
                     color: 'var(--primary-color)', 
                     textDecoration: 'none'
                   }}
                 >
-                  contact@siraresume.com
+                  siracv95@gmail.com
                 </a>
               </p>
               <p>
