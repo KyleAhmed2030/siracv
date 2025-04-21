@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import Button from '../components/Button';
@@ -265,33 +265,33 @@ const WelcomeScreen = () => {
               flexWrap: 'wrap',
               justifyContent: 'center'
             }}>
-              <a 
-                href="/privacy" 
+              <Link 
+                to="/privacy" 
                 style={{ 
                   color: theme === 'dark' ? '#3498db' : '#1e88e5',
                   textDecoration: 'none' 
                 }}
               >
                 {t('Privacy Policy')}
-              </a>
-              <a 
-                href="/terms" 
+              </Link>
+              <Link 
+                to="/terms" 
                 style={{ 
                   color: theme === 'dark' ? '#3498db' : '#1e88e5',
                   textDecoration: 'none' 
                 }}
               >
                 {t('Terms of Service')}
-              </a>
-              <a 
-                href="/contact" 
+              </Link>
+              <Link 
+                to="/contact" 
                 style={{ 
                   color: theme === 'dark' ? '#3498db' : '#1e88e5',
                   textDecoration: 'none' 
                 }}
               >
                 {t('Contact Us')}
-              </a>
+              </Link>
             </div>
             <p style={{ margin: '5px 0 0 0' }}>
               © {new Date().getFullYear()} Sira Resume Builder
