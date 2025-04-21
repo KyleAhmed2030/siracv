@@ -13,6 +13,9 @@ import ResumeBuilderScreen from '../screens/ResumeBuilderScreen';
 import PreviewScreen from '../screens/PreviewScreen';
 import SavedResumesScreen from '../screens/SavedResumesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
+import TermsOfServiceScreen from '../screens/TermsOfServiceScreen';
+import ContactScreen from '../screens/ContactScreen';
 
 // Layout component that decides whether to show the header
 const MainLayout = () => {
@@ -66,6 +69,9 @@ const AppNavigator = ({ initialLanguage }) => {
           <Route path="/preview" element={<PreviewScreen />} />
           <Route path="/saved" element={<SavedResumesScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
+          <Route path="/privacy" element={<PrivacyPolicyScreen />} />
+          <Route path="/terms" element={<TermsOfServiceScreen />} />
+          <Route path="/contact" element={<ContactScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

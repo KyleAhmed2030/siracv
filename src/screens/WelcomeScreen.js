@@ -249,17 +249,54 @@ const WelcomeScreen = () => {
             <li>{t('100% free to use with no hidden fees')}</li>
           </ul>
           
-          <p style={{ 
+          <div style={{ 
             fontSize: '12px', 
             color: theme === 'dark' ? '#999' : '#757575',
             textAlign: 'center',
-            marginTop: '20px'
+            marginTop: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '10px'
           }}>
-            © {new Date().getFullYear()} Sira Resume Builder • 
-            <a href="#" style={{ color: theme === 'dark' ? '#3498db' : '#1e88e5', marginLeft: '5px' }}>
-              {t('Privacy Policy')}
-            </a>
-          </p>
+            <div style={{ 
+              display: 'flex', 
+              gap: '15px',
+              flexWrap: 'wrap',
+              justifyContent: 'center'
+            }}>
+              <a 
+                href="/privacy" 
+                style={{ 
+                  color: theme === 'dark' ? '#3498db' : '#1e88e5',
+                  textDecoration: 'none' 
+                }}
+              >
+                {t('Privacy Policy')}
+              </a>
+              <a 
+                href="/terms" 
+                style={{ 
+                  color: theme === 'dark' ? '#3498db' : '#1e88e5',
+                  textDecoration: 'none' 
+                }}
+              >
+                {t('Terms of Service')}
+              </a>
+              <a 
+                href="/contact" 
+                style={{ 
+                  color: theme === 'dark' ? '#3498db' : '#1e88e5',
+                  textDecoration: 'none' 
+                }}
+              >
+                {t('Contact Us')}
+              </a>
+            </div>
+            <p style={{ margin: '5px 0 0 0' }}>
+              © {new Date().getFullYear()} Sira Resume Builder
+            </p>
+          </div>
         </div>
       </div>
     </div>
