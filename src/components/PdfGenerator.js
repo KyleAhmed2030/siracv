@@ -1188,8 +1188,8 @@ class PdfGenerator {
       <div class="skill-item">
         <span class="skill-name">${skill.name}</span>
         <span class="skill-rating">
-          ${Array(parseInt(skill.level)).fill('<span class="rating-dot filled"></span>').join('')}
-          ${Array(5 - parseInt(skill.level)).fill('<span class="rating-dot"></span>').join('')}
+          ${Array(parseInt(skill.level) || 0).fill('<span class="rating-dot filled"></span>').join('')}
+          ${Array(5 - (parseInt(skill.level) || 0)).fill('<span class="rating-dot"></span>').join('')}
         </span>
       </div>
     `).join('');
@@ -1215,7 +1215,7 @@ class PdfGenerator {
           </div>
         </div>
         
-        <div class="resume-content">
+        <div class="template5-content">
           ${summary ? `
             <div class="resume-section summary-section">
               <h3>Executive Summary</h3>
@@ -1400,6 +1400,10 @@ class PdfGenerator {
           font-size: 14px;
           line-height: 1.5;
           color: #444;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          max-width: 100%;
         }
         
         .skills-section {
