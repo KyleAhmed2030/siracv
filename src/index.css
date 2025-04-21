@@ -1211,6 +1211,13 @@ a {
   margin: 0 auto;
 }
 
+/* Make sure PDF and preview styles are consistent */
+.resume-pdf .template5-content {
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 .template5-section {
   margin-bottom: 30px;
 }
@@ -1252,6 +1259,33 @@ a {
 
 .right-column {
   flex: 2;
+}
+
+/* Responsive design for two-column layout */
+@media (max-width: 768px) {
+  .two-column-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .left-column, .right-column {
+    flex: none;
+    width: 100%;
+  }
+  
+  .template5-content, .resume-pdf .template5-content {
+    padding: 20px;
+  }
+  
+  .template5-section .item-header {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .item-header {
+    flex-direction: column;
+    gap: 5px;
+  }
 }
 
 .template5-section .resume-item {
@@ -1310,6 +1344,10 @@ a {
   font-size: 14px;
   line-height: 1.5;
   color: #555;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .dark .template5-section .item-description {

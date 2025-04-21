@@ -651,10 +651,10 @@ const Template5Preview = ({ resumeData, theme, primaryColor, accentColor }) => {
                     <div key={skill.id} className="skill-item">
                       <span className="skill-name">{skill.name}</span>
                       <span className="skill-rating">
-                        {Array(parseInt(skill.level)).fill().map((_, i) => 
+                        {Array(parseInt(skill.level) || 0).fill().map((_, i) => 
                           <span key={i} className="rating-dot filled"></span>
                         )}
-                        {Array(5 - parseInt(skill.level)).fill().map((_, i) => 
+                        {Array(5 - (parseInt(skill.level) || 0)).fill().map((_, i) => 
                           <span key={i} className="rating-dot"></span>
                         )}
                       </span>
