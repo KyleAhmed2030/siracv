@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
-import Header from '../components/Header';
 
 const TermsOfServiceScreen = () => {
   const { t } = useTranslation();
@@ -9,7 +8,6 @@ const TermsOfServiceScreen = () => {
   
   return (
     <div className="terms-of-service-screen">
-      <Header />
       
       <div className="container" style={{ 
         maxWidth: '800px',
