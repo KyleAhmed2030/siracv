@@ -43,11 +43,38 @@ const ContactScreen = () => {
       return;
     }
     
-    // In a real application, you would send the form data to a server here
-    // For now, we'll just simulate a successful submission
-    
-    setSubmitted(true);
-    setError('');
+    // In a real application, this would send the form data to a server
+    // Since we don't have a backend, we'll show a success message
+    // and save the contact request to localStorage for demonstration
+    try {
+      // Get existing contact requests or initialize empty array
+      const existingRequests = JSON.parse(localStorage.getItem('contact-requests') || '[]');
+      
+      // Add new request with timestamp
+      const newRequest = {
+        ...formData,
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString()
+      };
+      
+      // Save updated array back to localStorage
+      localStorage.setItem('contact-requests', JSON.stringify([...existingRequests, newRequest]));
+      
+      // Show success message
+      setSubmitted(true);
+      setError('');
+      
+      // Reset form data
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error) {
+      setError(t('There was an error saving your request. Please try again.'));
+      console.error('Contact form error:', error);
+    }
   };
   
   return (
