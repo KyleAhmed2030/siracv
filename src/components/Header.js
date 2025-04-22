@@ -148,12 +148,20 @@ const Header = () => {
         role="button"
         aria-label={t('Go to home page')}
       >
-        <img 
-          src="/images/logo.svg" 
-          alt="" 
-          aria-hidden="true"
-          style={{ width: isMobile ? '32px' : '40px', marginRight: '8px' }}
-        />
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: isMobile ? '32px' : '40px',
+          height: isMobile ? '32px' : '40px',
+          borderRadius: '50%',
+          backgroundColor: theme === 'dark' ? '#3498db' : '#e1f5fe',
+          color: theme === 'dark' ? 'white' : '#0277bd',
+          marginRight: '10px',
+          fontSize: isMobile ? '18px' : '24px'
+        }}>
+          <span role="img" aria-hidden="true">📝</span>
+        </div>
         <h1 style={titleStyle}>{t('Sira')}</h1>
       </div>
       
