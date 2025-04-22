@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
-import Header from '../components/Header';
 
 const PrivacyPolicyScreen = () => {
   const { t } = useTranslation();
@@ -9,7 +8,6 @@ const PrivacyPolicyScreen = () => {
   
   return (
     <div className="privacy-policy-screen">
-      <Header />
       
       <div className="container" style={{ 
         maxWidth: '800px',
