@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
+import Header from '../components/Header';
 import Button from '../components/Button';
+import Input from '../components/Input';
 
 const ContactScreen = () => {
   const { t } = useTranslation();
@@ -77,6 +79,7 @@ const ContactScreen = () => {
   
   return (
     <div className="contact-screen">
+      <Header />
       
       <div className="container" style={{ 
         maxWidth: '600px',
