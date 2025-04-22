@@ -33,24 +33,32 @@ class PdfGenerator {
           --template-primary-color: ${primaryColor};
           --template-accent-color: ${accentColor};
         }
+        /* Ensure content fits properly */
+        .resume-section {
+          page-break-inside: avoid;
+          overflow: visible;
+        }
+        .section-content {
+          overflow: visible;
+        }
       `;
       container.appendChild(styleElement);
       
       // Add HTML content based on template
       container.innerHTML += await this.getHtmlFromTemplate(data);
       
-      // Wait for images to load
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Wait for images and fonts to load
+      await new Promise(resolve => setTimeout(resolve, 1200));
       
-      // Generate PDF using html2canvas and jsPDF
-      const canvas = await html2canvas(container, {
-        scale: 2.5, // higher scale for better quality
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#FFFFFF' // Set background explicitly
-      });
+      // Get container dimensions
+      const containerHeight = container.offsetHeight;
+      const a4Height = 1123; // A4 height in pixels at 96 DPI
+      const a4Width = 794; // A4 width in pixels at 96 DPI
       
-      const imgData = canvas.toDataURL('image/png');
+      // Calculate how many pages we need
+      const numPages = Math.ceil(containerHeight / a4Height);
+      
+      // Create PDF object
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
@@ -59,11 +67,28 @@ class PdfGenerator {
       
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      const ratio = canvas.width / canvas.height;
-      const imgWidth = pdfWidth;
-      const imgHeight = pdfWidth / ratio;
       
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      // Process each page
+      for (let i = 0; i < numPages; i++) {
+        // Create a canvas for each page section
+        const canvas = await html2canvas(container, {
+          scale: 2, // Higher scale for better quality
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#FFFFFF',
+          y: i * a4Height,
+          height: a4Height
+        });
+        
+        // Add page breaks for multiple pages
+        if (i > 0) {
+          pdf.addPage();
+        }
+        
+        // Convert the canvas to an image and add to PDF
+        const imgData = canvas.toDataURL('image/png');
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      }
       
       // Clean up
       document.body.removeChild(container);
