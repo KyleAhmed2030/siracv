@@ -135,39 +135,93 @@ const ContactScreen = () => {
               </div>
             )}
             
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} id="contact-form">
               <div style={{ marginBottom: '15px' }}>
-                <Input
-                  label={t('Your Name')}
+                <label 
+                  htmlFor="name" 
+                  style={{ 
+                    display: 'block', 
+                    marginBottom: '5px',
+                    fontWeight: '500'
+                  }}
+                >
+                  {t('Your Name')}*
+                </label>
+                <input
+                  id="name"
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder={t('Enter your name')}
                   required
+                  style={{
+                    width: '100%',
+                    padding: '10px 15px',
+                    borderRadius: '5px',
+                    border: `1px solid ${theme === 'dark' ? '#555' : '#ddd'}`,
+                    backgroundColor: theme === 'dark' ? '#333' : '#fff',
+                    color: theme === 'dark' ? '#fff' : '#333'
+                  }}
                 />
               </div>
               
               <div style={{ marginBottom: '15px' }}>
-                <Input
-                  label={t('Email Address')}
+                <label 
+                  htmlFor="email" 
+                  style={{ 
+                    display: 'block', 
+                    marginBottom: '5px',
+                    fontWeight: '500'
+                  }}
+                >
+                  {t('Email Address')}*
+                </label>
+                <input
+                  id="email"
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={t('Enter your email')}
                   required
+                  style={{
+                    width: '100%',
+                    padding: '10px 15px',
+                    borderRadius: '5px',
+                    border: `1px solid ${theme === 'dark' ? '#555' : '#ddd'}`,
+                    backgroundColor: theme === 'dark' ? '#333' : '#fff',
+                    color: theme === 'dark' ? '#fff' : '#333'
+                  }}
                 />
               </div>
               
               <div style={{ marginBottom: '15px' }}>
-                <Input
-                  label={t('Subject')}
+                <label 
+                  htmlFor="subject" 
+                  style={{ 
+                    display: 'block', 
+                    marginBottom: '5px',
+                    fontWeight: '500'
+                  }}
+                >
+                  {t('Subject')}
+                </label>
+                <input
+                  id="subject"
                   type="text"
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder={t('What is this regarding?')}
+                  style={{
+                    width: '100%',
+                    padding: '10px 15px',
+                    borderRadius: '5px',
+                    border: `1px solid ${theme === 'dark' ? '#555' : '#ddd'}`,
+                    backgroundColor: theme === 'dark' ? '#333' : '#fff',
+                    color: theme === 'dark' ? '#fff' : '#333'
+                  }}
                 />
               </div>
               
@@ -194,21 +248,33 @@ const ContactScreen = () => {
                     width: '100%',
                     padding: '10px 15px',
                     borderRadius: '5px',
-                    border: `1px solid ${theme === 'dark' ? 'var(--gray-700)' : 'var(--gray-300)'}`,
-                    backgroundColor: theme === 'dark' ? 'var(--dark-bg)' : 'var(--white)',
-                    color: theme === 'dark' ? 'var(--dark-text)' : 'var(--gray-900)',
+                    border: `1px solid ${theme === 'dark' ? '#555' : '#ddd'}`,
+                    backgroundColor: theme === 'dark' ? '#333' : '#fff',
+                    color: theme === 'dark' ? '#fff' : '#333',
                     resize: 'vertical'
                   }}
                 />
               </div>
               
-              <Button
-                variant="primary"
+              <button
                 type="submit"
-                fullWidth
+                style={{
+                  width: '100%',
+                  backgroundColor: '#3498db',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '12px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#2980b9'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3498db'}
               >
                 {t('Send Message')}
-              </Button>
+              </button>
             </form>
             
             <div style={{ 
