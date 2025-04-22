@@ -25,6 +25,9 @@ const arTranslation = {
   "Welcome to Resume Builder": "مرحباً بك في سيرة",
   "Build Your Professional Resume": "أنشئ سيرتك الذاتية الاحترافية",
   "Create a professional resume in minutes with our easy-to-use builder.": "أنشئ سيرة ذاتية احترافية في دقائق باستخدام أداة الإنشاء سهلة الاستخدام.",
+  "Free Online Resume Builder": "منشئ السيرة الذاتية المجاني عبر الإنترنت",
+  "Create a Professional CV That Gets You Hired": "أنشئ سيرة ذاتية احترافية تساعدك في الحصول على وظيفة",
+  "Create standout resumes in minutes with our easy-to-use builder. Choose from multiple professional templates, customize colors, and export as PDF. Get hired faster with Sira - the free resume builder trusted by job seekers worldwide.": "أنشئ سير ذاتية متميزة في دقائق باستخدام أداة الإنشاء سهلة الاستخدام. اختر من بين قوالب احترافية متعددة، وخصص الألوان، وقم بالتصدير بتنسيق PDF. احصل على وظيفة بشكل أسرع مع سيرة - منشئ السيرة الذاتية المجاني الذي يثق به الباحثون عن عمل في جميع أنحاء العالم.",
 
   // Template Selection
   "Choose a Template": "اختر قالباً",
